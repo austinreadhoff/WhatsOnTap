@@ -1,0 +1,29 @@
+<div class="spinner" *ngIf="loadingState; else beerlist">
+  <mat-spinner></mat-spinner>
+</div>
+<ng-template class="beerlist" #beerlist>
+  <h2 style="text-align: center;">My Beers</h2>
+  <div class="beerlist-container mat-elevation-z8">
+    <div><button title="Create" mat-raised-button color="accent" (click)="createBeer()">Create</button></div>
+    <table mat-table #table [dataSource]="dataSource">
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let element">
+          <button title="Edit" mat-raised-button color="primary" (click)="updateBeer(element.id)">Edit</button>
+          <button title="Delete" mat-raised-button color="warn" (click)="deleteBeer(element.id)">Delete</button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+  </div>
+</ng-template>

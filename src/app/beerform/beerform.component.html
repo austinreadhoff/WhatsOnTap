@@ -1,0 +1,21 @@
+<form (ngSubmit)="onSubmit(beerFrm)" [formGroup]="beerFrm">
+  <h2>{{data.modalTitle}}</h2>
+
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="Name" formControlName="name">
+      <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
+      <!-- <mat-hint>Hint</mat-hint> -->
+      <mat-error *ngIf="formErrors.name">
+        {{ formErrors.name }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <button type="button" mat-raised-button color="warn" (click)="dialogRef.close()">Cancel</button>&nbsp;
+    <button type="submit" mat-raised-button color="primary" [disabled]="beerFrm.invalid">{{data.modalBtnTitle}}</button>
+  </div>
+
+</form>
