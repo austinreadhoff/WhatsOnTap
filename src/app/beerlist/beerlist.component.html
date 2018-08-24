@@ -7,14 +7,48 @@
     <div><button title="Create" mat-raised-button color="accent" (click)="createBeer()">Create</button></div>
     <table mat-table #table [dataSource]="dataSource">
 
-      <!-- Name Column -->
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> Name </th>
-        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element">{{element.name}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="style">
+        <th mat-header-cell *matHeaderCellDef>Style</th>
+        <td mat-cell *matCellDef="let element">{{element.style}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="abv">
+        <th mat-header-cell *matHeaderCellDef>ABV</th>
+        <td mat-cell *matCellDef="let element">{{element.abv | number:'1.1-1'}}%</td>
+      </ng-container>
+
+      <ng-container matColumnDef="ibu">
+        <th mat-header-cell *matHeaderCellDef>IBU</th>
+        <td mat-cell *matCellDef="let element">{{element.ibu | number:'1.1-1'}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="og">
+        <th mat-header-cell *matHeaderCellDef>OG</th>
+        <td mat-cell *matCellDef="let element">{{element.og | number:'1.3-3'}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="fg">
+        <th mat-header-cell *matHeaderCellDef>FG</th>
+        <td mat-cell *matCellDef="let element">{{element.fg | number:'1.3-3'}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="srm">
+        <th mat-header-cell *matHeaderCellDef>SRM</th>
+        <td mat-cell *matCellDef="let element">{{element.srm | number:'1.1-1'}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>Description</th>
+        <td mat-cell *matCellDef="let element">{{element.description}}</td>
       </ng-container>
 
       <ng-container matColumnDef="action">
-        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <th mat-header-cell *matHeaderCellDef>Action</th>
         <td mat-cell *matCellDef="let element">
           <button title="Edit" mat-raised-button color="primary" (click)="updateBeer(element.id)">Edit</button>
           <button title="Delete" mat-raised-button color="warn" (click)="deleteBeer(element.id)">Delete</button>

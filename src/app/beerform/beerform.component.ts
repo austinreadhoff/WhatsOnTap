@@ -38,7 +38,14 @@ export class BeerformComponent implements OnInit {
   ngOnInit() {
     this.beerFrm = this.fb.group({
       id: [''],
-      name: ['', [Validators.required, Validators.maxLength(255)]]
+      name: ['', [Validators.required, Validators.maxLength(255)]],
+      style: [''],
+      abv: [''],
+      ibu: [''],
+      og: [''],
+      fg: [''],
+      srm: [''],
+      description: ['']
     });
 
     this.beerFrm.valueChanges.subscribe(data => this.onValueChanged(data));

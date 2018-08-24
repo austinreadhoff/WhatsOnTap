@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using WhatsOnTap.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -41,10 +42,7 @@ namespace WhatsOnTap.Controllers
             {
                 return BadRequest();
             }
-            _context.Beer.Add(new Beer
-            {
-                name = item.name
-            });
+            _context.Beer.Add(item);
             _context.SaveChanges();
 
             return Ok( new { message= "Beer added successfully."});
@@ -64,7 +62,11 @@ namespace WhatsOnTap.Controllers
                 return NotFound();
             }
 
-            beer.name = item.name;
+            foreach(PropertyInfo prop in item.GetType().GetProperties()){
+                if (prop.Name != "id"){
+                    prop.SetValue(beer, prop.GetValue(item));
+                }
+            }
 
             _context.Beer.Update(beer);
             _context.SaveChanges();
