@@ -32,7 +32,7 @@ export class BeerlistComponent implements OnInit {
   }
 
   loadBeers(): void {
-    this._beerService.getAllBeers(Global.BASE_USER_ENDPOINT)
+    this._beerService.getAllBeers(Global.BASE_BEER_ENDPOINT)
       .subscribe(beers => {
         this.loadingState = false;
         this.dataSource.data = beers;

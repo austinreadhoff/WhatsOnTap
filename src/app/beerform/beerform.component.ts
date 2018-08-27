@@ -82,7 +82,7 @@ export class BeerformComponent implements OnInit {
     const beerData = formData.value;
     switch (this.data.dbops) {
       case "create":
-        this._beerService.createBeer(Global.BASE_USER_ENDPOINT, beerData).subscribe(
+        this._beerService.createBeer(Global.BASE_BEER_ENDPOINT, beerData).subscribe(
           data => {
             // Success
             if (data.message) {
@@ -97,7 +97,7 @@ export class BeerformComponent implements OnInit {
         );
         break;
       case "update":
-        this._beerService.updateBeer(Global.BASE_USER_ENDPOINT, beerData.id, beerData).subscribe(
+        this._beerService.updateBeer(Global.BASE_BEER_ENDPOINT, beerData.id, beerData).subscribe(
           data => {
             // Success
             if (data.message) {
@@ -112,7 +112,7 @@ export class BeerformComponent implements OnInit {
         );
         break;
       case "delete":
-        this._beerService.deleteBeer(Global.BASE_USER_ENDPOINT, beerData.id).subscribe(
+        this._beerService.deleteBeer(Global.BASE_BEER_ENDPOINT, beerData.id).subscribe(
           data => {
             // Success
             if (data.message) {

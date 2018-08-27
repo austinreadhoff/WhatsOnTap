@@ -11,6 +11,6 @@ namespace WhatsOnTap.Models
         }
 
         public DbSet<Beer> Beer { get; set; }
-
+        public DbSet<Tap> Tap { get; set; }
     }
 }
