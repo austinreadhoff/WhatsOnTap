@@ -12,15 +12,20 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { BeerlistComponent } from './beerlist/beerlist.component';
 import { BeerformComponent } from './beerform/beerform.component';
+import { TaplistComponent } from './taplist/taplist.component';
+import { TapformComponent } from './tapform/tapform.component';
 
 import { BeerService } from './services/beer.service';
+import { TapService } from './services/tap.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     BeerlistComponent,
-    BeerformComponent
+    BeerformComponent,
+    TaplistComponent,
+    TapformComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +37,7 @@ import { BeerService } from './services/beer.service';
     LayoutModule,
     Routing
   ],
-  providers: [BeerService],
+  providers: [BeerService, TapService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

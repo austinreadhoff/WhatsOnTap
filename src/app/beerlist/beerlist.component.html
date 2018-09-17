@@ -4,7 +4,7 @@
 <ng-template class="beerlist" #beerlist>
   <h2 style="text-align: center;">My Beers</h2>
   <div class="beerlist-container mat-elevation-z8">
-    <div><button title="Create" mat-raised-button color="accent" (click)="createBeer()">Create</button></div>
+    <div><button title="Create" mat-raised-button color="accent" (click)="createListItem()">Create</button></div>
     <table mat-table #table [dataSource]="dataSource">
 
       <ng-container matColumnDef="name">
@@ -50,8 +50,8 @@
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef>Action</th>
         <td mat-cell *matCellDef="let element">
-          <button title="Edit" mat-raised-button color="primary" (click)="updateBeer(element.id)">Edit</button>
-          <button title="Delete" mat-raised-button color="warn" (click)="deleteBeer(element.id)">Delete</button>
+          <button title="Edit" mat-raised-button color="primary" (click)="updateListItem(element.id)">Edit</button>
+          <button title="Delete" mat-raised-button color="warn" (click)="deleteListItem(element.id)">Delete</button>
         </td>
       </ng-container>
 

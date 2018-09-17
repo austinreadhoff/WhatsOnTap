@@ -4,46 +4,33 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
-import { BeerlistComponent } from '../beerlist/beerlist.component';
+import { TaplistComponent } from '../taplist/taplist.component';
 
-import { BeerService } from '../services/beer.service';
+import { TapService } from '../services/tap.service';
 import { Global } from '../shared/global';
 import { FormComponent } from '../shared/formComponent';
 
 @Component({
-  selector: 'app-beerform',
-  templateUrl: './beerform.component.html',
-  styleUrls: ['./beerform.component.scss']
+  selector: 'app-tapform',
+  templateUrl: './tapform.component.html',
+  styleUrls: ['./tapform.component.scss']
 })
-export class BeerformComponent implements OnInit, FormComponent {
+export class TapformComponent implements OnInit, FormComponent {
   itemForm: FormGroup;
 
-  formErrors = {
-    'name': ''
-  };
-  validationMessages = {
-    'name': {
-      'maxlength': 'Name cannot be more than 255 characters long.',
-      'required': 'Name is required.'
-    }
-  };
+  formErrors = {};
+  validationMessages = {};
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
-    private _beerService: BeerService,
-    public dialogRef: MatDialogRef<BeerlistComponent>) { }
+    private _tapService: TapService,
+    public dialogRef: MatDialogRef<TaplistComponent>) { }
 
   ngOnInit() {
     this.itemForm = this.fb.group({
       id: [''],
-      name: ['', [Validators.required, Validators.maxLength(255)]],
-      style: [''],
-      abv: [''],
-      ibu: [''],
-      og: [''],
-      fg: [''],
-      srm: [''],
-      description: ['']
+      beerId: [''],
+      order: ['']
     });
 
     this.itemForm.valueChanges.subscribe(data => this.onValueChanged(data));
@@ -52,7 +39,7 @@ export class BeerformComponent implements OnInit, FormComponent {
     if (this.data.dbops === "create") {
       this.itemForm.reset();
     } else {
-      this.itemForm.setValue(this.data.beer);
+      this.itemForm.setValue(this.data.tap);
     }
     this.SetControlsState(this.data.dbops === "delete" ? false : true);
   }
@@ -77,10 +64,10 @@ export class BeerformComponent implements OnInit, FormComponent {
   }
 
   onSubmit(formData: any) {
-    const beerData = formData.value;
+    const tapData = formData.value;
     switch (this.data.dbops) {
       case "create":
-        this._beerService.createBeer(Global.BASE_BEER_ENDPOINT, beerData).subscribe(
+        this._tapService.createTap(Global.BASE_TAP_ENDPOINT, tapData).subscribe(
           data => {
             // Success
             if (data.message) {
@@ -95,7 +82,7 @@ export class BeerformComponent implements OnInit, FormComponent {
         );
         break;
       case "update":
-        this._beerService.updateBeer(Global.BASE_BEER_ENDPOINT, beerData.id, beerData).subscribe(
+        this._tapService.updateTap(Global.BASE_TAP_ENDPOINT, tapData.id, tapData).subscribe(
           data => {
             // Success
             if (data.message) {
@@ -110,7 +97,7 @@ export class BeerformComponent implements OnInit, FormComponent {
         );
         break;
       case "delete":
-        this._beerService.deleteBeer(Global.BASE_BEER_ENDPOINT, beerData.id).subscribe(
+        this._tapService.deleteTap(Global.BASE_TAP_ENDPOINT, tapData.id).subscribe(
           data => {
             // Success
             if (data.message) {
