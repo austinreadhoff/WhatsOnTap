@@ -27,6 +27,10 @@ import { TapService } from './services/tap.service';
     TaplistComponent,
     TapformComponent
   ],
+  entryComponents: [
+    BeerformComponent,
+    TapformComponent
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

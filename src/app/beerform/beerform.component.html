@@ -1,4 +1,4 @@
-<form (ngSubmit)="onSubmit(beerFrm)" [formGroup]="beerFrm">
+<form (ngSubmit)="onSubmit(itemForm)" [formGroup]="itemForm">
   <h2>{{data.modalTitle}}</h2>
 
   <div>
@@ -62,7 +62,7 @@
 
   <div>
     <button type="button" mat-raised-button color="warn" (click)="dialogRef.close()">Cancel</button>&nbsp;
-    <button type="submit" mat-raised-button color="primary" [disabled]="beerFrm.invalid">{{data.modalBtnTitle}}</button>
+    <button type="submit" mat-raised-button color="primary" [disabled]="itemForm.invalid">{{data.modalBtnTitle}}</button>
   </div>
 
 </form>

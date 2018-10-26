@@ -5,7 +5,7 @@ import { BeerlistComponent } from './beerlist/beerlist.component';
 import {TaplistComponent} from './taplist/taplist.component';
 
 const appRoutes: Routes = [
-  { path: '',  pathMatch: 'full' , component: BeerlistComponent },
+  { path: '',  pathMatch: 'full' , component: TaplistComponent },
   { path: 'beers',  pathMatch: 'full' , component: BeerlistComponent },
   { path: 'taps',  pathMatch: 'full' , component: TaplistComponent }
 ];

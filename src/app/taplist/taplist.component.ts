@@ -22,7 +22,7 @@ export class TaplistComponent implements OnInit,ListComponent {
   modalTitle: string;
   modalBtnTitle: string;
 
-  displayedColumns = ['beerId'];
+  displayedColumns = ['beerId', 'action'];
   dataSource = new MatTableDataSource<ITap>();
 
   constructor(public snackBar: MatSnackBar, private _tapService: TapService, private dialog: MatDialog) { }
