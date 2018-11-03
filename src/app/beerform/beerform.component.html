@@ -15,6 +15,9 @@
     <mat-form-field appearance="outline">
       <mat-label>Style</mat-label>
       <input matInput placeholder="Style" formControlName="style">
+      <mat-error *ngIf="formErrors.style">
+        {{ formErrors.style }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -22,6 +25,9 @@
     <mat-form-field appearance="outline">
       <mat-label>ABV</mat-label>
       <input matInput type="number" formControlName="abv">
+      <mat-error *ngIf="formErrors.abv">
+        {{ formErrors.abv }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -29,6 +35,9 @@
     <mat-form-field appearance="outline">
       <mat-label>IBU</mat-label>
       <input matInput type="number" formControlName="ibu">
+      <mat-error *ngIf="formErrors.ibu">
+        {{ formErrors.ibu }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -36,6 +45,9 @@
     <mat-form-field appearance="outline">
       <mat-label>OG</mat-label>
       <input matInput type="number" formControlName="og">
+      <mat-error *ngIf="formErrors.og">
+        {{ formErrors.og }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -43,6 +55,9 @@
     <mat-form-field appearance="outline">
       <mat-label>FG</mat-label>
       <input matInput type="number" formControlName="fg">
+      <mat-error *ngIf="formErrors.fg">
+        {{ formErrors.fg }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -50,6 +65,9 @@
     <mat-form-field appearance="outline">
       <mat-label>SRM</mat-label>
       <input matInput type="number" formControlName="srm">
+      <mat-error *ngIf="formErrors.srm">
+        {{ formErrors.srm }}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -57,6 +75,9 @@
     <mat-form-field appearance="outline">
       <mat-label>Description</mat-label>
       <textarea matInput placeholder="Description" formControlName="description"></textarea>
+      <mat-error *ngIf="formErrors.description">
+        {{ formErrors.description }}
+      </mat-error>
     </mat-form-field>
   </div>
 

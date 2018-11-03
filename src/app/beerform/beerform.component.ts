@@ -19,13 +19,17 @@ export class BeerformComponent implements OnInit, FormComponent {
   itemForm: FormGroup;
 
   formErrors = {
-    'name': ''
+    'name': '',
+    'style': '',
+    'abv': '',
+    'ibu': '',
+    'og': '',
+    'fg': '',
+    'srm': '',
+    'description': ''
   };
   validationMessages = {
-    'name': {
-      'maxlength': 'Name cannot be more than 255 characters long.',
-      'required': 'Name is required.'
-    }
+    'required': 'Required Field'
   };
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
@@ -35,15 +39,16 @@ export class BeerformComponent implements OnInit, FormComponent {
 
   ngOnInit() {
     this.itemForm = this.fb.group({
+      //all properties of the model must be present here, used or not
       id: [''],
-      name: ['', [Validators.required, Validators.maxLength(255)]],
-      style: [''],
-      abv: [''],
-      ibu: [''],
-      og: [''],
-      fg: [''],
-      srm: [''],
-      description: ['']
+      name: ['', [Validators.required]],
+      style: ['', [Validators.required]],
+      abv: ['', [Validators.required]],
+      ibu: ['', [Validators.required]],
+      og: ['', [Validators.required]],
+      fg: ['', [Validators.required]],
+      srm: ['', [Validators.required]],
+      description: ['', [Validators.required]]
     });
 
     this.itemForm.valueChanges.subscribe(data => this.onValueChanged(data));
@@ -64,7 +69,7 @@ export class BeerformComponent implements OnInit, FormComponent {
       this.formErrors[field] = '';
       const control = form.get(field);
       if (control && control.dirty && !control.valid) {
-        const messages = this.validationMessages[field];
+        const messages = this.validationMessages;
         for (const key in control.errors) {
           this.formErrors[field] += messages[key] + ' ';
         }

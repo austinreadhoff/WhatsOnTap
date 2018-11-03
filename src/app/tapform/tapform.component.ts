@@ -22,8 +22,12 @@ export class TapformComponent implements OnInit, FormComponent {
   itemForm: FormGroup;
   beerSelector = new FormControl();
   filteredBeers: Observable<IBeer[]>;
-  formErrors = {};
-  validationMessages = {};
+  formErrors = {
+    'order': ''
+  };
+  validationMessages = {
+    'required': 'Required Field'
+  };
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
@@ -32,30 +36,37 @@ export class TapformComponent implements OnInit, FormComponent {
 
   ngOnInit() {
     this.itemForm = this.fb.group({
+      //all properties of the model must be present here, used or not
       id: [''],
       beerId: [''],
       beer: [''],
-      order: [''],
+      order: ['', [Validators.required]]
     });
-
+    this.beerSelector.setValidators(Validators.required);
+    
     this.itemForm.valueChanges.subscribe(data => this.onValueChanged(data));
     this.filteredBeers = this.beerSelector.valueChanges
-      .pipe(
-        startWith<string | IBeer>(''),
-        map(value => typeof value === 'string' ? value : value.name),
-        map(name => name ? this._beerFilter(name) : this.data.beers.slice())
-      )
+    .pipe(
+      startWith<string | IBeer>(''),
+      map(value => typeof value === 'string' ? value : value.name),
+      map(name => name ? this._beerFilter(name) : this.data.beers.slice())
+      );
     this.onValueChanged();
 
     if (this.data.dbops === "create") {
       this.itemForm.reset();
     } else {
       this.itemForm.setValue(this.data.tap);
-      //manually map autocomplete value
       this.beerSelector.setValue(this.data.tap.beer);
     }
-    this.SetControlsState(this.data.dbops === "delete" ? false : true);
-    this.beerSelector.disable();
+    if (this.data.dbops === "delete"){
+      this.SetControlsState(false);
+      this.beerSelector.disable();
+    }
+    else{
+      this.SetControlsState(true);
+      this.beerSelector.enable();
+    }
   }
 
   onValueChanged(data?: any) {
@@ -65,7 +76,7 @@ export class TapformComponent implements OnInit, FormComponent {
       this.formErrors[field] = '';
       const control = form.get(field);
       if (control && control.dirty && !control.valid) {
-        const messages = this.validationMessages[field];
+        const messages = this.validationMessages;
         for (const key in control.errors) {
           this.formErrors[field] += messages[key] + ' ';
         }
@@ -79,8 +90,6 @@ export class TapformComponent implements OnInit, FormComponent {
 
   onSubmit(formData: any) {
     const tapData = formData.value;
-
-    //Setting the beerId because I couldn't figure out how to bind it any other way.  Probably do this better later.
     tapData.beerId = this.beerSelector.value.id;
 
     switch (this.data.dbops) {
