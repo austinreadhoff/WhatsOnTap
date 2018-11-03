@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
@@ -9,6 +9,9 @@ import { TaplistComponent } from '../taplist/taplist.component';
 import { TapService } from '../services/tap.service';
 import { Global } from '../shared/global';
 import { FormComponent } from '../shared/formComponent';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { IBeer } from '../models/beer';
 
 @Component({
   selector: 'app-tapform',
@@ -17,7 +20,8 @@ import { FormComponent } from '../shared/formComponent';
 })
 export class TapformComponent implements OnInit, FormComponent {
   itemForm: FormGroup;
-
+  beerSelector = new FormControl();
+  filteredBeers: Observable<IBeer[]>;
   formErrors = {};
   validationMessages = {};
 
@@ -30,18 +34,28 @@ export class TapformComponent implements OnInit, FormComponent {
     this.itemForm = this.fb.group({
       id: [''],
       beerId: [''],
-      order: ['']
+      beer: [''],
+      order: [''],
     });
 
     this.itemForm.valueChanges.subscribe(data => this.onValueChanged(data));
+    this.filteredBeers = this.beerSelector.valueChanges
+      .pipe(
+        startWith<string | IBeer>(''),
+        map(value => typeof value === 'string' ? value : value.name),
+        map(name => name ? this._beerFilter(name) : this.data.beers.slice())
+      )
     this.onValueChanged();
 
     if (this.data.dbops === "create") {
       this.itemForm.reset();
     } else {
       this.itemForm.setValue(this.data.tap);
+      //manually map autocomplete value
+      this.beerSelector.setValue(this.data.tap.beer);
     }
     this.SetControlsState(this.data.dbops === "delete" ? false : true);
+    this.beerSelector.disable();
   }
 
   onValueChanged(data?: any) {
@@ -65,6 +79,10 @@ export class TapformComponent implements OnInit, FormComponent {
 
   onSubmit(formData: any) {
     const tapData = formData.value;
+
+    //Setting the beerId because I couldn't figure out how to bind it any other way.  Probably do this better later.
+    tapData.beerId = this.beerSelector.value.id;
+
     switch (this.data.dbops) {
       case "create":
         this._tapService.createTap(Global.BASE_TAP_ENDPOINT, tapData).subscribe(
@@ -113,4 +131,15 @@ export class TapformComponent implements OnInit, FormComponent {
         break;
     }
   }
+
+  //Stuff for the beer autocomplete
+  beerDisplayFn(beer?: IBeer): string | undefined {
+    return beer ? beer.name : undefined;
+  }
+
+  private _beerFilter(name: string): IBeer[] {
+    const filterValue = name.toLowerCase();
+    return this.data.beers.filter(beer => beer.name.toLowerCase().indexOf(filterValue) === 0);
+  }
+
 }

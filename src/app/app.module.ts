@@ -7,6 +7,7 @@ import { AppMaterialModule } from './app.material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -38,6 +39,7 @@ import { TapService } from './services/tap.service';
     AppMaterialModule,
     FormsModule,
     ReactiveFormsModule,
+    MatAutocompleteModule,
     LayoutModule,
     Routing
   ],

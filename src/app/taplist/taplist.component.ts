@@ -5,7 +5,9 @@ import { MatDialog} from '@angular/material';
 import { TapformComponent } from '../tapform/tapform.component';
 
 import { TapService } from '../services/tap.service';
+import { BeerService } from '../services/beer.service';
 import { ITap } from '../models/tap';
+import { IBeer } from '../models/beer';
 import { Global } from '../shared/global';
 import { ListComponent } from '../shared/listComponent';
 
@@ -21,22 +23,30 @@ export class TaplistComponent implements OnInit,ListComponent {
   loadingState: boolean;
   modalTitle: string;
   modalBtnTitle: string;
+  availableBeers: IBeer[];
 
-  displayedColumns = ['beerId', 'action'];
+  displayedColumns = ['beerName', 'action'];
   dataSource = new MatTableDataSource<ITap>();
 
-  constructor(public snackBar: MatSnackBar, private _tapService: TapService, private dialog: MatDialog) { }
+  constructor(public snackBar: MatSnackBar, private _tapService: TapService, private _beerService: BeerService, private dialog: MatDialog) { }
 
   ngOnInit() {
     this.loadingState = true;
     this.loadListItems();
   }
   loadListItems(): void {
-    this._tapService.getAllTaps(Global.BASE_TAP_ENDPOINT)
-      .subscribe(items => {
-        this.loadingState = false;
-        this.dataSource.data = items;
-      });
+    this._beerService.getAllBeers(Global.BASE_BEER_ENDPOINT)
+      .subscribe(beers => {
+        this.availableBeers = beers;
+        this._tapService.getAllTaps(Global.BASE_TAP_ENDPOINT)
+          .subscribe(items => {
+            this.loadingState = false;
+            items.forEach((i)=>{
+              i.beer = beers.find((b)=>{return b.id == i.beerId;});
+            })
+            this.dataSource.data = items;
+          });
+      })
   }
 
   createListItem() {
@@ -68,7 +78,7 @@ export class TaplistComponent implements OnInit,ListComponent {
   openDialog(): void {
     const dialogRef = this.dialog.open(TapformComponent, {
       width: '500px',
-      data: { dbops: this.dbops, modalTitle: this.modalTitle, modalBtnTitle: this.modalBtnTitle, beer: this.listItem }
+      data: { dbops: this.dbops, modalTitle: this.modalTitle, modalBtnTitle: this.modalBtnTitle, beers: this.availableBeers, tap: this.listItem }
     });
 
     dialogRef.afterClosed().subscribe(result => {

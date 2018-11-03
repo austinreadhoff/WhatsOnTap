@@ -1,3 +1,27 @@
-<p>
-  tapform works!
-</p>
+<form (ngSubmit)="onSubmit(itemForm)" [formGroup]="itemForm">
+  <h2>{{data.modalTitle}}</h2>
+
+  <div>
+    <mat-form-field appearance="outline">
+      <input type="text" placeholder="Beer" aria-label="Beer" matInput [formControl]="beerSelector" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="beerDisplayFn">
+        <mat-option *ngFor="let option of filteredBeers | async" [value]="option">
+          {{option.name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Order</mat-label>
+      <input matInput type="number" formControlName="order">
+    </mat-form-field>
+  </div>
+
+  <div>
+    <button type="button" mat-raised-button color="warn" (click)="dialogRef.close()">Cancel</button>&nbsp;
+    <button type="submit" mat-raised-button color="primary" [disabled]="itemForm.invalid">{{data.modalBtnTitle}}</button>
+  </div>
+
+</form>
