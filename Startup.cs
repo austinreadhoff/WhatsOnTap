@@ -26,8 +26,7 @@ namespace WhatsOnTap
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<WhatsOnTapContext>(options =>  
-            //options.UseSqlServer(Configuration.GetConnectionString("WhatsOnTapDb"))); 
-            options.UseInMemoryDatabase("WhatsOnTapDB"));
+                options.UseSqlite("Data Source=WhatsOnTap.db"));
 
             services.AddMvc();
         }
