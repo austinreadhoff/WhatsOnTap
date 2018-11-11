@@ -33,7 +33,7 @@ namespace WhatsOnTap.Migrations
 
                     b.Property<double>("og");
 
-                    b.Property<int>("srm");
+                    b.Property<double>("srm");
 
                     b.Property<string>("style");
 

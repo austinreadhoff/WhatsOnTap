@@ -11,7 +11,7 @@ namespace WhatsOnTap.Models
         public double ibu {get;set;}
         public double og {get;set;}
         public double fg {get;set;}
-        public int srm {get;set;}
+        public double srm {get;set;}
         public string description {get;set;}
     }
 }
