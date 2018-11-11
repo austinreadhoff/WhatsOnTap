@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
@@ -9,6 +9,9 @@ import { BeerlistComponent } from '../beerlist/beerlist.component';
 import { BeerService } from '../services/beer.service';
 import { Global } from '../shared/global';
 import { FormComponent } from '../shared/formComponent';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { IStyle } from '../models/style';
 
 @Component({
   selector: 'app-beerform',
@@ -17,10 +20,11 @@ import { FormComponent } from '../shared/formComponent';
 })
 export class BeerformComponent implements OnInit, FormComponent {
   itemForm: FormGroup;
+  styleSelector = new FormControl();
+  filteredStyles: Observable<IStyle[]>;
 
   formErrors = {
     'name': '',
-    'style': '',
     'abv': '',
     'ibu': '',
     'og': '',
@@ -42,7 +46,8 @@ export class BeerformComponent implements OnInit, FormComponent {
       //all properties of the model must be present here, used or not
       id: [''],
       name: ['', [Validators.required]],
-      style: ['', [Validators.required]],
+      styleId: [''],
+      style: [''],
       abv: ['', [Validators.required]],
       ibu: ['', [Validators.required]],
       og: ['', [Validators.required]],
@@ -50,16 +55,31 @@ export class BeerformComponent implements OnInit, FormComponent {
       srm: ['', [Validators.required]],
       description: ['', [Validators.required]]
     });
+    this.styleSelector.setValidators(Validators.required);
 
     this.itemForm.valueChanges.subscribe(data => this.onValueChanged(data));
+    this.filteredStyles = this.styleSelector.valueChanges
+    .pipe(
+      startWith<string | IStyle>(''),
+      map(value => typeof value === 'string' ? value : value.name),
+      map(name => name ? this._styleFilter(name) : this.data.styles.slice())
+      );
     this.onValueChanged();
 
     if (this.data.dbops === "create") {
       this.itemForm.reset();
     } else {
       this.itemForm.setValue(this.data.beer);
+      this.styleSelector.setValue(this.data.beer.style);
     }
-    this.SetControlsState(this.data.dbops === "delete" ? false : true);
+    if (this.data.dbops === "delete"){
+      this.SetControlsState(false);
+      this.styleSelector.disable();
+    }
+    else{
+      this.SetControlsState(true);
+      this.styleSelector.enable();
+    }
   }
 
   onValueChanged(data?: any) {
@@ -83,6 +103,8 @@ export class BeerformComponent implements OnInit, FormComponent {
 
   onSubmit(formData: any) {
     const beerData = formData.value;
+    beerData.styleId = this.styleSelector.value.id;
+
     switch (this.data.dbops) {
       case "create":
         this._beerService.createBeer(Global.BASE_BEER_ENDPOINT, beerData).subscribe(
@@ -130,5 +152,15 @@ export class BeerformComponent implements OnInit, FormComponent {
         );
         break;
     }
+  }
+
+  //Stuff for the beer autocomplete
+  styleDisplayFn(style?: IStyle): string | undefined {
+    return style ? style.name : undefined;
+  }
+
+  private _styleFilter(name: string): IStyle[] {
+    const filterValue = name.toLowerCase();
+    return this.data.styles.filter(style => style.name.toLowerCase().indexOf(filterValue) === 0);
   }
 }

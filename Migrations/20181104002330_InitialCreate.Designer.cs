@@ -37,7 +37,7 @@ namespace WhatsOnTap.Migrations
 
                     b.Property<int>("srm");
 
-                    b.Property<string>("style");
+                    b.Property<int>("styleId");
 
                     b.HasKey("id");
 

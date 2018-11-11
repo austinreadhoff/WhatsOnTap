@@ -5,7 +5,9 @@ import { MatDialog} from '@angular/material';
 import { BeerformComponent } from '../beerform/beerform.component';
 
 import { BeerService } from '../services/beer.service';
+import { StyleService } from '../services/style.service';
 import { IBeer } from '../models/beer';
+import { IStyle } from '../models/style';
 import { Global } from '../shared/global';
 import { ListComponent } from '../shared/listComponent';
 
@@ -21,11 +23,12 @@ export class BeerlistComponent implements OnInit, ListComponent {
   loadingState: boolean;
   modalTitle: string;
   modalBtnTitle: string;
+  availableStyles: IStyle[];
 
   displayedColumns = ['name', 'style', 'abv', 'ibu', 'og', 'fg', 'srm', 'description', 'action'];
   dataSource = new MatTableDataSource<IBeer>();
 
-  constructor(public snackBar: MatSnackBar, private _beerService: BeerService, private dialog: MatDialog) { }
+  constructor(public snackBar: MatSnackBar, private _beerService: BeerService, private _styleService: StyleService, private dialog: MatDialog) { }
 
   ngOnInit() {
     this.loadingState = true;
@@ -33,10 +36,17 @@ export class BeerlistComponent implements OnInit, ListComponent {
   }
 
   loadListItems(): void {
-    this._beerService.getAllBeers(Global.BASE_BEER_ENDPOINT)
-      .subscribe(items => {
-        this.loadingState = false;
-        this.dataSource.data = items;
+    this._styleService.getAllStyles(Global.BASE_STYLE_ENDPOINT)
+      .subscribe(styles => {
+        this.availableStyles = styles;
+        this._beerService.getAllBeers(Global.BASE_BEER_ENDPOINT)
+          .subscribe(items => {
+            this.loadingState = false;
+            items.forEach((i)=>{
+              i.style = styles.find((b)=>{return b.id == i.styleId;});
+            });
+            this.dataSource.data = items;
+          });
       });
   }
 
@@ -69,7 +79,8 @@ export class BeerlistComponent implements OnInit, ListComponent {
   openDialog(): void {
     const dialogRef = this.dialog.open(BeerformComponent, {
       width: '500px',
-      data: { dbops: this.dbops, modalTitle: this.modalTitle, modalBtnTitle: this.modalBtnTitle, beer: this.listItem }
+      height: '80%',
+      data: { dbops: this.dbops, modalTitle: this.modalTitle, modalBtnTitle: this.modalBtnTitle, styles:this.availableStyles, beer: this.listItem }
     });
 
     dialogRef.afterClosed().subscribe(result => {
