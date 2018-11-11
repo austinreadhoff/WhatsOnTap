@@ -18,7 +18,7 @@ namespace WhatsOnTap.Migrations
                     ibu = table.Column<double>(nullable: false),
                     og = table.Column<double>(nullable: false),
                     fg = table.Column<double>(nullable: false),
-                    srm = table.Column<int>(nullable: false),
+                    srm = table.Column<double>(nullable: false),
                     description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
