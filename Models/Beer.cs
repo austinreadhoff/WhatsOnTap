@@ -6,7 +6,7 @@ namespace WhatsOnTap.Models
     {
         public long? id { get; set; }
         public string name { get; set; }
-        public string style {get;set;}
+        public int styleId {get;set;}
         public double abv {get;set;}
         public double ibu {get;set;}
         public double og {get;set;}

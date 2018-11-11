@@ -42,6 +42,18 @@ namespace WhatsOnTap.Migrations
                     b.ToTable("Beer");
                 });
 
+            modelBuilder.Entity("WhatsOnTap.Models.Style", b =>
+                {
+                    b.Property<long?>("id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("name");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Style");
+                });
+
             modelBuilder.Entity("WhatsOnTap.Models.Tap", b =>
                 {
                     b.Property<long?>("id")

@@ -1,36 +1,25 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
-import { BeerlistComponent } from '../beerlist/beerlist.component';
+import { StylelistComponent } from '../stylelist/stylelist.component';
 
-import { BeerService } from '../services/beer.service';
+import { StyleService } from '../services/style.service';
 import { Global } from '../shared/global';
 import { FormComponent } from '../shared/formComponent';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
-import { IStyle } from '../models/style';
 
 @Component({
-  selector: 'app-beerform',
-  templateUrl: './beerform.component.html',
-  styleUrls: ['./beerform.component.scss']
+  selector: 'app-styleform',
+  templateUrl: './styleform.component.html',
+  styleUrls: ['./styleform.component.scss']
 })
-export class BeerformComponent implements OnInit, FormComponent {
+export class StyleformComponent implements OnInit, FormComponent {
   itemForm: FormGroup;
-  styleSelector = new FormControl();
-  filteredStyles: Observable<IStyle[]>;
 
   formErrors = {
-    'name': '',
-    'abv': '',
-    'ibu': '',
-    'og': '',
-    'fg': '',
-    'srm': '',
-    'description': ''
+    'name': ''
   };
   validationMessages = {
     'required': 'Required Field'
@@ -38,48 +27,25 @@ export class BeerformComponent implements OnInit, FormComponent {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
-    private _beerService: BeerService,
-    public dialogRef: MatDialogRef<BeerlistComponent>) { }
+    private _styleService: StyleService,
+    public dialogRef: MatDialogRef<StylelistComponent>) { }
 
   ngOnInit() {
     this.itemForm = this.fb.group({
       //all properties of the model must be present here, used or not
       id: [''],
-      name: ['', [Validators.required]],
-      styleId: [''],
-      style: [''],
-      abv: ['', [Validators.required]],
-      ibu: ['', [Validators.required]],
-      og: ['', [Validators.required]],
-      fg: ['', [Validators.required]],
-      srm: ['', [Validators.required]],
-      description: ['', [Validators.required]]
+      name: ['', [Validators.required]]
     });
-    this.styleSelector.setValidators(Validators.required);
 
     this.itemForm.valueChanges.subscribe(data => this.onValueChanged(data));
-    this.filteredStyles = this.styleSelector.valueChanges
-    .pipe(
-      startWith<string | IStyle>(''),
-      map(value => typeof value === 'string' ? value : value.name),
-      map(name => name ? this._styleFilter(name) : this.data.styles.slice())
-      );
     this.onValueChanged();
 
     if (this.data.dbops === "create") {
       this.itemForm.reset();
     } else {
-      this.itemForm.setValue(this.data.beer);
-      this.styleSelector.setValue(this.data.beer.style);
+      this.itemForm.setValue(this.data.style);
     }
-    if (this.data.dbops === "delete"){
-      this.SetControlsState(false);
-      this.styleSelector.disable();
-    }
-    else{
-      this.SetControlsState(true);
-      this.styleSelector.enable();
-    }
+    this.SetControlsState(this.data.dbops === "delete" ? false : true);
   }
 
   onValueChanged(data?: any) {
@@ -102,12 +68,10 @@ export class BeerformComponent implements OnInit, FormComponent {
   }
 
   onSubmit(formData: any) {
-    const beerData = formData.value;
-    beerData.styleId = this.styleSelector.value.id;
-
+    const styleData = formData.value;
     switch (this.data.dbops) {
       case "create":
-        this._beerService.createBeer(Global.BASE_BEER_ENDPOINT, beerData).subscribe(
+        this._styleService.createStyle(Global.BASE_STYLE_ENDPOINT, styleData).subscribe(
           data => {
             // Success
             if (data.message) {
@@ -122,7 +86,7 @@ export class BeerformComponent implements OnInit, FormComponent {
         );
         break;
       case "update":
-        this._beerService.updateBeer(Global.BASE_BEER_ENDPOINT, beerData.id, beerData).subscribe(
+        this._styleService.updateStyle(Global.BASE_STYLE_ENDPOINT, styleData.id, styleData).subscribe(
           data => {
             // Success
             if (data.message) {
@@ -137,7 +101,7 @@ export class BeerformComponent implements OnInit, FormComponent {
         );
         break;
       case "delete":
-        this._beerService.deleteBeer(Global.BASE_BEER_ENDPOINT, beerData.id).subscribe(
+        this._styleService.deleteStyle(Global.BASE_STYLE_ENDPOINT, styleData.id).subscribe(
           data => {
             // Success
             if (data.message) {
@@ -152,15 +116,5 @@ export class BeerformComponent implements OnInit, FormComponent {
         );
         break;
     }
-  }
-
-  //Stuff for the beer autocomplete
-  styleDisplayFn(style?: IStyle): string | undefined {
-    return style ? style.name : undefined;
-  }
-
-  private _styleFilter(name: string): IStyle[] {
-    const filterValue = name.toLowerCase();
-    return this.data.styles.filter(style => style.name.toLowerCase().indexOf(filterValue) === 0);
   }
 }

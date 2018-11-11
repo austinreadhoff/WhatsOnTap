@@ -9,8 +9,8 @@ using WhatsOnTap.Models;
 namespace WhatsOnTap.Migrations
 {
     [DbContext(typeof(WhatsOnTapContext))]
-    [Migration("20181104002330_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20181110164105_AddStyles")]
+    partial class AddStyles
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,11 +37,23 @@ namespace WhatsOnTap.Migrations
 
                     b.Property<int>("srm");
 
-                    b.Property<int>("styleId");
+                    b.Property<string>("style");
 
                     b.HasKey("id");
 
                     b.ToTable("Beer");
+                });
+
+            modelBuilder.Entity("WhatsOnTap.Models.Style", b =>
+                {
+                    b.Property<long?>("id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("name");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Style");
                 });
 
             modelBuilder.Entity("WhatsOnTap.Models.Tap", b =>

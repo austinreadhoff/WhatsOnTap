@@ -13,7 +13,7 @@ namespace WhatsOnTap.Migrations
                     id = table.Column<long>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     name = table.Column<string>(nullable: true),
-                    style = table.Column<string>(nullable: true),
+                    styleId = table.Column<int>(nullable: true),
                     abv = table.Column<double>(nullable: false),
                     ibu = table.Column<double>(nullable: false),
                     og = table.Column<double>(nullable: false),

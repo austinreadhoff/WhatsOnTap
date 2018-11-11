@@ -1,0 +1,19 @@
+<form (ngSubmit)="onSubmit(itemForm)" [formGroup]="itemForm">
+  <h2>{{data.modalTitle}}</h2>
+
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="Name" formControlName="name">
+      <mat-error *ngIf="formErrors.name">
+        {{ formErrors.name }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <button type="button" mat-raised-button color="warn" (click)="dialogRef.close()">Cancel</button>&nbsp;
+    <button type="submit" mat-raised-button color="primary" [disabled]="itemForm.invalid">{{data.modalBtnTitle}}</button>
+  </div>
+
+</form>
