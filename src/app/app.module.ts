@@ -11,6 +11,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
+import { MenuComponent } from './menu/menu.component';
 import { BeerlistComponent } from './beerlist/beerlist.component';
 import { BeerformComponent } from './beerform/beerform.component';
 import { TaplistComponent } from './taplist/taplist.component';
@@ -26,6 +27,7 @@ import { StyleService } from './services/style.service';
   declarations: [
     AppComponent,
     HeaderComponent,
+    MenuComponent,
     BeerlistComponent,
     BeerformComponent,
     TaplistComponent,
