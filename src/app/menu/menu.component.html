@@ -1,0 +1,42 @@
+<div class="spinner" *ngIf="loadingState; else menu">
+  <mat-spinner></mat-spinner>
+</div>
+<ng-template #menu>
+  <div class="menu-body">
+    <div class="header">
+      <h2>What's on Tap at</h2>
+      <h1>{{breweryName}}</h1>
+    </div>
+    <div class="beers-container">
+      <div *ngFor="let beer of beers" class="beer-container">
+        <div class="beer-header">
+          <h1>{{beer.name}}</h1>
+          <h2>{{beer.style.name}}</h2>
+        </div>
+        <div class="beer-center-info">
+          <table>
+            <tbody>
+              <tr>
+                <td class="abv">
+                  <span class="center-header">ABV</span>
+                  <span class="center-content">{{beer.abv}}%</span>
+                </td>
+                <td class="ibu">
+                  <span class="center-header">IBU</span>	
+                  <span class="center-content">{{beer.ibu}}</span>
+                </td>
+                <td class="srm">
+                  <span class="center-header">SRM</span>
+                  <span class="center-content">{{beer.srm}}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <p>{{beer.description}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>  
