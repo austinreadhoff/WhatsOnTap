@@ -9,6 +9,8 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
+import {MatFileUploadModule} from 'angular-material-fileupload';
+
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { MenuComponent } from './menu/menu.component';
@@ -45,6 +47,7 @@ import { StyleService } from './services/style.service';
     BrowserAnimationsModule,
     HttpClientModule,
     AppMaterialModule,
+    MatFileUploadModule,
     FormsModule,
     ReactiveFormsModule,
     MatAutocompleteModule,

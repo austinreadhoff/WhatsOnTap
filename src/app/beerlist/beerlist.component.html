@@ -52,6 +52,10 @@
         <th mat-header-cell *matHeaderCellDef>Action</th>
         <td mat-cell *matCellDef="let element">
           <button title="Edit" mat-raised-button color="primary" (click)="updateListItem(element.id)">Edit</button>
+          <input title="Label" mat-raised-button color="primary" type="file" [fileUploadInputFor]="fileQueue">
+          <mat-file-upload-queue #fileQueue [fileAlias]="'file'" [httpUrl]="'api/image'">      
+            <mat-file-upload [file]="file" [id]="i" *ngFor="let file of fileQueue.files; let i = index"></mat-file-upload>
+          </mat-file-upload-queue>
           <button title="Delete" mat-raised-button color="warn" (click)="deleteListItem(element.id)">Delete</button>
         </td>
       </ng-container>
