@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { Global } from '../shared/global';
 import { BeerService } from '../services/beer.service';
 import { StyleService } from '../services/style.service';
-import { IBeer } from '../models/beer';
-import { IStyle } from '../models/style';
+import { TapService } from '../services/tap.service';
+import { ITap } from '../models/tap';
 
 @Component({
   selector: 'app-menu',
@@ -13,10 +13,10 @@ import { IStyle } from '../models/style';
 })
 export class MenuComponent implements OnInit {
   loadingState: boolean;
-  beers: IBeer[];
+  taps: ITap[];
   breweryName: String;
 
-  constructor(private _beerService: BeerService, private _styleService: StyleService) { }
+  constructor(private _beerService: BeerService, private _styleService: StyleService, private _tapService: TapService) { }
 
   ngOnInit() {
     this.loadingState = true;
@@ -27,15 +27,21 @@ export class MenuComponent implements OnInit {
   }
 
   loadBeers(){
-    this._styleService.getAllStyles(Global.BASE_STYLE_ENDPOINT)
-      .subscribe(styles => {
-        this._beerService.getAllBeers(Global.BASE_BEER_ENDPOINT)
-          .subscribe(beers => {
-            this.loadingState = false;
-            beers.forEach((i)=>{
-              i.style = styles.find((b)=>{return b.id == i.styleId;});
-            });
-            this.beers = beers;
+    this._tapService.getAllTaps(Global.BASE_TAP_ENDPOINT)
+      .subscribe(taps =>{
+        this._styleService.getAllStyles(Global.BASE_STYLE_ENDPOINT)
+          .subscribe(styles => {
+            this._beerService.getAllBeers(Global.BASE_BEER_ENDPOINT)
+              .subscribe(beers => {
+                this.loadingState = false;
+                beers.forEach((b)=>{
+                  b.style = styles.find((s)=>{return s.id == b.styleId;});
+                });
+                taps.forEach((t)=>{
+                  t.beer = beers.find((b) => {return b.id == t.beerId;});
+                })
+                this.taps = taps;
+              });
           });
       });
   }

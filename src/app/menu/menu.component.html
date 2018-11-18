@@ -8,30 +8,30 @@
       <h1>{{breweryName}}</h1>
     </div>
     <div class="beers-container">
-      <div *ngFor="let beer of beers" class="beer-container">
+      <div *ngFor="let tap of taps" class="beer-container">
         <img class="beer-img" src="https://baconmockup.com/300/400/">
         <div class="beer-info">
           <div class="beer-header">
-            <h1>{{beer.name}}</h1>
-            <h2>{{beer.style.name}}</h2>
+            <h1>{{tap.beer.name}}</h1>
+            <h2>{{tap.beer.style.name}}</h2>
           </div>
           <div class="beer-center-info">
             <div class="center-prop">
               <span class="center-header">ABV</span>
-              <span class="center-content">{{beer.abv}}%</span>
-              <span class="center-lower">OG: {{beer.og}} | FG {{beer.fg}}</span>
+              <span class="center-content">{{tap.beer.abv}}%</span>
+              <span class="center-lower">OG: {{tap.beer.og}} | FG {{tap.beer.fg}}</span>
             </div>
             <div class="center-prop">
               <span class="center-header">IBU</span>	
-              <span class="center-content">{{beer.ibu}}</span>
+              <span class="center-content">{{tap.beer.ibu}}</span>
             </div>
             <div class="center-prop">
               <span class="center-header">SRM</span>
-              <span class="center-content">{{beer.srm}}</span>
+              <span class="center-content">{{tap.beer.srm}}</span>
             </div>
           </div>
           <div>
-            <p>{{beer.description}}</p>
+            <p>{{tap.beer.description}}</p>
           </div>
         </div>
       </div>
