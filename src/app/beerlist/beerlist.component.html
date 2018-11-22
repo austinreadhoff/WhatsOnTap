@@ -56,6 +56,10 @@
           <mat-file-upload-queue #fileQueue [fileAlias]="'file'" [httpUrl]="'api/image'">      
             <mat-file-upload [file]="file" [id]="i" *ngFor="let file of fileQueue.files; let i = index"></mat-file-upload>
           </mat-file-upload-queue>
+          <!-- <form method="POST" enctype="multipart/form-data" asp-controller="Image" asp-action="UploadLabel">
+            <input type="file" name="labelUpload" />
+            <input type="submit" value="Upload" />
+          </form> -->
           <button title="Delete" mat-raised-button color="warn" (click)="deleteListItem(element.id)">Delete</button>
         </td>
       </ng-container>

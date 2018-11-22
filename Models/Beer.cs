@@ -13,6 +13,6 @@ namespace WhatsOnTap.Models
         public double fg {get;set;}
         public double srm {get;set;}
         public string description {get;set;}
-        //public byte[] label {get;set;}
+        public byte[] label {get;set;}
     }
 }
