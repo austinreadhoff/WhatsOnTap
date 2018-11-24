@@ -36,6 +36,7 @@ export class MenuComponent implements OnInit {
                 this.loadingState = false;
                 beers.forEach((b)=>{
                   b.style = styles.find((s)=>{return s.id == b.styleId;});
+                  b.labelSrc = `data:image/png;base64,${b.label}`;
                 });
                 taps.forEach((t)=>{
                   t.beer = beers.find((b) => {return b.id == t.beerId;});
