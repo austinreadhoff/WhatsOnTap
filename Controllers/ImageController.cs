@@ -21,13 +21,23 @@ namespace WhatsOnTap.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadLabel()
+        public async Task<IActionResult> UploadLabel(int id)
         { 
-            Beer beer = _context.Beer.Where(b => b.id == 1).FirstOrDefault();
-            using (var sr = new StreamReader(Request.Body))
+            Beer beer = _context.Beer.Where(b => b.id == id).FirstOrDefault();
+            // using (var sr = new StreamReader(Request.Body))
+            // {
+            //     var body  = await sr.ReadToEndAsync();
+            //     beer.label = Encoding.ASCII.GetBytes(body);
+
+            //     _context.Beer.Update(beer);
+            //     _context.SaveChanges();
+            //     return Ok();
+            // }
+            using (var ms = new MemoryStream())
             {
-                var body  = await sr.ReadToEndAsync();
-                beer.label = Encoding.ASCII.GetBytes(body);
+                var file = Request.Form.Files.FirstOrDefault();
+                await file.CopyToAsync(ms);
+                beer.label = ms.ToArray();
 
                 _context.Beer.Update(beer);
                 _context.SaveChanges();
