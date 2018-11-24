@@ -24,15 +24,7 @@ namespace WhatsOnTap.Controllers
         public async Task<IActionResult> UploadLabel(int id)
         { 
             Beer beer = _context.Beer.Where(b => b.id == id).FirstOrDefault();
-            // using (var sr = new StreamReader(Request.Body))
-            // {
-            //     var body  = await sr.ReadToEndAsync();
-            //     beer.label = Encoding.ASCII.GetBytes(body);
 
-            //     _context.Beer.Update(beer);
-            //     _context.SaveChanges();
-            //     return Ok();
-            // }
             using (var ms = new MemoryStream())
             {
                 var file = Request.Form.Files.FirstOrDefault();
@@ -43,7 +35,6 @@ namespace WhatsOnTap.Controllers
                 _context.SaveChanges();
                 return Ok();
             }
-
         }
     }
 }

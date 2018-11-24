@@ -9,7 +9,7 @@
     </div>
     <div class="beers-container">
       <div *ngFor="let tap of taps" class="beer-container">
-        <img class="beer-img" src="https://baconmockup.com/300/400/">
+        <img class="beer-img" src={{tap.beer.labelSrc}}>
         <div class="beer-info">
           <div class="beer-header">
             <h1>{{tap.beer.name}}</h1>

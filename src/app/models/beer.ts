@@ -11,4 +11,6 @@ export interface IBeer{
     fg: number;
     srm: number;
     description: string;
+    label: string;
+    labelSrc: string;
 }
