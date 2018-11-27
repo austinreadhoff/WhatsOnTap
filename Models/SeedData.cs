@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace WhatsOnTap.Models
@@ -502,6 +503,26 @@ namespace WhatsOnTap.Models
                         }
                     );
                 }
+                #endregion
+
+                #region Settings
+
+                List<Setting> defaultSettings = new List<Setting>(){
+                    new Setting
+                    {
+                        key = "BreweryName",
+                        type = "string",
+                        stringValue = "The Best Brewery"
+                    }
+                };
+                defaultSettings.ForEach(setting => 
+                {
+                    if (!context.Setting.Any(s => s.key == setting.key))
+                    {
+                        context.Setting.Add(setting);
+                    }
+                });
+
                 #endregion
 
                 context.SaveChanges();

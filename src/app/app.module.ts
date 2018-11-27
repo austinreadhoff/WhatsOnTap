@@ -14,6 +14,7 @@ import {MatFileUploadModule} from 'angular-material-fileupload';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { MenuComponent } from './menu/menu.component';
+import { SettingsComponent } from './settings/settings.component';
 import { BeerlistComponent } from './beerlist/beerlist.component';
 import { BeerformComponent } from './beerform/beerform.component';
 import { TaplistComponent } from './taplist/taplist.component';
@@ -24,12 +25,14 @@ import { StyleformComponent } from './styleform/styleform.component';
 import { BeerService } from './services/beer.service';
 import { TapService } from './services/tap.service';
 import { StyleService } from './services/style.service';
+import { SettingService } from './services/setting.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     MenuComponent,
+    SettingsComponent,
     BeerlistComponent,
     BeerformComponent,
     TaplistComponent,
@@ -54,7 +57,7 @@ import { StyleService } from './services/style.service';
     LayoutModule,
     Routing
   ],
-  providers: [BeerService, TapService, StyleService],
+  providers: [BeerService, TapService, StyleService, SettingService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
