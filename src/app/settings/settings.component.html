@@ -7,13 +7,21 @@
     <div class="header">
       <h1>Brewery Settings</h1>
     </div>
-    <div class="settings-content">
+    <div class="settings-content" style="display:flex;flex-direction:column;">
       <mat-form-field class="settings-field">
         <input #BreweryName matInput placeholder="Brewery Name" 
           value={{formFields.BreweryName.stringValue}}
           (blur)="updateSetting(formFields.BreweryName, BreweryName.value)"
           (keyup.enter)="updateSetting(formFields.BreweryName, BreweryName.value)">
       </mat-form-field>
+
+      <mat-checkbox #HideOG
+        [checked]="formFields.HideOG.boolValue"
+        (change)="updateSetting(formFields.HideOG, HideOG.checked)">Hide OG</mat-checkbox>
+
+      <mat-checkbox #HideFG
+        [checked]="formFields.HideFG.boolValue"
+        (change)="updateSetting(formFields.HideFG, HideFG.checked)">Hide FG</mat-checkbox>
     </div>
   </div>
 </ng-template>

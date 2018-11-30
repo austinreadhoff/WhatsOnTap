@@ -3,4 +3,5 @@ export interface ISetting{
     key: string;
     type: string;
     stringValue: string;
+    boolValue: boolean;
 }

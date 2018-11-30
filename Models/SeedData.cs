@@ -513,6 +513,18 @@ namespace WhatsOnTap.Models
                         key = "BreweryName",
                         type = "string",
                         stringValue = "The Best Brewery"
+                    },
+                    new Setting
+                    {
+                        key = "HideOG",
+                        type = "bool",
+                        boolValue = true
+                    },
+                    new Setting
+                    {
+                        key = "HideFG",
+                        type = "bool",
+                        boolValue = true
                     }
                 };
                 defaultSettings.ForEach(setting => 
