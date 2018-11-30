@@ -32,15 +32,17 @@ export class SettingsComponent implements OnInit {
   }
 
   updateSetting(settingObj, value){
-    settingObj.stringValue = value;
-    this._settingService.updateSetting(Global.BASE_SETTING_ENDPOINT, settingObj.id, settingObj)
-      .subscribe(result =>{
-        if (result.message === 'Setting is updated successfully.') {          
-          this.showMessage("Update Saved!");
-        } else {
-          this.showMessage('There is some issue in saving records, please complain to system administrator!');
-        }
-      })
+    if (settingObj[settingObj.type + "Value"] != value){
+      settingObj[settingObj.type + "Value"] = value;
+      this._settingService.updateSetting(Global.BASE_SETTING_ENDPOINT, settingObj.id, settingObj)
+        .subscribe(result =>{
+          if (result.message === 'Setting is updated successfully.') {          
+            this.showMessage("Update Saved!");
+          } else {
+            this.showMessage('There is some issue in saving records, please complain to system administrator!');
+          }
+        });
+    }
   }
 
   showMessage(msg: string) {

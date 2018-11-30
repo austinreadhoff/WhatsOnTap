@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatCheckboxModule} from '@angular/material/checkbox';
 
 import {MatFileUploadModule} from 'angular-material-fileupload';
 
@@ -54,6 +55,7 @@ import { SettingService } from './services/setting.service';
     FormsModule,
     ReactiveFormsModule,
     MatAutocompleteModule,
+    MatCheckboxModule,
     LayoutModule,
     Routing
   ],

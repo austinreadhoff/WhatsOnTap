@@ -19,7 +19,11 @@
             <div class="center-prop">
               <span class="center-header">ABV</span>
               <span class="center-content">{{tap.beer.abv}}%</span>
-              <span class="center-lower">OG: {{tap.beer.og}} | FG {{tap.beer.fg}}</span>
+              <div class="center-lower">
+                <span *ngIf="!brewerySettings.HideOG.boolValue">OG: {{tap.beer.og}}</span>
+                <span *ngIf="!brewerySettings.HideOG.boolValue && !brewerySettings.HideFG.boolValue">|</span> 
+                <span *ngIf="!brewerySettings.HideFG.boolValue">FG {{tap.beer.fg}}</span>
+              </div>
             </div>
             <div class="center-prop">
               <span class="center-header">IBU</span>	
