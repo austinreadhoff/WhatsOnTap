@@ -516,13 +516,13 @@ namespace WhatsOnTap.Models
                     },
                     new Setting
                     {
-                        key = "HideOG",
+                        key = "ShowOG",
                         type = "bool",
                         boolValue = true
                     },
                     new Setting
                     {
-                        key = "HideFG",
+                        key = "ShowFG",
                         type = "bool",
                         boolValue = true
                     }
