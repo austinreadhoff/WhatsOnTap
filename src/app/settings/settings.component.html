@@ -15,13 +15,13 @@
           (keyup.enter)="updateSetting(formFields.BreweryName, BreweryName.value)">
       </mat-form-field>
 
-      <mat-checkbox #HideOG
-        [checked]="formFields.HideOG.boolValue"
-        (change)="updateSetting(formFields.HideOG, HideOG.checked)">Hide OG</mat-checkbox>
+      <mat-checkbox #ShowOG
+        [checked]="formFields.ShowOG.boolValue"
+        (change)="updateSetting(formFields.ShowOG, ShowOG.checked)">Show OG</mat-checkbox>
 
-      <mat-checkbox #HideFG
-        [checked]="formFields.HideFG.boolValue"
-        (change)="updateSetting(formFields.HideFG, HideFG.checked)">Hide FG</mat-checkbox>
+      <mat-checkbox #ShowFG
+        [checked]="formFields.ShowFG.boolValue"
+        (change)="updateSetting(formFields.ShowFG, ShowFG.checked)">Show FG</mat-checkbox>
     </div>
   </div>
 </ng-template>
