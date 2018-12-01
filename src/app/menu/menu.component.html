@@ -11,7 +11,9 @@
       <!--Normal Horizontal Beer-->
       <div *ngFor="let tap of taps" class="beer-container">
         <ng-container *ngIf="!tap.isEmpty; else emptytap">
-          <img class="beer-img" src={{tap.beer.labelSrc}}>
+          <img class="beer-img" 
+            *ngIf="tap.beer.labelSrc != 'data:image/png;base64,null'"
+            src="{{tap.beer.labelSrc}}">
           <div class="beer-info">
             <div class="beer-header">
               <h1>{{tap.beer.name}}</h1>
@@ -36,9 +38,9 @@
                 <span class="center-content">{{tap.beer.srm}}</span>
               </div>
             </div>
-            <div>
-              <p>{{tap.beer.description}}</p>
-            </div>
+          </div>
+          <div>
+            <p>{{tap.beer.description}}</p>
           </div>
         </ng-container>
         <!--Empty Horizontal Beer-->
