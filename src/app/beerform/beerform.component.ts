@@ -162,6 +162,6 @@ export class BeerformComponent implements OnInit, FormComponent {
 
   private _styleFilter(name: string): IStyle[] {
     const filterValue = name.toLowerCase();
-    return this.data.styles.filter(style => style.name.toLowerCase().indexOf(filterValue) === 0);
+    return this.data.styles.filter(style => style.name.toLowerCase().indexOf(filterValue) != -1);
   }
 }

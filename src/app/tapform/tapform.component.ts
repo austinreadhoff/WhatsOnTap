@@ -158,7 +158,7 @@ export class TapformComponent implements OnInit, FormComponent {
 
   private _beerFilter(name: string): IBeer[] {
     const filterValue = name.toLowerCase();
-    return this.data.beers.filter(beer => beer.name.toLowerCase().indexOf(filterValue) === 0);
+    return this.data.beers.filter(beer => beer.name.toLowerCase().indexOf(filterValue) != -1);
   }
 
 }
