@@ -37,14 +37,20 @@ export class TaplistComponent implements OnInit,ListComponent {
   loadListItems(): void {
     this._beerService.getAllBeers(Global.BASE_BEER_ENDPOINT)
       .subscribe(beers => {
-        this.availableBeers = beers;
+        this.availableBeers = beers
+          .sort((a, b) => {
+            return a.name < b.name ? -1 : 1;
+          });
         this._tapService.getAllTaps(Global.BASE_TAP_ENDPOINT)
           .subscribe(items => {
             this.loadingState = false;
             items.forEach((i)=>{
               i.beer = beers.find((b)=>{return b.id == i.beerId;});
             })
-            this.dataSource.data = items;
+            this.dataSource.data = items
+              .sort((a, b) => {
+                return a.order < b.order ? -1 : 1;
+              });
           });
       })
   }

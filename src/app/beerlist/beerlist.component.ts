@@ -38,14 +38,20 @@ export class BeerlistComponent implements OnInit, ListComponent {
   loadListItems(): void {
     this._styleService.getAllStyles(Global.BASE_STYLE_ENDPOINT)
       .subscribe(styles => {
-        this.availableStyles = styles;
+        this.availableStyles = styles
+          .sort((a, b) => {
+            return a.name < b.name ? -1 : 1;
+          });
         this._beerService.getAllBeers(Global.BASE_BEER_ENDPOINT)
           .subscribe(items => {
             this.loadingState = false;
             items.forEach((i)=>{
               i.style = styles.find((b)=>{return b.id == i.styleId;});
             });
-            this.dataSource.data = items;
+            this.dataSource.data = items
+              .sort((a, b) => {
+                return a.name < b.name ? -1 : 1;
+              });
           });
       });
   }

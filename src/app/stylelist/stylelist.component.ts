@@ -36,7 +36,10 @@ export class StylelistComponent implements OnInit, ListComponent {
     this._styleService.getAllStyles(Global.BASE_STYLE_ENDPOINT)
       .subscribe(items => {
         this.loadingState = false;
-        this.dataSource.data = items;
+        this.dataSource.data = items
+          .sort((a, b) => {
+            return a.name < b.name ? -1 : 1;
+          });
       });
   }
 
