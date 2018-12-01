@@ -36,8 +36,9 @@ export class TapformComponent implements OnInit, FormComponent {
 
   ngOnInit() {
     this.itemForm = this.fb.group({
-      //all properties of the model must be present here, used or not
+      //all properties of the .cs model must be present here, used or not
       id: [''],
+      isEmpty: [''],
       beerId: [''],
       beer: [''],
       order: ['', [Validators.required]]
@@ -61,11 +62,13 @@ export class TapformComponent implements OnInit, FormComponent {
     }
     if (this.data.dbops === "delete"){
       this.SetControlsState(false);
-      this.beerSelector.disable();
     }
     else{
       this.SetControlsState(true);
-      this.beerSelector.enable();
+
+      if (this.data.tap.isEmpty){
+        this.beerSelector.disable();
+      }
     }
   }
 
@@ -85,7 +88,14 @@ export class TapformComponent implements OnInit, FormComponent {
   }
 
   SetControlsState(isEnable: boolean) {
-    isEnable ? this.itemForm.enable() : this.itemForm.disable();
+    if (isEnable){
+      this.itemForm.enable();
+      this.beerSelector.enable();
+    }
+    else{
+      this.itemForm.disable();
+      this.beerSelector.disable();
+    }
   }
 
   onSubmit(formData: any) {

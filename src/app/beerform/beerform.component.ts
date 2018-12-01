@@ -73,14 +73,7 @@ export class BeerformComponent implements OnInit, FormComponent {
       this.itemForm.setValue(this.data.beer);
       this.styleSelector.setValue(this.data.beer.style);
     }
-    if (this.data.dbops === "delete"){
-      this.SetControlsState(false);
-      this.styleSelector.disable();
-    }
-    else{
-      this.SetControlsState(true);
-      this.styleSelector.enable();
-    }
+    this.SetControlsState(!(this.data.dbops === "delete"));
   }
 
   onValueChanged(data?: any) {
@@ -99,7 +92,14 @@ export class BeerformComponent implements OnInit, FormComponent {
   }
 
   SetControlsState(isEnable: boolean) {
-    isEnable ? this.itemForm.enable() : this.itemForm.disable();
+    if (isEnable){
+      this.itemForm.enable();
+      this.styleSelector.enable();
+    }
+    else{
+      this.itemForm.disable();
+      this.styleSelector.disable();
+    }
   }
 
   onSubmit(formData: any) {

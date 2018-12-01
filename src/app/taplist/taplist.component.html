@@ -10,7 +10,12 @@
 
       <ng-container matColumnDef="beerName">
         <th mat-header-cell *matHeaderCellDef>Beer</th>
-        <td mat-cell *matCellDef="let element">{{element.beer.name}}</td>
+        <td mat-cell *matCellDef="let element">
+          <ng-container *ngIf="!element.isEmpty; else emptytext">{{element.beer.name}}</ng-container>
+          <ng-template #emptytext>
+            <span class="empty-tap-text">TAPPED OUT</span>
+          </ng-template>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="action">

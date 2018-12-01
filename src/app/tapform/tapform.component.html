@@ -2,6 +2,13 @@
   <h2>{{data.modalTitle}}</h2>
 
   <div>
+    <mat-checkbox
+      formControlName="isEmpty"
+      (change)="this.beerSelector.enabled ? this.beerSelector.disable() : this.beerSelector.enable()"
+      >Tap is Currently Empty</mat-checkbox>
+  </div>
+
+  <div>
     <mat-form-field appearance="outline">
       <input type="text" placeholder="Beer" aria-label="Beer" matInput [formControl]="beerSelector" [matAutocomplete]="auto">
       <mat-autocomplete #auto="matAutocomplete" [displayWith]="beerDisplayFn">
