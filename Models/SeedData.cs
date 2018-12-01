@@ -435,7 +435,7 @@ namespace WhatsOnTap.Models
                         },
                         new Style
                         {
-                            name = " Mixed-Fermentation Sour Beer"
+                            name = "Mixed-Fermentation Sour Beer"
                         },
                         new Style
                         {

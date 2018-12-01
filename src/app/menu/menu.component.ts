@@ -64,6 +64,9 @@ export class MenuComponent implements OnInit {
       t.beer = beers.find((b) => {return b.id == t.beerId;});
     })
 
-    this.taps = taps;
+    this.taps = taps
+      .sort((a, b) => {
+        return a.order < b.order ? -1 : 1;
+      });
   }
 }
