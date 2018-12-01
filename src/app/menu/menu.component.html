@@ -8,36 +8,47 @@
       <h1>{{brewerySettings.BreweryName.stringValue}}</h1>
     </div>
     <div class="beers-container">
+      <!--Normal Horizontal Beer-->
       <div *ngFor="let tap of taps" class="beer-container">
-        <img class="beer-img" src={{tap.beer.labelSrc}}>
-        <div class="beer-info">
-          <div class="beer-header">
-            <h1>{{tap.beer.name}}</h1>
-            <h2>{{tap.beer.style.name}}</h2>
-          </div>
-          <div class="beer-center-info">
-            <div class="center-prop">
-              <span class="center-header">ABV</span>
-              <span class="center-content">{{tap.beer.abv}}%</span>
-              <div class="center-lower">
-                <span *ngIf="brewerySettings.ShowOG.boolValue">OG: {{tap.beer.og}}</span>
-                <span *ngIf="brewerySettings.ShowOG.boolValue && brewerySettings.ShowFG.boolValue">|</span> 
-                <span *ngIf="brewerySettings.ShowFG.boolValue">FG {{tap.beer.fg}}</span>
+        <ng-container *ngIf="!tap.isEmpty; else emptytap">
+          <img class="beer-img" src={{tap.beer.labelSrc}}>
+          <div class="beer-info">
+            <div class="beer-header">
+              <h1>{{tap.beer.name}}</h1>
+              <h2>{{tap.beer.style.name}}</h2>
+            </div>
+            <div class="beer-center-info">
+              <div class="center-prop">
+                <span class="center-header">ABV</span>
+                <span class="center-content">{{tap.beer.abv}}%</span>
+                <div class="center-lower">
+                  <span *ngIf="brewerySettings.ShowOG.boolValue">OG: {{tap.beer.og}}</span>
+                  <span *ngIf="brewerySettings.ShowOG.boolValue && brewerySettings.ShowFG.boolValue">|</span> 
+                  <span *ngIf="brewerySettings.ShowFG.boolValue">FG {{tap.beer.fg}}</span>
+                </div>
+              </div>
+              <div class="center-prop">
+                <span class="center-header">IBU</span>	
+                <span class="center-content">{{tap.beer.ibu}}</span>
+              </div>
+              <div class="center-prop">
+                <span class="center-header">SRM</span>
+                <span class="center-content">{{tap.beer.srm}}</span>
               </div>
             </div>
-            <div class="center-prop">
-              <span class="center-header">IBU</span>	
-              <span class="center-content">{{tap.beer.ibu}}</span>
-            </div>
-            <div class="center-prop">
-              <span class="center-header">SRM</span>
-              <span class="center-content">{{tap.beer.srm}}</span>
+            <div>
+              <p>{{tap.beer.description}}</p>
             </div>
           </div>
-          <div>
-            <p>{{tap.beer.description}}</p>
+        </ng-container>
+        <!--Empty Horizontal Beer-->
+        <ng-template #emptytap>
+          <div class="beer-info">
+            <div class="beer-header">
+              <h1>Nothing on Tap :(</h1>
+            </div>
           </div>
-        </div>
+        </ng-template>
       </div>
     </div>
   </div>

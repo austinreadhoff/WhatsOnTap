@@ -5,4 +5,5 @@ export interface ITap{
     order: number;
     beerId: number;
     beer: IBeer;
+    isEmpty: boolean;
 }
