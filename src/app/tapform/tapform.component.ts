@@ -59,15 +59,16 @@ export class TapformComponent implements OnInit, FormComponent {
     } else {
       this.itemForm.setValue(this.data.tap);
       this.beerSelector.setValue(this.data.tap.beer);
-    }
-    if (this.data.dbops === "delete"){
-      this.SetControlsState(false);
-    }
-    else{
-      this.SetControlsState(true);
 
-      if (this.data.tap.isEmpty){
-        this.beerSelector.disable();
+      if (this.data.dbops === "delete"){
+        this.SetControlsState(false);
+      }
+      else{
+        this.SetControlsState(true);
+  
+        if (this.data.tap.isEmpty){
+          this.beerSelector.disable();
+        }
       }
     }
   }
@@ -101,6 +102,7 @@ export class TapformComponent implements OnInit, FormComponent {
   onSubmit(formData: any) {
     const tapData = formData.value;
     tapData.beerId = this.beerSelector.value.id;
+    tapData.isEmpty = tapData.isEmpty ? tapData.isEmpty : false;
 
     switch (this.data.dbops) {
       case "create":
