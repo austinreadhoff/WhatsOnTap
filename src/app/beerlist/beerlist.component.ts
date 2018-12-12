@@ -25,7 +25,7 @@ export class BeerlistComponent implements OnInit, ListComponent {
   modalBtnTitle: string;
   availableStyles: IStyle[];
 
-  displayedColumns = ['name', 'style', 'abv', 'ibu', 'og', 'fg', 'srm', 'description', 'action'];
+  displayedColumns = ['name', 'style', 'abv', 'ibu', 'og', 'fg', 'srm', 'action'];
   dataSource = new MatTableDataSource<IBeer>();
 
   constructor(public snackBar: MatSnackBar, private _beerService: BeerService, private _styleService: StyleService, private dialog: MatDialog) { }
