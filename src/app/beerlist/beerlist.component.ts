@@ -112,4 +112,13 @@ export class BeerlistComponent implements OnInit, ListComponent {
       }
     });
   }
+
+  toggleLabelUpload(id:number): void{
+    var container = document.getElementById("upload-container-"+id);
+    if (container.classList.contains("upload-container-visible"))
+      container.classList.remove("upload-container-visible");
+    else{
+      container.classList.add("upload-container-visible");
+    }
+  }
 }
