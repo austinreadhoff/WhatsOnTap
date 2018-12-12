@@ -1,0 +1,13 @@
+.settings-body {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+    max-width: 1200px;
+    max-height: 700px;
+    overflow: auto;
+    margin: 0 auto;
+    padding: 20px;
+}
+mat-form-field{
+    max-width: 50%;
+}
