@@ -15,6 +15,7 @@ import {MatFileUploadModule} from 'angular-material-fileupload';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { MenuComponent } from './menu/menu.component';
+import { AdminComponent } from './admin/admin.component';
 import { SettingsComponent } from './settings/settings.component';
 import { BeerlistComponent } from './beerlist/beerlist.component';
 import { BeerformComponent } from './beerform/beerform.component';
@@ -33,6 +34,7 @@ import { SettingService } from './services/setting.service';
     AppComponent,
     HeaderComponent,
     MenuComponent,
+    AdminComponent,
     SettingsComponent,
     BeerlistComponent,
     BeerformComponent,

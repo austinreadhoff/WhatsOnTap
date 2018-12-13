@@ -1,0 +1,10 @@
+<app-header></app-header>
+<h2>
+  Administration
+</h2>
+<div class="admin-container">
+  <a *ngFor="let tile of tiles" routerLink="{{tile.path}}" routerLinkActive="active" class="mat-elevation-z8">
+    <img src="{{tile.imgSrc}}">
+    <p>{{tile.text}}</p>
+  </a>
+</div>
