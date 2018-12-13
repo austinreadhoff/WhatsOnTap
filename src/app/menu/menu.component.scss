@@ -1,6 +1,6 @@
 .menu-body{
     height: 100%;
-    background-image: url("DefaultBackground.jpg");
+    background-image: url("/assets/img/DefaultBackground.jpg");
     color: white;
     font-family: 'Neucha', helvetica, sans-serif;
 
@@ -10,6 +10,9 @@
 }
 .header{
     padding: 20px;
+}
+.brewery-title{
+    color:white;
 }
 .beers-container{
     display: flex;
