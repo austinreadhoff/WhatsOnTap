@@ -1,0 +1,32 @@
+h2{
+    text-align: center;
+}
+.admin-container{
+    display: flex;
+    justify-content: space-between;
+    min-width: 300px;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 20px;
+
+    a{
+        padding-top: 15px;
+        width: 20%;
+        border: 1px solid black;
+        &:hover{
+            text-decoration: none;
+        }
+    }
+
+    img{
+        display: block;
+        margin: 0 auto;
+        width: 109px;
+        height: 120px;
+    }
+
+    p{
+        color: black;
+        text-align: center;
+    }
+}
