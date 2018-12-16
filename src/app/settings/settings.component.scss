@@ -8,11 +8,22 @@
     margin: 0 auto;
     padding: 20px;
 }
-mat-form-field{
-    max-width: 50%;
+.settings-content{
+    display: contents;
 }
+mat-form-field{
+    width: 50%;
+}
+
+.upload-container{
+    display: none;
+}
+.upload-container-visible{
+    display: block !important;
+}
+
 @media screen and (max-width: 1000px) {
     mat-form-field {
-        max-width: 100%;
+        width: 100%;
     }
   }

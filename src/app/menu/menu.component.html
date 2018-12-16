@@ -3,7 +3,7 @@
   <mat-spinner></mat-spinner>
 </div>
 <ng-template #menu>
-  <div class="menu-body">
+  <div class="menu-body" [ngStyle]="{'background':background}">
     <div class="header">
       <h2>What's on Tap at</h2>
       <a class="nav-link" routerLink="/admin"><h1 class="brewery-title">{{brewerySettings.BreweryName.stringValue}}</h1></a>

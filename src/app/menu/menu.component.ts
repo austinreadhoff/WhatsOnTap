@@ -18,8 +18,8 @@ import { IBeer } from '../models/beer';
 export class MenuComponent implements OnInit {
   loadingState: boolean;
   taps: ITap[];
-  breweryName: String;
   brewerySettings: object;
+  background: string;
 
   constructor(private _beerService: BeerService, private _styleService: StyleService, private _tapService: TapService, private _settingService: SettingService) { }
 
@@ -27,9 +27,6 @@ export class MenuComponent implements OnInit {
     this.brewerySettings = {};
     this.loadingState = true;
     this.loadData();
-
-    //TODO: pull from data
-    this.breweryName = "The Best Fucking Brewery"
   }
 
   loadData(){
@@ -54,6 +51,14 @@ export class MenuComponent implements OnInit {
     settings.forEach(setting => {
       this.brewerySettings[setting.key] = setting;
     });
+
+    var backgroundByteArr = this.brewerySettings["MenuBackground"]["byteArrValue"];
+    if (backgroundByteArr == null){
+      this.background = "black";
+    }
+    else{
+      this.background = "url(data:image/jpg;base64,"+backgroundByteArr+")";
+    }
 
     beers.forEach((b)=>{
       b.style = styles.find((s)=>{return s.id == b.styleId;});

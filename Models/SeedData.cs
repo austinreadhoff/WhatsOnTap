@@ -525,6 +525,12 @@ namespace WhatsOnTap.Models
                         key = "ShowFG",
                         type = "bool",
                         boolValue = true
+                    },
+                    new Setting
+                    {
+                        key = "MenuBackground",
+                        type = "byteArr",
+                        byteArrValue = null
                     }
                 };
                 defaultSettings.ForEach(setting => 
