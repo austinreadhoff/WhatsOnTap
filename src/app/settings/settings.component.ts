@@ -45,6 +45,15 @@ export class SettingsComponent implements OnInit {
     }
   }
 
+  toggleLabelUpload(id:string): void{
+    var container = document.getElementById(id);
+    if (container.classList.contains("upload-container-visible"))
+      container.classList.remove("upload-container-visible");
+    else{
+      container.classList.add("upload-container-visible");
+    }
+  }
+
   showMessage(msg: string) {
     this.snackBar.open(msg, '', {
       duration: 3000

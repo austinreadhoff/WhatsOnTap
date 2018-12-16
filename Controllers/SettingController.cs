@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using WhatsOnTap.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
 
 namespace WhatsOnTap.Controllers
 {
@@ -58,6 +59,23 @@ namespace WhatsOnTap.Controllers
             _context.Setting.Update(setting);
             _context.SaveChanges();
             return Ok( new { message= "Setting is updated successfully."});
+        }
+
+        [HttpPost("background")]
+        public async Task<IActionResult> UploadBackground()
+        {
+            Setting backgroundSetting = _context.Setting.Where(s => s.key == "MenuBackground").FirstOrDefault();
+
+            using (var ms = new MemoryStream())
+            {
+                var file = Request.Form.Files.FirstOrDefault();
+                await file.CopyToAsync(ms);
+                backgroundSetting.byteArrValue = ms.ToArray();
+
+                _context.Setting.Update(backgroundSetting);
+                _context.SaveChanges();
+                return Ok();
+            }
         }
     }
 }

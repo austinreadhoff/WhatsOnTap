@@ -22,6 +22,16 @@
       <mat-checkbox #ShowFG
         [checked]="formFields.ShowFG.boolValue"
         (change)="updateSetting(formFields.ShowFG, ShowFG.checked)">Show FG</mat-checkbox>
+
+      <br/>
+      <label>Menu Background</label>
+      <button title="Upload Label" mat-raised-button color="accent" (click)="toggleLabelUpload('upload-background')" style="width:10em;">Upload Image</button>
+      <div id="upload-background" class="upload-container">
+        <input title="Upload Label" class="label-input" color="primary" type="file" [fileUploadInputFor]="fileQueue">
+        <mat-file-upload-queue #fileQueue [fileAlias]="'file'" httpUrl="api/setting/background">      
+          <mat-file-upload [file]="file" [id]="i" *ngFor="let file of fileQueue.files; let i = index"></mat-file-upload>
+        </mat-file-upload-queue>
+      </div>
     </div>
   </div>
 </ng-template>

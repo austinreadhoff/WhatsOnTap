@@ -9,5 +9,6 @@ namespace WhatsOnTap.Models
         public string type {get;set;}
         public string stringValue {get;set;}
         public bool boolValue {get;set;}
+        public byte[] byteArrValue {get;set;}
     }
 }
