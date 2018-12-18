@@ -3,10 +3,12 @@
   <mat-spinner></mat-spinner>
 </div>
 <ng-template #menu>
-  <div class="menu-body" [ngStyle]="{'background':background}">
+  <div class="menu-body" [ngStyle]="{'background':background, 'color':brewerySettings.MenuTextColor.stringValue}">
     <div class="header">
       <h2>What's on Tap at</h2>
-      <a class="nav-link" routerLink="/admin"><h1 class="brewery-title">{{brewerySettings.BreweryName.stringValue}}</h1></a>
+      <a class="nav-link" routerLink="/admin">
+        <h1 class="brewery-title" [ngStyle]="{'color':brewerySettings.MenuTextColor.stringValue}">{{brewerySettings.BreweryName.stringValue}}</h1>
+      </a>
     </div>
     <div class="beers-container">
       <!--Normal Horizontal Beer-->
@@ -21,7 +23,7 @@
               <h2>{{tap.beer.style.name}}</h2>
             </div>
             <div class="beer-center-info">
-              <div class="center-prop">
+              <div class="center-prop" [ngStyle]="{'border-color':brewerySettings.MenuTextColor.stringValue}">
                 <span class="center-header">ABV</span>
                 <span class="center-content">{{tap.beer.abv}}%</span>
                 <div class="center-lower">
@@ -30,11 +32,11 @@
                   <span *ngIf="brewerySettings.ShowFG.boolValue">FG {{tap.beer.fg}}</span>
                 </div>
               </div>
-              <div class="center-prop">
+              <div class="center-prop" [ngStyle]="{'border-color':brewerySettings.MenuTextColor.stringValue}">
                 <span class="center-header">IBU</span>	
                 <span class="center-content">{{tap.beer.ibu}}</span>
               </div>
-              <div class="center-prop">
+              <div class="center-prop" [ngStyle]="{'border-color':brewerySettings.MenuTextColor.stringValue}">
                 <span class="center-header">SRM</span>
                 <span class="center-content">{{tap.beer.srm}}</span>
               </div>

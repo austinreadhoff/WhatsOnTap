@@ -32,6 +32,14 @@
           <mat-file-upload [file]="file" [id]="i" *ngFor="let file of fileQueue.files; let i = index"></mat-file-upload>
         </mat-file-upload-queue>
       </div>
+
+      <br/>
+      <mat-form-field class="settings-field">
+        <input #MenuTextColor matInput placeholder="Menu Font Color (css-compatible values)" 
+          value={{formFields.MenuTextColor.stringValue}}
+          (blur)="updateSetting(formFields.MenuTextColor, MenuTextColor.value)"
+          (keyup.enter)="updateSetting(formFields.MenuTextColor, MenuTextColor.value)">
+      </mat-form-field>
     </div>
   </div>
 </ng-template>
