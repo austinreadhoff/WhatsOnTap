@@ -531,6 +531,12 @@ namespace WhatsOnTap.Models
                         key = "MenuBackground",
                         type = "byteArr",
                         byteArrValue = null
+                    },
+                    new Setting
+                    {
+                        key = "MenuTextColor",
+                        type = "string",
+                        stringValue = "white"
                     }
                 };
                 defaultSettings.ForEach(setting => 
