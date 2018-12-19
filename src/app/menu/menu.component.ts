@@ -53,11 +53,12 @@ export class MenuComponent implements OnInit {
     });
 
     var backgroundByteArr = this.brewerySettings["MenuBackground"]["byteArrValue"];
-    if (backgroundByteArr == null){
-      this.background = "black";
+    var backgroundSolidColor = this.brewerySettings["MenuSolidBackground"]["stringValue"];
+    if (this.brewerySettings["MenuType"]["stringValue"] == "image" && backgroundByteArr != null){
+      this.background = "url(data:image/jpg;base64,"+backgroundByteArr+")";
     }
     else{
-      this.background = "url(data:image/jpg;base64,"+backgroundByteArr+")";
+      this.background = backgroundSolidColor != null ? backgroundSolidColor : "black";
     }
 
     beers.forEach((b)=>{
