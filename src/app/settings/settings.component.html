@@ -24,14 +24,32 @@
         (change)="updateSetting(formFields.ShowFG, ShowFG.checked)">Show FG</mat-checkbox>
 
       <br/>
-      <label>Menu Background</label>
-      <button title="Upload Label" mat-raised-button color="accent" (click)="toggleLabelUpload('upload-background')" style="width:10em;">Upload Image</button>
-      <div id="upload-background" class="upload-container">
-        <input title="Upload Label" class="label-input" color="primary" type="file" [fileUploadInputFor]="fileQueue">
-        <mat-file-upload-queue #fileQueue [fileAlias]="'file'" httpUrl="api/setting/background">      
-          <mat-file-upload [file]="file" [id]="i" *ngFor="let file of fileQueue.files; let i = index"></mat-file-upload>
-        </mat-file-upload-queue>
-      </div>
+      <mat-radio-group #MenuType [(ngModel)]="formFields.MenuType.stringValue" (ngModelChange)="updateSetting(formFields.MenuType, formFields.MenuType.stringValue, true)">
+      <!-- (change)="updateSetting(formFields.MenuType, MenuType.value)" -->
+        <mat-radio-button value="solid">
+            <span class="settings-radio-content">
+              <mat-form-field class="settings-field">
+                <input #MenuSolidBackground matInput placeholder="Menu Solid Background Color (css-compatible values)" 
+                  value={{formFields.MenuSolidBackground.stringValue}}
+                  (blur)="updateSetting(formFields.MenuSolidBackground, MenuSolidBackground.value)"
+                  (keyup.enter)="updateSetting(formFields.MenuSolidBackground, MenuSolidBackground.value)">
+              </mat-form-field>
+            </span>
+        </mat-radio-button>
+        <mat-radio-button value="image">
+          <span class="settings-radio-content">
+            <label>Menu Background</label>
+            <button title="Upload Label" mat-raised-button color="accent" (click)="toggleLabelUpload('upload-background')" style="width:10em;">Upload Image</button>
+            <div id="upload-background" class="upload-container">
+              <input title="Upload Label" class="label-input" color="primary" type="file" [fileUploadInputFor]="fileQueue">
+              <mat-file-upload-queue #fileQueue [fileAlias]="'file'" httpUrl="api/setting/background">      
+                <mat-file-upload [file]="file" [id]="i" *ngFor="let file of fileQueue.files; let i = index"></mat-file-upload>
+              </mat-file-upload-queue>
+            </div>
+          </span>
+        </mat-radio-button>
+      </mat-radio-group>
+
 
       <br/>
       <mat-form-field class="settings-field">

@@ -534,6 +534,18 @@ namespace WhatsOnTap.Models
                     },
                     new Setting
                     {
+                        key = "MenuType",
+                        type = "string",
+                        stringValue = "solid"
+                    },
+                    new Setting
+                    {
+                        key = "MenuSolidBackground",
+                        type = "string",
+                        stringValue = "black"
+                    },
+                    new Setting
+                    {
                         key = "MenuTextColor",
                         type = "string",
                         stringValue = "white"
