@@ -79,18 +79,6 @@ namespace WhatsOnTap.Models
                         },
                         new Style
                         {
-                            name = "American Light Lager"
-                        },
-                        new Style
-                        {
-                            name = "American Light Lager"
-                        },
-                        new Style
-                        {
-                            name = "American Light Lager"
-                        },
-                        new Style
-                        {
                             name = "German Leichtbier"
                         },
                         new Style
