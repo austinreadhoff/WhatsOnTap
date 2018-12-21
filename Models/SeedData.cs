@@ -47,10 +47,6 @@ namespace WhatsOnTap.Models
                         },
                         new Style
                         {
-                            name = "American Light Lager"
-                        },
-                        new Style
-                        {
                             name = "Czech Pale Lager"
                         },
                         new Style
