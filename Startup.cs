@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SignalRWebPack.Hubs;
 using WhatsOnTap.Models;
 
 namespace WhatsOnTap
@@ -30,7 +31,7 @@ namespace WhatsOnTap
         {
             services.AddDbContext<WhatsOnTapContext>(options =>  
                 options.UseSqlite("Data Source=WhatsOnTap.db"));
-                
+            services.AddSignalR();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -44,6 +45,11 @@ namespace WhatsOnTap
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSignalR(options =>
+            {
+                options.MapHub<MenuHub>("/hub");
+            });
 
             app.UseMvc();
 
