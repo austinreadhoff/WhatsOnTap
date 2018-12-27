@@ -40,7 +40,7 @@ namespace WhatsOnTap.Controllers
         }
         
         [HttpPost]
-        public IActionResult Create([FromBody] Tap item)
+        public async Task<IActionResult> Create([FromBody] Tap item)
         {
             if (item == null)
             {
@@ -48,7 +48,7 @@ namespace WhatsOnTap.Controllers
             }
             _context.Tap.Add(item);
             _context.SaveChanges();
-
+            await _menuHubContext.Clients.All.SendAsync("MenuUpdated");
             return Ok( new { message= "Tap added successfully."});
         }
 
@@ -74,12 +74,12 @@ namespace WhatsOnTap.Controllers
 
             _context.Tap.Update(tap);
             _context.SaveChanges();
-            await _menuHubContext.Clients.All.SendAsync("MenuUpdated", item);
+            await _menuHubContext.Clients.All.SendAsync("MenuUpdated");
             return Ok( new { message= "Tap is updated successfully."});
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(long id)
+        public async Task<IActionResult> Delete(long id)
         {
             var tap = _context.Tap.FirstOrDefault(t => t.id == id);
             if (tap == null)
@@ -89,6 +89,7 @@ namespace WhatsOnTap.Controllers
 
             _context.Tap.Remove(tap);
             _context.SaveChanges();
+            await _menuHubContext.Clients.All.SendAsync("MenuUpdated");
             return Ok( new { message= "Tap is deleted successfully."});
         }
     }

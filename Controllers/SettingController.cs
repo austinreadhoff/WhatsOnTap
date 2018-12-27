@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using WhatsOnTap.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
+using Microsoft.AspNetCore.SignalR;
+using SignalRWebPack.Hubs;
 
 namespace WhatsOnTap.Controllers
 {
@@ -13,10 +15,12 @@ namespace WhatsOnTap.Controllers
     public class SettingController : Controller
     {
         private readonly WhatsOnTapContext _context;
+        private readonly IHubContext<MenuHub> _menuHubContext;
 
-        public SettingController(WhatsOnTapContext context)
+        public SettingController(WhatsOnTapContext context, IHubContext<MenuHub> menuHubContext)
         {
             _context = context;
+            _menuHubContext = menuHubContext;
         }
 
         [HttpGet]
@@ -37,7 +41,7 @@ namespace WhatsOnTap.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(long id, [FromBody] Setting item)
+        public async Task<IActionResult> Update(long id, [FromBody] Setting item)
         {
             if (item == null || id == 0)
             {
@@ -58,6 +62,7 @@ namespace WhatsOnTap.Controllers
 
             _context.Setting.Update(setting);
             _context.SaveChanges();
+            await _menuHubContext.Clients.All.SendAsync("MenuUpdated");
             return Ok( new { message= "Setting is updated successfully."});
         }
 
@@ -74,6 +79,7 @@ namespace WhatsOnTap.Controllers
 
                 _context.Setting.Update(backgroundSetting);
                 _context.SaveChanges();
+                await _menuHubContext.Clients.All.SendAsync("MenuUpdated");
                 return Ok();
             }
         }
