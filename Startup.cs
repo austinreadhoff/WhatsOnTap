@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SignalRWebPack.Hubs;
 using WhatsOnTap.Models;
 
 namespace WhatsOnTap
@@ -29,8 +31,8 @@ namespace WhatsOnTap
         {
             services.AddDbContext<WhatsOnTapContext>(options =>  
                 options.UseSqlite("Data Source=WhatsOnTap.db"));
-
-            services.AddMvc();
+            services.AddSignalR();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +45,11 @@ namespace WhatsOnTap
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSignalR(options =>
+            {
+                options.MapHub<MenuHub>("/hub");
+            });
 
             app.UseMvc();
 

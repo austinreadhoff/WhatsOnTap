@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using WhatsOnTap.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using SignalRWebPack.Hubs;
 
 namespace WhatsOnTap.Controllers
 {
@@ -12,10 +14,12 @@ namespace WhatsOnTap.Controllers
     public class StyleController : Controller
     {
         private readonly WhatsOnTapContext _context;
+        private readonly IHubContext<MenuHub> _menuHubContext;
 
-        public StyleController(WhatsOnTapContext context)
+        public StyleController(WhatsOnTapContext context, IHubContext<MenuHub> menuHubContext)
         {
             _context = context;
+            _menuHubContext = menuHubContext;
         }
 
         [HttpGet]
@@ -49,7 +53,7 @@ namespace WhatsOnTap.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(long id, [FromBody] Style item)
+        public async Task<IActionResult> Update(long id, [FromBody] Style item)
         {
             if (item == null || id == 0)
             {
@@ -70,6 +74,7 @@ namespace WhatsOnTap.Controllers
 
             _context.Style.Update(style);
             _context.SaveChanges();
+            await _menuHubContext.Clients.All.SendAsync("MenuUpdated");
             return Ok( new { message= "Style is updated successfully."});
         }
 

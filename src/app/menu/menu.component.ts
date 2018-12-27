@@ -9,6 +9,7 @@ import { ITap } from '../models/tap';
 import { ISetting } from '../models/setting';
 import { IStyle } from '../models/style';
 import { IBeer } from '../models/beer';
+import * as signalR from "@aspnet/signalr";
 
 @Component({
   selector: 'app-menu',
@@ -20,6 +21,9 @@ export class MenuComponent implements OnInit {
   taps: ITap[];
   brewerySettings: object;
   background: string;
+  connection = new signalR.HubConnectionBuilder()
+    .withUrl("/hub")
+    .build();
 
   constructor(private _beerService: BeerService, private _styleService: StyleService, private _tapService: TapService, private _settingService: SettingService) { }
 
@@ -27,9 +31,15 @@ export class MenuComponent implements OnInit {
     this.brewerySettings = {};
     this.loadingState = true;
     this.loadData();
+
+    this.connection.start().catch(err => alert(err));
+    this.connection.on("MenuUpdated", () => {
+      this.menuUpdated()
+    });
   }
 
   loadData(){
+    this.loadingState = true;
     this._settingService.getAllSettings(Global.BASE_SETTING_ENDPOINT)
       .subscribe(settings =>{
         this._tapService.getAllTaps(Global.BASE_TAP_ENDPOINT)
@@ -74,5 +84,9 @@ export class MenuComponent implements OnInit {
       .sort((a, b) => {
         return a.order < b.order ? -1 : 1;
       });
+  }
+
+  menuUpdated(){
+    this.loadData();
   }
 }
