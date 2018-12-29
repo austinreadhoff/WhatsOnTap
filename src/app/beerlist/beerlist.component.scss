@@ -18,3 +18,8 @@
 .upload-container-visible{
     display: block !important;
 }
+@media (max-width:992px){
+    .mobile-hidden{
+        display:none;
+    }
+}

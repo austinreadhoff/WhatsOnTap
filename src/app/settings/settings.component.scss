@@ -29,7 +29,7 @@ mat-radio-button * {
     display: block !important;
 }
 
-@media screen and (max-width: 1000px) {
+@media (max-width:992px) {
     mat-form-field {
         width: 100%;
     }

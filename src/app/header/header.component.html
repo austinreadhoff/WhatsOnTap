@@ -1,10 +1,25 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="navbar-nav">
-    <a class="navbar-brand" routerLink="/" routerLinkActive="active">What's On Tap</a>
-    <a class="nav-link nav-menu-link" routerLink="/" routerLinkActive="active">Menu</a>
-    <a class="nav-link" routerLink="/taps" routerLinkActive="active">Taps</a>
-    <a class="nav-link" routerLink="/beers" routerLinkActive="active">Beers</a>
-    <a class="nav-link" routerLink="/styles" routerLinkActive="active">Styles</a>
-    <a class="nav-link" routerLink="/settings" routerLinkActive="active">Settings</a>
+  <a class="navbar-brand" routerLink="/" routerLinkActive="active">What's On Tap</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbar-collapsible">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/" routerLinkActive="active">Menu</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/taps" routerLinkActive="active">Taps</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/beers" routerLinkActive="active">Beers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/styles" routerLinkActive="active">Styles</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/settings" routerLinkActive="active">Settings</a>
+      </li>
+    </ul>
   </div>
 </nav>
