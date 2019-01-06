@@ -44,10 +44,12 @@ export class MenuComponent implements OnInit {
       .subscribe(settings =>{
         this._tapService.getAllTaps(Global.BASE_TAP_ENDPOINT)
           .subscribe(taps =>{
-            this._styleService.getAllStyles(Global.BASE_STYLE_ENDPOINT)
-              .subscribe(styles => {
-                this._beerService.getAllBeers(Global.BASE_BEER_ENDPOINT)
-                  .subscribe(beers => {
+            var beerIds = taps.map(t => t.beerId);
+            this._beerService.getBeersByIds(Global.BASE_BEER_ENDPOINT, beerIds)
+              .subscribe(beers => {
+                var styleIds = beers.map(b => b.styleId);
+                this._styleService.getStylesByIds(Global.BASE_STYLE_ENDPOINT, styleIds)
+                  .subscribe(styles => {
                     this.setupMenu(settings, taps, styles, beers);
                   });
               });

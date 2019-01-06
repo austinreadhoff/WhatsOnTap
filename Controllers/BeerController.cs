@@ -29,15 +29,20 @@ namespace WhatsOnTap.Controllers
             return _context.Beer.ToList();
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetById(long id)
+        [HttpGet]
+        [Route("GetByIds")]
+        public IActionResult GetByIds([FromQuery(Name="ids")] long[] ids)
         {
-            var item = _context.Beer.FirstOrDefault(t => t.id == id);
-            if (item == null)
+            var items = _context.Beer
+                .Where(t => t.id.HasValue)
+                .Where(t => ids.Contains(t.id.Value))
+                .DefaultIfEmpty(null);
+
+            if (items == null)
             {
                 return NotFound();
             }
-            return new ObjectResult(item);
+            return new ObjectResult(items);
         }
         
         [HttpPost]
