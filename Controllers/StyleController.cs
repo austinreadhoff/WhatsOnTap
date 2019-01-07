@@ -22,10 +22,22 @@ namespace WhatsOnTap.Controllers
             _menuHubContext = menuHubContext;
         }
 
+
         [HttpGet]
         public IEnumerable<Style> GetAll()
         {
             return _context.Style.ToList();
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(long id)
+        {
+            var item = _context.Style.FirstOrDefault(s => s.id == id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            return new ObjectResult(item);
         }
 
         [HttpGet]
@@ -78,7 +90,8 @@ namespace WhatsOnTap.Controllers
 
             _context.Style.Update(style);
             _context.SaveChanges();
-            await _menuHubContext.Clients.All.SendAsync("MenuUpdated");
+
+            await _menuHubContext.Clients.All.SendAsync("StyleUpdated", style.id);
             return Ok( new { message= "Style is updated successfully."});
         }
 

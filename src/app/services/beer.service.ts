@@ -21,7 +21,12 @@ export class BeerService {
       .pipe(catchError(this.handleError));
   }
 
-  getBeersByIds(url:string, ids:number[]){
+  getBeerById(url:string, id:number): Observable<IBeer>{
+    return this.http.get<IBeer>(`${url}/${id}`, httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
+  getBeersByIds(url:string, ids:number[]): Observable<IBeer[]>{
     var inputString = '?ids=' + ids.join('&ids=');
     return this.http.get<IBeer[]>(`${url}/GetByIds${inputString}`, httpOptions)
       .pipe(catchError(this.handleError));

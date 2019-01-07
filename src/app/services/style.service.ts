@@ -21,6 +21,11 @@ export class StyleService {
       .pipe(catchError(this.handleError));
   }
 
+  getStyleById(url:string, id:number){
+    return this.http.get<IStyle>(`${url}/${id}`, httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
   getStylesByIds(url:string, ids:number[]){
     var inputString = '?ids=' + ids.join('&ids=');
     return this.http.get<IStyle[]>(`${url}/GetByIds${inputString}`, httpOptions)
