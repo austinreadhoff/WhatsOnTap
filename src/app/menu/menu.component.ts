@@ -130,42 +130,63 @@ export class MenuComponent implements OnInit {
   }
 
   async updateBeer(id:number){
-    var updatedIndex = this.taps
-    .map(t => t.beerId)
-    .indexOf(id);
-    
-    if (updatedIndex != -1){
+    var updatedIndices = [];
+
+    this.taps
+      .map(t => t.beerId)
+      .forEach((beerId, index) => {
+        if (beerId == id){
+          updatedIndices.push(index);
+        }
+      });
+
+    if (updatedIndices.length){
       this._beerService.getBeerById(Global.BASE_BEER_ENDPOINT, id)
         .subscribe(async(beer) => {
           beer = await this.fillBeerData(beer);
-          this.taps[updatedIndex].beer = beer;
+          updatedIndices.forEach(i => {
+            this.taps[i].beer = beer;
+          }, this);
         });
     }
   }
 
   updateLabel(id:number, label:string){
-    var updatedIndex = this.taps
-      .map(t => t.beerId)
-      .indexOf(id);
+    var updatedIndices = [];
 
-    if (updatedIndex != -1){
-      this.taps[updatedIndex].beer.label = label;
-      this.taps[updatedIndex].beer.labelSrc = `data:image/png;base64,${label}`;
-    }
+    this.taps
+      .map(t => t.beerId)
+      .forEach((beerId, index) => {
+        if (beerId == id){
+          updatedIndices.push(index);
+        }
+      });
+    
+    updatedIndices.forEach(i => {
+      this.taps[i].beer.label = label;
+      this.taps[i].beer.labelSrc = `data:image/png;base64,${label}`;
+    }, this);
   }
 
   updateStyle(id:number){
-    var updatedIndex = this.taps
+    var updatedIndices = [];
+
+    this.taps
       .map(t => t.beer)
       .map(b => b.styleId)
-      .indexOf(id);
+      .forEach((styleId, index) => {
+        if (styleId == id){
+          updatedIndices.push(index);
+        }
+      });
 
-    if (updatedIndex != -1)
-    {
+    if (updatedIndices.length){
       this._styleService.getStyleById(Global.BASE_STYLE_ENDPOINT, id)
-        .subscribe(style => {
-          this.taps[updatedIndex].beer.style = style;
-        })
+        .subscribe(async(style) => {
+          updatedIndices.forEach(i => {
+            this.taps[i].beer.style = style;
+          }, this);
+        });
     }
   }
 
