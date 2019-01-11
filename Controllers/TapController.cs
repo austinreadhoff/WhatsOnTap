@@ -48,7 +48,7 @@ namespace WhatsOnTap.Controllers
             }
             _context.Tap.Add(item);
             _context.SaveChanges();
-            await _menuHubContext.Clients.All.SendAsync("MenuUpdated");
+            await _menuHubContext.Clients.All.SendAsync("TapCreated", item);
             return Ok( new { message= "Tap added successfully."});
         }
 
@@ -74,7 +74,7 @@ namespace WhatsOnTap.Controllers
 
             _context.Tap.Update(tap);
             _context.SaveChanges();
-            await _menuHubContext.Clients.All.SendAsync("MenuUpdated");
+            await _menuHubContext.Clients.All.SendAsync("TapUpdated", tap);
             return Ok( new { message= "Tap is updated successfully."});
         }
 
@@ -89,7 +89,7 @@ namespace WhatsOnTap.Controllers
 
             _context.Tap.Remove(tap);
             _context.SaveChanges();
-            await _menuHubContext.Clients.All.SendAsync("MenuUpdated");
+            await _menuHubContext.Clients.All.SendAsync("TapDeleted", id);
             return Ok( new { message= "Tap is deleted successfully."});
         }
     }

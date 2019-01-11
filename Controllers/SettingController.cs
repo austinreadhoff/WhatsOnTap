@@ -62,7 +62,7 @@ namespace WhatsOnTap.Controllers
 
             _context.Setting.Update(setting);
             _context.SaveChanges();
-            await _menuHubContext.Clients.All.SendAsync("MenuUpdated");
+            await _menuHubContext.Clients.All.SendAsync("SettingUpdated", setting);
             return Ok( new { message= "Setting is updated successfully."});
         }
 
@@ -79,7 +79,7 @@ namespace WhatsOnTap.Controllers
 
                 _context.Setting.Update(backgroundSetting);
                 _context.SaveChanges();
-                await _menuHubContext.Clients.All.SendAsync("MenuUpdated");
+                await _menuHubContext.Clients.All.SendAsync("SettingUpdated", backgroundSetting);
                 return Ok();
             }
         }

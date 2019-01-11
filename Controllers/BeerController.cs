@@ -29,6 +29,17 @@ namespace WhatsOnTap.Controllers
             return _context.Beer.ToList();
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetById(long id)
+        {
+            var item = _context.Beer.FirstOrDefault(t => t.id == id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            return new ObjectResult(item);
+        }
+
         [HttpGet]
         [Route("GetByIds")]
         public IActionResult GetByIds([FromQuery(Name="ids")] long[] ids)
@@ -80,7 +91,8 @@ namespace WhatsOnTap.Controllers
 
             _context.Beer.Update(beer);
             _context.SaveChanges();
-            await _menuHubContext.Clients.All.SendAsync("MenuUpdated");
+            
+            await _menuHubContext.Clients.All.SendAsync("BeerUpdated", beer.id);
             return Ok( new { message= "Beer is updated successfully."});
         }
 
@@ -111,7 +123,7 @@ namespace WhatsOnTap.Controllers
 
                 _context.Beer.Update(beer);
                 _context.SaveChanges();
-                await _menuHubContext.Clients.All.SendAsync("MenuUpdated");
+                await _menuHubContext.Clients.All.SendAsync("LabelUpdated", id, beer.label);
                 return Ok();
             }
         }
