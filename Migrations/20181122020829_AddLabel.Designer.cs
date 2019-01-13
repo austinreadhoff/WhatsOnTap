@@ -39,7 +39,7 @@ namespace WhatsOnTap.Migrations
 
                     b.Property<double>("srm");
 
-                    b.Property<int>("styleId");
+                    b.Property<long>("styleId");
 
                     b.HasKey("id");
 
@@ -63,7 +63,7 @@ namespace WhatsOnTap.Migrations
                     b.Property<long?>("id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("beerId");
+                    b.Property<long>("beerId");
 
                     b.Property<int>("order");
 

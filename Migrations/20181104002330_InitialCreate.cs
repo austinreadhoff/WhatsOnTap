@@ -13,7 +13,7 @@ namespace WhatsOnTap.Migrations
                     id = table.Column<long>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     name = table.Column<string>(nullable: true),
-                    styleId = table.Column<int>(nullable: true),
+                    styleId = table.Column<long>(nullable: true),
                     abv = table.Column<double>(nullable: false),
                     ibu = table.Column<double>(nullable: false),
                     og = table.Column<double>(nullable: false),
@@ -33,7 +33,7 @@ namespace WhatsOnTap.Migrations
                     id = table.Column<long>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     order = table.Column<int>(nullable: false),
-                    beerId = table.Column<int>(nullable: false)
+                    beerId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
