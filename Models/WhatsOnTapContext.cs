@@ -13,5 +13,6 @@ namespace WhatsOnTap.Models
         public DbSet<Tap> Tap { get; set; }
         public DbSet<Style> Style { get; set; }
         public DbSet<Setting> Setting { get; set; }
+        public DbSet<Label> Label{ get; set; }
     }
 }

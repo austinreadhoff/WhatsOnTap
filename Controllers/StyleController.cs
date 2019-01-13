@@ -46,8 +46,8 @@ namespace WhatsOnTap.Controllers
         {
             var items = _context.Style
                 .Where(s => s.id.HasValue)
-                .Where(s => ids.Contains(s.id.Value))
-                .DefaultIfEmpty(null);
+                .Where(s => ids.Contains(s.id.Value));
+
             if (items == null)
             {
                 return NotFound();

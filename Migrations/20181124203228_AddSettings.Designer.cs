@@ -31,7 +31,7 @@ namespace WhatsOnTap.Migrations
 
                     b.Property<double>("ibu");
 
-                    b.Property<byte[]>("label");
+                    b.Property<long?>("labelId");
 
                     b.Property<string>("name");
 

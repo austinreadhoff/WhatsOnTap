@@ -28,6 +28,7 @@ import { BeerService } from './services/beer.service';
 import { TapService } from './services/tap.service';
 import { StyleService } from './services/style.service';
 import { SettingService } from './services/setting.service';
+import { LabelService } from './services/label.service';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,7 @@ import { SettingService } from './services/setting.service';
     LayoutModule,
     Routing
   ],
-  providers: [BeerService, TapService, StyleService, SettingService],
+  providers: [BeerService, TapService, StyleService, SettingService, LabelService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

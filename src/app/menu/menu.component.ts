@@ -10,6 +10,8 @@ import { ISetting } from '../models/setting';
 import { IStyle } from '../models/style';
 import { IBeer } from '../models/beer';
 import * as signalR from "@aspnet/signalr";
+import { ILabel } from '../models/label';
+import { LabelService } from '../services/label.service';
 
 @Component({
   selector: 'app-menu',
@@ -25,7 +27,13 @@ export class MenuComponent implements OnInit {
     .withUrl("/hub")
     .build();
 
-  constructor(private _beerService: BeerService, private _styleService: StyleService, private _tapService: TapService, private _settingService: SettingService) { }
+  constructor(
+    private _beerService: BeerService,
+    private _styleService: StyleService,
+    private _tapService: TapService,
+    private _settingService: SettingService,
+    private _labelService: LabelService
+    ) { }
 
   ngOnInit() {
     this.brewerySettings = {};
@@ -45,8 +53,8 @@ export class MenuComponent implements OnInit {
     this.connection.on("BeerUpdated", (id) => {
       this.updateBeer(id);
     });
-    this.connection.on("LabelUpdated", (id, label) => {
-      this.updateLabel(id, label);
+    this.connection.on("LabelUpdated", (beerId, labelId) => {
+      this.updateLabel(beerId, labelId);
     });
     this.connection.on("StyleUpdated", (id) => {
       this.updateStyle(id);
@@ -66,16 +74,20 @@ export class MenuComponent implements OnInit {
             this._beerService.getBeersByIds(Global.BASE_BEER_ENDPOINT, beerIds)
               .subscribe(beers => {
                 var styleIds = beers.map(b => b.styleId);
+                var labelIds = beers.map(b => b.labelId);
                 this._styleService.getStylesByIds(Global.BASE_STYLE_ENDPOINT, styleIds)
                   .subscribe(styles => {
-                    this.setupMenu(settings, taps, styles, beers);
+                    this._labelService.getLabelsByIds(Global.BASE_LABEL_ENDPOINT, labelIds)
+                      .subscribe(labels => {
+                        this.setupMenu(settings, taps, styles, labels, beers);
+                      });
                   });
               });
           });
       });
   }
 
-  setupMenu(settings: ISetting[], taps: ITap[], styles: IStyle[], beers: IBeer[]){
+  setupMenu(settings: ISetting[], taps: ITap[], styles: IStyle[], labels: ILabel[], beers: IBeer[]){
     this.loadingState = false;
 
     settings.forEach(setting => {
@@ -93,7 +105,10 @@ export class MenuComponent implements OnInit {
 
     beers.forEach((b)=>{
       b.style = styles.find((s)=>{return s.id == b.styleId;});
-      b.labelSrc = `data:image/png;base64,${b.label}`;
+      b.label = labels.find((l)=>{return l.id == b.labelId;}); 
+      if (b.label){
+        b.labelSrc = `data:image/png;base64,${b.label.image}`;
+      }
     });
 
     taps.forEach((t)=>{
@@ -151,21 +166,26 @@ export class MenuComponent implements OnInit {
     }
   }
 
-  updateLabel(id:number, label:string){
+  updateLabel(relatedBeerId:number, labelId:number){
     var updatedIndices = [];
 
     this.taps
       .map(t => t.beerId)
       .forEach((beerId, index) => {
-        if (beerId == id){
+        if (beerId == relatedBeerId){
           updatedIndices.push(index);
         }
       });
     
-    updatedIndices.forEach(i => {
-      this.taps[i].beer.label = label;
-      this.taps[i].beer.labelSrc = `data:image/png;base64,${label}`;
-    }, this);
+    if (updatedIndices.length){
+      this._labelService.getLabelById(Global.BASE_LABEL_ENDPOINT, labelId)
+        .subscribe(async(label) => {
+          updatedIndices.forEach(i => {
+            this.taps[i].beer.label = label;
+            this.taps[i].beer.labelSrc = `data:image/png;base64,${label.image}`;
+          }, this);
+        });
+    }
   }
 
   updateStyle(id:number){
@@ -198,15 +218,9 @@ export class MenuComponent implements OnInit {
   fillTapData(tap): Promise<ITap>{
     return new Promise(resolve => {
     this._beerService.getBeerById(Global.BASE_BEER_ENDPOINT, tap.beerId)
-      .subscribe(beer => {
-        tap.beer = beer;
-        
-        this._styleService.getStyleById(Global.BASE_STYLE_ENDPOINT, beer.styleId)
-        .subscribe(style => {
-          tap.beer.style = style;
-
-          resolve(tap);
-        });
+      .subscribe(async(beer) => {
+        tap.beer = await this.fillBeerData(beer);
+        resolve(tap);
       });
     });
   }
@@ -216,8 +230,17 @@ export class MenuComponent implements OnInit {
       this._styleService.getStyleById(Global.BASE_STYLE_ENDPOINT, beer.styleId)
       .subscribe(style => {
         beer.style = style;
-
-        resolve(beer);
+        if (beer.labelId){
+          this._labelService.getLabelById(Global.BASE_LABEL_ENDPOINT, beer.labelId)
+          .subscribe(label => {
+            beer.label = label;
+            beer.labelSrc = `data:image/png;base64,${beer.label.image}`;
+            resolve(beer);
+          });
+        }
+        else{
+          resolve(beer);
+        }
       });
     });
   }

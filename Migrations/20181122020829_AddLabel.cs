@@ -7,8 +7,8 @@ namespace WhatsOnTap.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<byte[]>(
-                name: "label",
+            migrationBuilder.AddColumn<long?>(
+                name: "labelId",
                 table: "Beer",
                 nullable: true);
         }
@@ -16,7 +16,7 @@ namespace WhatsOnTap.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "label",
+                name: "labelId",
                 table: "Beer");
         }
     }

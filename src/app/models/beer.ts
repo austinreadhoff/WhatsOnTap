@@ -1,4 +1,5 @@
 import { IStyle } from "./style";
+import { ILabel } from "./label";
 
 export interface IBeer{
     id: number;
@@ -11,6 +12,7 @@ export interface IBeer{
     fg: number;
     srm: number;
     description: string;
-    label: string;
+    labelId: number;
+    label: ILabel;
     labelSrc: string;
 }

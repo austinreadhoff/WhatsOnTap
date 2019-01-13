@@ -32,7 +32,7 @@ namespace WhatsOnTap.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(long id)
         {
-            var item = _context.Beer.FirstOrDefault(t => t.id == id);
+            var item = _context.Beer.FirstOrDefault(b => b.id == id);
             if (item == null)
             {
                 return NotFound();
@@ -45,9 +45,8 @@ namespace WhatsOnTap.Controllers
         public IActionResult GetByIds([FromQuery(Name="ids")] long[] ids)
         {
             var items = _context.Beer
-                .Where(t => t.id.HasValue)
-                .Where(t => ids.Contains(t.id.Value))
-                .DefaultIfEmpty(null);
+                .Where(b => b.id.HasValue)
+                .Where(b => ids.Contains(b.id.Value));
 
             if (items == null)
             {
@@ -77,7 +76,7 @@ namespace WhatsOnTap.Controllers
                 return BadRequest();
             }
 
-            var beer = _context.Beer.FirstOrDefault(t => t.id == id);
+            var beer = _context.Beer.FirstOrDefault(b => b.id == id);
             if (beer == null)
             {
                 return NotFound();
@@ -99,7 +98,7 @@ namespace WhatsOnTap.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {
-            var beer = _context.Beer.FirstOrDefault(t => t.id == id);
+            var beer = _context.Beer.FirstOrDefault(b => b.id == id);
             if (beer == null)
             {
                 return NotFound();
@@ -108,24 +107,6 @@ namespace WhatsOnTap.Controllers
             _context.Beer.Remove(beer);
             _context.SaveChanges();
             return Ok( new { message= "Beer is deleted successfully."});
-        }
-
-        [HttpPost("label")]
-        public async Task<IActionResult> UploadLabel(int id)
-        { 
-            Beer beer = _context.Beer.Where(b => b.id == id).FirstOrDefault();
-
-            using (var ms = new MemoryStream())
-            {
-                var file = Request.Form.Files.FirstOrDefault();
-                await file.CopyToAsync(ms);
-                beer.label = ms.ToArray();
-
-                _context.Beer.Update(beer);
-                _context.SaveChanges();
-                await _menuHubContext.Clients.All.SendAsync("LabelUpdated", id, beer.label);
-                return Ok();
-            }
         }
     }
 }

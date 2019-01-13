@@ -9,14 +9,14 @@ using WhatsOnTap.Models;
 namespace WhatsOnTap.Migrations
 {
     [DbContext(typeof(WhatsOnTapContext))]
-    [Migration("20181130221459_AddEmptyTap")]
-    partial class AddEmptyTap
+    [Migration("20190112230936_LabelTabel")]
+    partial class LabelTabel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024");
+                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
 
             modelBuilder.Entity("WhatsOnTap.Models.Beer", b =>
                 {
@@ -46,12 +46,28 @@ namespace WhatsOnTap.Migrations
                     b.ToTable("Beer");
                 });
 
+            modelBuilder.Entity("WhatsOnTap.Models.Label", b =>
+                {
+                    b.Property<long?>("id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("extension");
+
+                    b.Property<byte[]>("image");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Label");
+                });
+
             modelBuilder.Entity("WhatsOnTap.Models.Setting", b =>
                 {
                     b.Property<long?>("id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<bool>("boolValue");
+
+                    b.Property<byte[]>("byteArrValue");
 
                     b.Property<string>("key");
 

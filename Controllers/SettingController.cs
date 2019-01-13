@@ -32,7 +32,7 @@ namespace WhatsOnTap.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(long id)
         {
-            var item = _context.Setting.FirstOrDefault(t => t.id == id);
+            var item = _context.Setting.FirstOrDefault(s => s.id == id);
             if (item == null)
             {
                 return NotFound();
@@ -48,7 +48,7 @@ namespace WhatsOnTap.Controllers
                 return BadRequest();
             }
 
-            var setting = _context.Setting.FirstOrDefault(t => t.id == id);
+            var setting = _context.Setting.FirstOrDefault(s => s.id == id);
             if (setting == null)
             {
                 return NotFound();
