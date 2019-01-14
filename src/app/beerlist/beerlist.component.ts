@@ -40,7 +40,7 @@ export class BeerlistComponent implements OnInit, ListComponent {
       .subscribe(styles => {
         this.availableStyles = styles
           .sort((a, b) => {
-            return a.name < b.name ? -1 : 1;
+            return a.name.localeCompare(b.name)
           });
         this._beerService.getAllBeers(Global.BASE_BEER_ENDPOINT)
           .subscribe(items => {
@@ -50,7 +50,7 @@ export class BeerlistComponent implements OnInit, ListComponent {
             });
             this.dataSource.data = items
               .sort((a, b) => {
-                return a.name < b.name ? -1 : 1;
+                return a.name.localeCompare(b.name)
               });
           });
       });

@@ -39,7 +39,7 @@ export class TaplistComponent implements OnInit,ListComponent {
       .subscribe(beers => {
         this.availableBeers = beers
           .sort((a, b) => {
-            return a.name < b.name ? -1 : 1;
+            return a.name.localeCompare(b.name)
           });
         this._tapService.getAllTaps(Global.BASE_TAP_ENDPOINT)
           .subscribe(items => {
