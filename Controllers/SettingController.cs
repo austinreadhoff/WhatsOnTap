@@ -76,6 +76,7 @@ namespace WhatsOnTap.Controllers
                 var file = Request.Form.Files.FirstOrDefault();
                 await file.CopyToAsync(ms);
                 backgroundSetting.byteArrValue = ms.ToArray();
+                backgroundSetting.stringValue = file.FileName.Substring(file.FileName.LastIndexOf('.')+1);
 
                 _context.Setting.Update(backgroundSetting);
                 _context.SaveChanges();

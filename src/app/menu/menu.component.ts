@@ -95,9 +95,10 @@ export class MenuComponent implements OnInit {
     });
 
     var backgroundByteArr = this.brewerySettings["MenuBackground"]["byteArrValue"];
+    var backgroundExtension = this.brewerySettings["MenuBackground"]["stringValue"];
     var backgroundSolidColor = this.brewerySettings["MenuSolidBackground"]["stringValue"];
     if (this.brewerySettings["MenuType"]["stringValue"] == "image" && backgroundByteArr != null){
-      this.background = "url(data:image/jpg;base64,"+backgroundByteArr+")";
+      this.background = "url(data:image/"+backgroundExtension+";base64,"+backgroundByteArr+")";
     }
     else{
       this.background = backgroundSolidColor != null ? backgroundSolidColor : "black";
@@ -107,7 +108,7 @@ export class MenuComponent implements OnInit {
       b.style = styles.find((s)=>{return s.id == b.styleId;});
       b.label = labels.find((l)=>{return l.id == b.labelId;}); 
       if (b.label){
-        b.labelSrc = `data:image/png;base64,${b.label.image}`;
+        b.labelSrc = `data:image/${b.label.extension};base64,${b.label.image}`;
       }
     });
 
@@ -182,7 +183,7 @@ export class MenuComponent implements OnInit {
         .subscribe(async(label) => {
           updatedIndices.forEach(i => {
             this.taps[i].beer.label = label;
-            this.taps[i].beer.labelSrc = `data:image/png;base64,${label.image}`;
+            this.taps[i].beer.labelSrc = `data:image/${label.extension};base64,${label.image}`;
           }, this);
         });
     }
@@ -234,7 +235,7 @@ export class MenuComponent implements OnInit {
           this._labelService.getLabelById(Global.BASE_LABEL_ENDPOINT, beer.labelId)
           .subscribe(label => {
             beer.label = label;
-            beer.labelSrc = `data:image/png;base64,${beer.label.image}`;
+            beer.labelSrc = `data:image/${beer.label.extension};base64,${beer.label.image}`;
             resolve(beer);
           });
         }

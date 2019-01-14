@@ -1,6 +1,13 @@
+@font-face{
+    font-family: 'Chalkduster';
+    src: url(/assets/fonts/Chalkduster.ttf.eot),
+        url(/assets/fonts/Chalkduster.ttf.svg),
+        url(/assets/fonts/Chalkduster.ttf.woff);
+}
+
 .menu-body{
     height: 100%;
-    font-family: 'Neucha', helvetica, sans-serif;
+    font-family: 'Chalkduster', helvetica, sans-serif;
 
     h1,h2,p{
         text-align: center;

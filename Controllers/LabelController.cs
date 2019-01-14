@@ -67,7 +67,7 @@ namespace WhatsOnTap.Controllers
                 Label label = new Label()
                 {
                     image = ms.ToArray(),
-                    extension = file.FileName.Substring(file.FileName.LastIndexOf('.'))
+                    extension = file.FileName.Substring(file.FileName.LastIndexOf('.')+1)
                 };
 
                 Label oldLabel = _context.Label.Where(l => l.id == beer.labelId).FirstOrDefault();

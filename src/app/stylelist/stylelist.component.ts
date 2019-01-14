@@ -38,7 +38,7 @@ export class StylelistComponent implements OnInit, ListComponent {
         this.loadingState = false;
         this.dataSource.data = items
           .sort((a, b) => {
-            return a.name < b.name ? -1 : 1;
+            return a.name.localeCompare(b.name)
           });
       });
   }
