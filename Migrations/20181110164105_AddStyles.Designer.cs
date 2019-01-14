@@ -61,7 +61,7 @@ namespace WhatsOnTap.Migrations
                     b.Property<long?>("id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("beerId");
+                    b.Property<long>("beerId");
 
                     b.Property<int>("order");
 

@@ -6,7 +6,7 @@ namespace WhatsOnTap.Models
     {
         public long? id { get; set; }
         public int order { get; set; }
-        public int beerId {get;set;}
+        public long beerId {get;set;}
         public bool isEmpty {get;set;}
     }
 }
