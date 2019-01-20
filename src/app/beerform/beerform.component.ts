@@ -148,14 +148,14 @@ export class BeerformComponent implements OnInit, FormComponent {
             }
           },
           error => {
-            this.dialogRef.close('error');
+            this.dialogRef.close(error);
           }
         );
         break;
     }
   }
 
-  //Stuff for the beer autocomplete
+  //Stuff for the style autocomplete
   styleDisplayFn(style?: IStyle): string | undefined {
     return style ? style.name : undefined;
   }

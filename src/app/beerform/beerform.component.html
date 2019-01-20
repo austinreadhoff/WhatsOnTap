@@ -75,7 +75,7 @@
   <div>
     <mat-form-field appearance="outline">
       <mat-label>Description</mat-label>
-      <textarea matInput placeholder="Description" formControlName="description"></textarea>
+      <textarea matInput matTextareaAutosize placeholder="Description" formControlName="description"></textarea>
       <mat-error *ngIf="formErrors.description">
         {{ formErrors.description }}
       </mat-error>
