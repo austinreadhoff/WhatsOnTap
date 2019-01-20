@@ -58,7 +58,13 @@ export class BeerService {
         `Backend returned code ${error.status}, ` +
         `body was: ${error.error}`);
     }
-    // return an observable with a user-facing error message
-    return throwError('Something bad happened; please try again later.');
+    //status-specific responses
+    if (error.status == 409){
+      return throwError('409');
+    }
+    else{
+      //default
+      return throwError('error');
+    }
   }
 }

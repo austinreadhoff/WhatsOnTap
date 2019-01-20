@@ -104,6 +104,12 @@ namespace WhatsOnTap.Controllers
                 return NotFound();
             }
 
+            var onTap = _context.Tap.Any(t => t.beerId == id);
+            if (onTap)
+            {
+                return StatusCode(409);
+            }
+
             _context.Beer.Remove(beer);
             _context.SaveChanges();
             return Ok( new { message= "Beer is deleted successfully."});
