@@ -1,8 +1,11 @@
-@font-face{
+@font-face {
     font-family: 'Chalkduster';
-    src: url(/assets/fonts/Chalkduster.ttf.eot),
-        url(/assets/fonts/Chalkduster.ttf.svg),
-        url(/assets/fonts/Chalkduster.ttf.woff);
+    src: url('/assets/fonts/Chalkduster.eot');
+    src: url('/assets/fonts/Chalkduster.eot?#iefix') format('embedded-opentype'),
+        url('/assets/fonts/Chalkduster.woff2') format('woff2'),
+        url('/assets/fonts/Chalkduster.woff') format('woff'),
+        url('/assets/fonts/Chalkduster.ttf') format('truetype'),
+        url('/assets/fonts/Chalkduster.svg#Chalkduster') format('svg');
 }
 
 .menu-body{
