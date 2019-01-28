@@ -11,6 +11,9 @@
   <div>
     <mat-form-field appearance="outline">
       <input type="text" placeholder="Beer" aria-label="Beer" matInput [formControl]="beerSelector" [matAutocomplete]="auto">
+      <mat-error *ngIf="typeaheadErrors.beer">
+        {{ typeaheadErrors.beer }}
+      </mat-error>
       <mat-autocomplete #auto="matAutocomplete" [displayWith]="beerDisplayFn">
         <mat-option *ngFor="let option of filteredBeers | async" [value]="option">
           {{option.name}}

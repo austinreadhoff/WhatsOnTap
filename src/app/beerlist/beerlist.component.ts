@@ -107,6 +107,8 @@ export class BeerlistComponent implements OnInit, ListComponent {
         }
       } else if (result === '409') {
         this.showMessage('Cannot delete a beer that is currently on tap.');
+      } else if (result === 'styleTxt') {
+        this.showMessage('Please select a valid style from the list');
       } else if (result === 'error') {
         this.showMessage('There is some issue in saving records, please complain to system administrator!');
       }
