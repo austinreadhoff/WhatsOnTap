@@ -48,6 +48,7 @@ namespace WhatsOnTap.Controllers
             }
             _context.Tap.Add(item);
             _context.SaveChanges();
+            ReorderTaps(item);
             await _menuHubContext.Clients.All.SendAsync("TapCreated", item);
             return Ok( new { message= "Tap added successfully."});
         }
@@ -74,6 +75,7 @@ namespace WhatsOnTap.Controllers
 
             _context.Tap.Update(tap);
             _context.SaveChanges();
+            ReorderTaps(tap);
             await _menuHubContext.Clients.All.SendAsync("TapUpdated", tap);
             return Ok( new { message= "Tap is updated successfully."});
         }
@@ -92,5 +94,26 @@ namespace WhatsOnTap.Controllers
             await _menuHubContext.Clients.All.SendAsync("TapDeleted", id);
             return Ok( new { message= "Tap is deleted successfully."});
         }
+
+        #region private helpers
+        
+        private void ReorderTaps(Tap editedTap){
+            if (_context.Tap.Count(t => t.order == editedTap.order) > 1)
+            {
+                List<Tap> taps = _context.Tap.OrderBy(t => t.order).ToList();
+                taps.Remove(editedTap);
+                taps.Insert(editedTap.order-1, editedTap);
+
+                for(int i=0; i<taps.Count; i++)
+                {
+                    taps[i].order = i+1;
+                    _context.Tap.Update(taps[i]);
+                }
+
+                _context.SaveChanges();
+            }
+        }
+
+        #endregion
     }
 }
