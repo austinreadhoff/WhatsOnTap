@@ -14,7 +14,7 @@
       <div *ngFor="let tap of taps" class="beer-container">
         <ng-container *ngIf="!tap.isEmpty; else emptytap">
           <img class="beer-img" 
-            *ngIf="tap.beer.labelSrc.indexOf(';base64,null') == -1"
+            *ngIf="tap.beer.labelSrc != null"
             src="{{tap.beer.labelSrc}}">
           <div class="beer-info">
             <div class="beer-header">

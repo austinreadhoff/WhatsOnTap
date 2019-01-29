@@ -102,6 +102,9 @@ export class MenuComponent implements OnInit {
       if (b.label){
         b.labelSrc = `data:image/${b.label.extension};base64,${b.label.image}`;
       }
+      else{
+        b.labelSrc = null;
+      }
     });
 
     taps.forEach((t)=>{
