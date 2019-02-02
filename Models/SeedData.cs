@@ -500,6 +500,24 @@ namespace WhatsOnTap.Models
                     },
                     new Setting
                     {
+                        key = "ShowStyle",
+                        type = "bool",
+                        boolValue = true
+                    },
+                    new Setting
+                    {
+                        key = "ShowABV",
+                        type = "bool",
+                        boolValue = true
+                    },
+                    new Setting
+                    {
+                        key = "ShowIBU",
+                        type = "bool",
+                        boolValue = true
+                    },
+                    new Setting
+                    {
                         key = "ShowOG",
                         type = "bool",
                         boolValue = true
@@ -507,6 +525,18 @@ namespace WhatsOnTap.Models
                     new Setting
                     {
                         key = "ShowFG",
+                        type = "bool",
+                        boolValue = true
+                    },
+                    new Setting
+                    {
+                        key = "ShowSRM",
+                        type = "bool",
+                        boolValue = true
+                    },
+                    new Setting
+                    {
+                        key = "ShowDesc",
                         type = "bool",
                         boolValue = true
                     },

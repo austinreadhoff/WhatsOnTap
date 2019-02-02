@@ -7,13 +7,29 @@
     <h2 style="text-align: center;">Brewery Settings</h2>
   </div>
   <div class="settings-body mat-elevation-z8">
-    <div class="settings-content" style="display:flex;flex-direction:column;">
+    <div class="settings-content" style="display:flex;flex-direction:column;">      
+
       <mat-form-field class="settings-field">
         <input #BreweryName matInput placeholder="Brewery Name" 
           value={{formFields.BreweryName.stringValue}}
           (blur)="updateSetting(formFields.BreweryName, BreweryName.value)"
           (keyup.enter)="updateSetting(formFields.BreweryName, BreweryName.value)">
       </mat-form-field>
+
+      <br/>
+      <h4>Layout</h4>
+
+      <mat-checkbox #ShowStyle
+        [checked]="formFields.ShowStyle.boolValue"
+        (change)="updateSetting(formFields.ShowStyle, ShowStyle.checked)">Show Style</mat-checkbox>
+
+      <mat-checkbox #ShowABV
+        [checked]="formFields.ShowABV.boolValue"
+        (change)="updateSetting(formFields.ShowABV, ShowABV.checked)">Show ABV</mat-checkbox>
+
+      <mat-checkbox #ShowIBU
+        [checked]="formFields.ShowIBU.boolValue"
+        (change)="updateSetting(formFields.ShowIBU, ShowIBU.checked)">Show IBU</mat-checkbox>
 
       <mat-checkbox #ShowOG
         [checked]="formFields.ShowOG.boolValue"
@@ -23,7 +39,16 @@
         [checked]="formFields.ShowFG.boolValue"
         (change)="updateSetting(formFields.ShowFG, ShowFG.checked)">Show FG</mat-checkbox>
 
+      <mat-checkbox #ShowSRM
+        [checked]="formFields.ShowSRM.boolValue"
+        (change)="updateSetting(formFields.ShowSRM, ShowSRM.checked)">Show SRM</mat-checkbox>
+
+      <mat-checkbox #ShowDesc
+        [checked]="formFields.ShowDesc.boolValue"
+        (change)="updateSetting(formFields.ShowDesc, ShowDesc.checked)">Show Description</mat-checkbox>
+
       <br/>
+      <h4>Styles</h4>
       <mat-radio-group #MenuType [(ngModel)]="formFields.MenuType.stringValue" (ngModelChange)="updateSetting(formFields.MenuType, formFields.MenuType.stringValue, true)">
       <!-- (change)="updateSetting(formFields.MenuType, MenuType.value)" -->
         <mat-radio-button value="solid">
