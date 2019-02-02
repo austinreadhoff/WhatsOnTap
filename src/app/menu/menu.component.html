@@ -19,7 +19,7 @@
           <div class="beer-info">
             <div class="beer-header">
               <h1>{{tap.beer.name}}</h1>
-              <h2>{{tap.beer.style.name}}</h2>
+              <h2 *ngIf="tap.beer.style">{{tap.beer.style.name}}</h2>
             </div>
             <div class="beer-center-info">
               <div class="center-prop" [ngStyle]="{'border-color':brewerySettings.MenuTextColor.stringValue}">

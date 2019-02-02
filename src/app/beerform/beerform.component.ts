@@ -52,12 +52,12 @@ export class BeerformComponent implements OnInit, FormComponent {
       name: ['', [Validators.required]],
       styleId: [''],
       style: [''],
-      abv: ['', [Validators.required]],
-      ibu: ['', [Validators.required]],
-      og: ['', [Validators.required]],
-      fg: ['', [Validators.required]],
-      srm: ['', [Validators.required]],
-      description: ['', [Validators.required]],
+      abv: [''],
+      ibu: [''],
+      og: [''],
+      fg: [''],
+      srm: [''],
+      description: [''],
       labelId: ['']
     });
     this.styleSelector.setValidators(Validators.required);
@@ -84,7 +84,7 @@ export class BeerformComponent implements OnInit, FormComponent {
   onValueChanged(data?: any) {
     this.typeaheadErrors['style'] = '';
 
-    if (this.styleSelector.value != null && typeof this.styleSelector.value == "object")
+    if (typeof this.styleSelector.value == "object")
     {
       this.itemForm.setErrors(null);
       this.styleSelector.setErrors(null);
@@ -93,10 +93,7 @@ export class BeerformComponent implements OnInit, FormComponent {
       this.itemForm.setErrors({"styleError":true});
       this.styleSelector.setErrors({"error":true});
 
-      if (this.styleSelector.value === "")
-        this.typeaheadErrors['style'] += this.validationMessages['required'] + ' ';
-      else
-        this.typeaheadErrors['style'] += this.validationMessages['noFreeText'] + ' ';
+      this.typeaheadErrors['style'] += this.validationMessages['noFreeText'] + ' ';
     }
 
     if (!this.itemForm) { return; }
@@ -128,9 +125,14 @@ export class BeerformComponent implements OnInit, FormComponent {
     const beerData = formData.value;
 
     //Just in case, validation should prevent this from ever going wrong
-    if (this.styleSelector.value != null && typeof this.styleSelector.value == "object")
+    if (typeof this.styleSelector.value == "object")
     {
-      beerData.styleId = this.styleSelector.value.id;
+      if (this.styleSelector.value)
+        beerData.styleId = this.styleSelector.value.id;
+    }
+    else if(this.styleSelector.value === "")
+    {
+      beerData.styleId = null;
     }
     else{
       this.dialogRef.close('styleTxt');
