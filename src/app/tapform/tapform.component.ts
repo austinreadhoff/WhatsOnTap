@@ -22,6 +22,7 @@ export class TapformComponent implements OnInit, FormComponent {
   itemForm: FormGroup;
   beerSelector = new FormControl();
   filteredBeers: Observable<IBeer[]>;
+  orderOptions: number[];
   formErrors = {
     'order': ''
   };
@@ -39,6 +40,13 @@ export class TapformComponent implements OnInit, FormComponent {
     public dialogRef: MatDialogRef<TaplistComponent>) { }
 
   ngOnInit() {
+    this.orderOptions = [];
+    this._tapService.getCount(Global.BASE_TAP_ENDPOINT)
+      .subscribe(count => {
+        for(var i=1; i<=count; i++){
+          this.orderOptions.push(i);
+        }
+      });
     this.itemForm = this.fb.group({
       //all properties of the .ts model must be present here, used or not
       id: [''],

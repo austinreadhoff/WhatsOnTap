@@ -10,7 +10,8 @@
 
   <div>
     <mat-form-field appearance="outline">
-      <input type="text" placeholder="Beer" aria-label="Beer" matInput [formControl]="beerSelector" [matAutocomplete]="auto">
+      <mat-label>Beer</mat-label>
+      <input type="text" aria-label="Beer" matInput [formControl]="beerSelector" [matAutocomplete]="auto">
       <mat-error *ngIf="typeaheadErrors.beer">
         {{ typeaheadErrors.beer }}
       </mat-error>
@@ -25,7 +26,9 @@
   <div>
     <mat-form-field appearance="outline">
       <mat-label>Order</mat-label>
-      <input matInput type="number" formControlName="order">
+      <mat-select formControlName="order">
+        <mat-option *ngFor="let option of orderOptions" [value]=option>{{option}}</mat-option>
+      </mat-select>
       <mat-error *ngIf="formErrors.order">
         {{ formErrors.order }}
       </mat-error>

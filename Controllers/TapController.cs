@@ -38,6 +38,13 @@ namespace WhatsOnTap.Controllers
             }
             return new ObjectResult(item);
         }
+
+        [HttpGet]
+        [Route("GetCount")]
+        public int GetCount()
+        {
+            return _context.Tap.Count();
+        }
         
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Tap item)
