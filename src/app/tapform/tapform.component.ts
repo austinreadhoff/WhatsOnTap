@@ -46,6 +46,8 @@ export class TapformComponent implements OnInit, FormComponent {
         for(var i=1; i<=count; i++){
           this.orderOptions.push(i);
         }
+        if (this.data.dbops === "create")
+          this.orderOptions.push(count+1);
       });
     this.itemForm = this.fb.group({
       //all properties of the .ts model must be present here, used or not
