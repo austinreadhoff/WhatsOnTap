@@ -500,6 +500,12 @@ namespace WhatsOnTap.Models
                     },
                     new Setting
                     {
+                        key = "ShowTapNumbers",
+                        type = "bool",
+                        boolValue = true
+                    },
+                    new Setting
+                    {
                         key = "ShowStyle",
                         type = "bool",
                         boolValue = true

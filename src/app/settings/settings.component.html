@@ -19,6 +19,10 @@
       <br/>
       <h4>Layout</h4>
 
+      <mat-checkbox #ShowTapNumbers
+        [checked]="formFields.ShowTapNumbers.boolValue"
+        (change)="updateSetting(formFields.ShowTapNumbers, ShowTapNumbers.checked)">Show Tap Numbers</mat-checkbox>
+
       <mat-checkbox #ShowStyle
         [checked]="formFields.ShowStyle.boolValue"
         (change)="updateSetting(formFields.ShowStyle, ShowStyle.checked)">Show Style</mat-checkbox>
