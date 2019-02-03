@@ -494,6 +494,12 @@ namespace WhatsOnTap.Models
                 List<Setting> defaultSettings = new List<Setting>(){
                     new Setting
                     {
+                        key = "MenuType",
+                        type = "string",
+                        stringValue = "vertical"
+                    },
+                    new Setting
+                    {
                         key = "BreweryName",
                         type = "string",
                         stringValue = "The Best Brewery"
@@ -554,7 +560,7 @@ namespace WhatsOnTap.Models
                     },
                     new Setting
                     {
-                        key = "MenuType",
+                        key = "BackgroundType",
                         type = "string",
                         stringValue = "solid"
                     },

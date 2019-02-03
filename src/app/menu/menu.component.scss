@@ -8,66 +8,148 @@
         url('/assets/fonts/Chalkduster.svg#Chalkduster') format('svg');
 }
 
+.spinner{
+    top: 45%;
+    left: 47%;
+    position: fixed;
+}
+
 .menu-body{
     height: 100%;
     font-family: 'Chalkduster', helvetica, sans-serif;
 
-    h1,h2,p{
+    p{
+        text-align: center;
+        color: #EEE;
+    }
+
+    .header{
+        padding: 20px;
+        h1,h2{
+            text-align: center;
+        }
+    }
+}
+
+.menu-body.horizontal{
+    h1,h2{
         text-align: center;
     }
-}
-.header{
-    padding: 20px;
-}
-.beers-container{
-    display: flex;
-    flex-wrap: nowrap;
-}
-.beer-container{
-    width: 100%;
-    background-color: rgba(153,153,153,.23);
-    border-radius: 5px;
-    margin: 1%;
-    padding: 10px;
-
-    .beer-img{
-        float: left;
-        max-width: 40%;
-        height: auto;
-        padding-right: 10px;
-    }
-    .beer-info{
+    .beers-container{
         display: flex;
-        flex-direction: column;
         flex-wrap: nowrap;
-
-        .beer-center-info{
-            padding: 20px 0; 
-        }
-
-        .beer-center-info{
-            width: 100%;
-            display: flex;
-            .center-prop{
-                flex: 1;
-                text-align: center;
-                border-left: 1px dashed;
-                padding: 0 5px;
-
-                .center-header,.center-content,.center-lower{
-                    display: block;
-                }
-                .center-content{
-                    font-size: 3em;
-                }
-            }
-            .center-prop:first-child{
-                border-left: none;
-            }
-        }
-
     }
-    p{
-        font-size: 1.4em;
+    .beer-container{
+        width: 100%;
+        background-color: rgba(153,153,153,.23);
+        border-radius: 5px;
+        margin: 1%;
+        padding: 10px;
+
+        .beer-img{
+            float: left;
+            max-width: 40%;
+            height: auto;
+            padding-right: 10px;
+        }
+        .beer-info{
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+
+            .beer-center-info{
+                padding: 20px 0; 
+                width: 100%;
+                display: flex;
+
+                .center-prop{
+                    flex: 1;
+                    text-align: center;
+                    border-left: 1px dashed;
+                    padding: 0 5px;
+
+                    .center-header,.center-content,.center-lower{
+                        display: block;
+                    }
+                    .center-content{
+                        font-size: 3em;
+                    }
+                }
+                .center-prop:first-child{
+                    border-left: none;
+                }
+            }
+            .beer-desc{
+                font-size: 1.4em;
+            }
+        }
+    }
+}
+
+.menu-body.vertical{
+    h1,h2{
+        text-align: left;
+    }
+    .beers-container{
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: column;
+    }
+    .beer-container{
+        background-color: rgba(153,153,153,.23);
+        border-radius: 5px;
+        margin: 3px 1%;
+        padding: 10px;
+
+        h1{
+            font-size: 2em;
+        }
+        h2{
+            font-size: 1.2em;
+        }
+
+        .beer-img{
+            float: left;
+            max-width: 10%;
+            height: auto;
+            padding-right: 10px;
+        }
+        .beer-info{
+            display: flex;
+            justify-content: space-between;
+
+            div{
+                display: inline-block;
+            }
+            .beer-header{
+                order: 1;
+            }
+            .beer-center-info{
+                order: 3;
+                padding: 20px 0;
+
+                .center-prop{
+                    text-align: center;
+                    border-left: 1px dashed;
+                    padding: 0 5px;
+
+                    .center-header,.center-content,.center-lower{
+                        display: block;
+                    }
+                    .center-content{
+                        font-size: 2em;
+                    }
+                }
+                .center-prop:first-child{
+                    border-left: none;
+                }
+            }
+            .beer-desc{
+                order: 2;
+                flex: 1;
+                max-width: 50%;
+                font-size: 1.1em;
+            }
+        }
     }
 }

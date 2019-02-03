@@ -2,7 +2,7 @@
   <mat-spinner></mat-spinner>
 </div>
 <ng-template #menu>
-  <div class="menu-body" [ngStyle]="{'background':background, 'color':brewerySettings.MenuTextColor.stringValue}">
+  <div class="menu-body" [ngClass]="brewerySettings.MenuType.stringValue" [ngStyle]="{'background':background, 'color':brewerySettings.MenuTextColor.stringValue}">
     <div class="header">
       <h2>What's on Tap at</h2>
       <a class="nav-link" routerLink="/admin">
@@ -10,7 +10,6 @@
       </a>
     </div>
     <div class="beers-container">
-      <!--Normal Horizontal Beer-->
       <div *ngFor="let tap of taps; let i = index" class="beer-container">
         <ng-container *ngIf="!tap.isEmpty; else emptytap">
           <img class="beer-img" 
@@ -43,12 +42,12 @@
                 <span class="center-content">{{tap.beer.srm}}</span>
               </div>
             </div>
-            <div *ngIf="brewerySettings.ShowDesc.boolValue">
+            <div *ngIf="brewerySettings.ShowDesc.boolValue" class="beer-desc">
               <p>{{tap.beer.description}}</p>
             </div>
           </div>
         </ng-container>
-        <!--Empty Horizontal Beer-->
+        <!--Empty Beer-->
         <ng-template #emptytap>
           <div class="beer-info">
             <div class="beer-header">
@@ -59,4 +58,4 @@
       </div>
     </div>
   </div>
-</ng-template>  
+</ng-template>

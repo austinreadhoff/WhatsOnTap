@@ -208,7 +208,7 @@ export class MenuComponent implements OnInit {
 
   updateSetting(setting:ISetting){
     this.brewerySettings[setting.key] = setting;
-    if (setting.key == "MenuType" ||
+    if (setting.key == "BackgroundType" ||
         setting.key == "MenuBackground" ||
         setting.key == "MenuSolidBackground"){
       this.setupBackground();  
@@ -220,7 +220,7 @@ export class MenuComponent implements OnInit {
     var backgroundByteArr = this.brewerySettings["MenuBackground"]["byteArrValue"];
     var backgroundExtension = this.brewerySettings["MenuBackground"]["stringValue"];
     var backgroundSolidColor = this.brewerySettings["MenuSolidBackground"]["stringValue"];
-    if (this.brewerySettings["MenuType"]["stringValue"] == "image" && backgroundByteArr != null){
+    if (this.brewerySettings["BackgroundType"]["stringValue"] == "image" && backgroundByteArr != null){
       this.background = "url(data:image/"+backgroundExtension+";base64,"+backgroundByteArr+")";
     }
     else{

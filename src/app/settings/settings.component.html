@@ -19,6 +19,15 @@
       <br/>
       <h4>Layout</h4>
 
+      <mat-radio-group #MenuType [(ngModel)]="formFields.MenuType.stringValue" (ngModelChange)="updateSetting(formFields.MenuType, formFields.MenuType.stringValue, true)">
+        <mat-radio-button value="vertical">
+          Vertical
+        </mat-radio-button>
+        <mat-radio-button value="horizontal">
+          Horizontal
+        </mat-radio-button>
+      </mat-radio-group>
+      <br/>
       <mat-checkbox #ShowTapNumbers
         [checked]="formFields.ShowTapNumbers.boolValue"
         (change)="updateSetting(formFields.ShowTapNumbers, ShowTapNumbers.checked)">Show Tap Numbers</mat-checkbox>
@@ -53,8 +62,7 @@
 
       <br/>
       <h4>Styles</h4>
-      <mat-radio-group #MenuType [(ngModel)]="formFields.MenuType.stringValue" (ngModelChange)="updateSetting(formFields.MenuType, formFields.MenuType.stringValue, true)">
-      <!-- (change)="updateSetting(formFields.MenuType, MenuType.value)" -->
+      <mat-radio-group #BackgroundType [(ngModel)]="formFields.BackgroundType.stringValue" (ngModelChange)="updateSetting(formFields.BackgroundType, formFields.BackgroundType.stringValue, true)">
         <mat-radio-button value="solid">
             <span class="settings-radio-content">
               <mat-form-field class="settings-field">
