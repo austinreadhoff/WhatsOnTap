@@ -25,6 +25,8 @@ namespace WhatsOnTap.Migrations
                 INSERT INTO Beer
                 SELECT *
                 FROM temp;
+
+                DROP TABLE temp;
             ");
             // migrationBuilder.AlterColumn<long>(
             //     name: "styleId",
@@ -84,6 +86,8 @@ namespace WhatsOnTap.Migrations
                 INSERT INTO Beer
                 SELECT *
                 FROM temp;
+
+                DROP TABLE temp;
             ");
             // migrationBuilder.AlterColumn<long>(
             //     name: "styleId",
