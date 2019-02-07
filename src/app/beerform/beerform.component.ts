@@ -32,8 +32,12 @@ export class BeerformComponent implements OnInit, FormComponent {
     'srm': '',
     'description': ''
   };
+  typeaheadErrors = {
+    'style': ''
+  };
   validationMessages = {
-    'required': 'Required Field'
+    'required': 'Required Field',
+    'noFreeText': 'Please select a valid Style'
   };
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
@@ -43,22 +47,23 @@ export class BeerformComponent implements OnInit, FormComponent {
 
   ngOnInit() {
     this.itemForm = this.fb.group({
-      //all properties of the .cs model must be present here, used or not
+      //all properties of the .ts model must be present here, used or not
       id: [''],
       name: ['', [Validators.required]],
       styleId: [''],
       style: [''],
-      abv: ['', [Validators.required]],
-      ibu: ['', [Validators.required]],
-      og: ['', [Validators.required]],
-      fg: ['', [Validators.required]],
-      srm: ['', [Validators.required]],
-      description: ['', [Validators.required]],
+      abv: [''],
+      ibu: [''],
+      og: [''],
+      fg: [''],
+      srm: [''],
+      description: [''],
       labelId: ['']
     });
     this.styleSelector.setValidators(Validators.required);
 
     this.itemForm.valueChanges.subscribe(data => this.onValueChanged(data));
+    this.styleSelector.valueChanges.subscribe(data => this.onValueChanged(data));
     this.filteredStyles = this.styleSelector.valueChanges
     .pipe(
       startWith<string | IStyle>(''),
@@ -77,6 +82,20 @@ export class BeerformComponent implements OnInit, FormComponent {
   }
 
   onValueChanged(data?: any) {
+    this.typeaheadErrors['style'] = '';
+
+    if (typeof this.styleSelector.value == "object")
+    {
+      this.itemForm.setErrors(null);
+      this.styleSelector.setErrors(null);
+    }
+    else{
+      this.itemForm.setErrors({"styleError":true});
+      this.styleSelector.setErrors({"error":true});
+
+      this.typeaheadErrors['style'] += this.validationMessages['noFreeText'] + ' ';
+    }
+
     if (!this.itemForm) { return; }
     const form = this.itemForm;
     for (const field in this.formErrors) {
@@ -104,7 +123,21 @@ export class BeerformComponent implements OnInit, FormComponent {
 
   onSubmit(formData: any) {
     const beerData = formData.value;
-    beerData.styleId = this.styleSelector.value.id;
+
+    //Just in case, validation should prevent this from ever going wrong
+    if (typeof this.styleSelector.value == "object")
+    {
+      if (this.styleSelector.value)
+        beerData.styleId = this.styleSelector.value.id;
+    }
+    else if(this.styleSelector.value === "")
+    {
+      beerData.styleId = null;
+    }
+    else{
+      this.dialogRef.close('styleTxt');
+      return;
+    }
 
     switch (this.data.dbops) {
       case "create":

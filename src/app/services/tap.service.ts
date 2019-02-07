@@ -21,6 +21,11 @@ export class TapService {
       .pipe(catchError(this.handleError));
   }
 
+  getCount(url:string): Observable<number>{
+    return this.http.get<number>(`${url}/GetCount`, httpOptions)
+      .pipe(catchError(this.handleError));
+  }
+
   createTap(url:string, tap: ITap): Observable<any>{
     return this.http.post(url, JSON.stringify(tap), httpOptions)
       .pipe(catchError(this.handleError));

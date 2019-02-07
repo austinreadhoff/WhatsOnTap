@@ -494,9 +494,39 @@ namespace WhatsOnTap.Models
                 List<Setting> defaultSettings = new List<Setting>(){
                     new Setting
                     {
+                        key = "MenuType",
+                        type = "string",
+                        stringValue = "vertical"
+                    },
+                    new Setting
+                    {
                         key = "BreweryName",
                         type = "string",
                         stringValue = "The Best Brewery"
+                    },
+                    new Setting
+                    {
+                        key = "ShowTapNumbers",
+                        type = "bool",
+                        boolValue = true
+                    },
+                    new Setting
+                    {
+                        key = "ShowStyle",
+                        type = "bool",
+                        boolValue = true
+                    },
+                    new Setting
+                    {
+                        key = "ShowABV",
+                        type = "bool",
+                        boolValue = true
+                    },
+                    new Setting
+                    {
+                        key = "ShowIBU",
+                        type = "bool",
+                        boolValue = true
                     },
                     new Setting
                     {
@@ -512,13 +542,25 @@ namespace WhatsOnTap.Models
                     },
                     new Setting
                     {
+                        key = "ShowSRM",
+                        type = "bool",
+                        boolValue = true
+                    },
+                    new Setting
+                    {
+                        key = "ShowDesc",
+                        type = "bool",
+                        boolValue = true
+                    },
+                    new Setting
+                    {
                         key = "MenuBackground",
                         type = "byteArr",
                         byteArrValue = null
                     },
                     new Setting
                     {
-                        key = "MenuType",
+                        key = "BackgroundType",
                         type = "string",
                         stringValue = "solid"
                     },

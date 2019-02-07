@@ -13,7 +13,11 @@
 
   <div>
     <mat-form-field appearance="outline">
-      <input type="text" placeholder="Style" aria-label="Style" matInput [formControl]="styleSelector" [matAutocomplete]="auto">
+      <mat-label>Style</mat-label>
+      <input type="text" aria-label="Style" matInput [formControl]="styleSelector" [matAutocomplete]="auto">
+      <mat-error *ngIf="typeaheadErrors.style">
+        {{ typeaheadErrors.style }}
+      </mat-error>
       <mat-autocomplete #auto="matAutocomplete" [displayWith]="styleDisplayFn">
         <mat-option *ngFor="let option of filteredStyles | async" [value]="option">
           {{option.name}}

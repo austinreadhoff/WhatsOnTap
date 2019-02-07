@@ -32,7 +32,7 @@ export class StyleformComponent implements OnInit, FormComponent {
 
   ngOnInit() {
     this.itemForm = this.fb.group({
-      //all properties of the .cs model must be present here, used or not
+      //all properties of the .ts model must be present here, used or not
       id: [''],
       name: ['', [Validators.required]]
     });

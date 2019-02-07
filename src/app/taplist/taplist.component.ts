@@ -103,10 +103,10 @@ export class TaplistComponent implements OnInit,ListComponent {
             this.showMessage('Data successfully deleted.');
             break;
         }
+      } else if (result === 'beerTxt') {
+        this.showMessage('Please select a valid beer from the list');
       } else if (result === 'error') {
         this.showMessage('There is some issue in saving records, please complain to system administrator!');
-      } else {
-       // this.showMessage('Please try again, something went wrong');
       }
     });
   }

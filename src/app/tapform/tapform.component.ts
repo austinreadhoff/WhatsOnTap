@@ -22,11 +22,16 @@ export class TapformComponent implements OnInit, FormComponent {
   itemForm: FormGroup;
   beerSelector = new FormControl();
   filteredBeers: Observable<IBeer[]>;
+  orderOptions: number[];
   formErrors = {
     'order': ''
   };
+  typeaheadErrors = {
+    'beer': ''
+  };
   validationMessages = {
-    'required': 'Required Field'
+    'required': 'Required Field',
+    'noFreeText': 'Please select a valid Beer'
   };
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
@@ -35,8 +40,17 @@ export class TapformComponent implements OnInit, FormComponent {
     public dialogRef: MatDialogRef<TaplistComponent>) { }
 
   ngOnInit() {
+    this.orderOptions = [];
+    this._tapService.getCount(Global.BASE_TAP_ENDPOINT)
+      .subscribe(count => {
+        for(var i=1; i<=count; i++){
+          this.orderOptions.push(i);
+        }
+        if (this.data.dbops === "create")
+          this.orderOptions.push(count+1);
+      });
     this.itemForm = this.fb.group({
-      //all properties of the .cs model must be present here, used or not
+      //all properties of the .ts model must be present here, used or not
       id: [''],
       isEmpty: [''],
       beerId: [''],
@@ -46,6 +60,7 @@ export class TapformComponent implements OnInit, FormComponent {
     this.beerSelector.setValidators(Validators.required);
     
     this.itemForm.valueChanges.subscribe(data => this.onValueChanged(data));
+    this.beerSelector.valueChanges.subscribe(data => this.onValueChanged(data));
     this.filteredBeers = this.beerSelector.valueChanges
     .pipe(
       startWith<string | IBeer>(''),
@@ -74,6 +89,23 @@ export class TapformComponent implements OnInit, FormComponent {
   }
 
   onValueChanged(data?: any) {
+    this.typeaheadErrors['beer'] = '';
+
+    if (this.beerSelector.value != null && typeof this.beerSelector.value == "object")
+    {
+      this.itemForm.setErrors(null);
+      this.beerSelector.setErrors(null);
+    }
+    else{
+      this.itemForm.setErrors({"beerError":true});
+      this.beerSelector.setErrors({"noFreeText":true});
+      
+      if (this.beerSelector.value === "")
+        this.typeaheadErrors['beer'] += this.validationMessages['required'] + ' ';
+      else
+        this.typeaheadErrors['beer'] += this.validationMessages['noFreeText'] + ' ';
+    }
+
     if (!this.itemForm) { return; }
     const form = this.itemForm;
     for (const field in this.formErrors) {
@@ -101,8 +133,17 @@ export class TapformComponent implements OnInit, FormComponent {
 
   onSubmit(formData: any) {
     const tapData = formData.value;
-    tapData.beerId = this.beerSelector.value.id;
     tapData.isEmpty = tapData.isEmpty ? tapData.isEmpty : false;
+
+    //Just in case, validation should prevent this from ever going wrong
+    if (this.beerSelector.value != null && typeof this.beerSelector.value == "object")
+    {
+      tapData.beerId = this.beerSelector.value.id;
+    }
+    else{
+      this.dialogRef.close('beerTxt');
+      return;
+    }
 
     switch (this.data.dbops) {
       case "create":

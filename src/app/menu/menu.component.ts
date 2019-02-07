@@ -94,21 +94,16 @@ export class MenuComponent implements OnInit {
       this.brewerySettings[setting.key] = setting;
     });
 
-    var backgroundByteArr = this.brewerySettings["MenuBackground"]["byteArrValue"];
-    var backgroundExtension = this.brewerySettings["MenuBackground"]["stringValue"];
-    var backgroundSolidColor = this.brewerySettings["MenuSolidBackground"]["stringValue"];
-    if (this.brewerySettings["MenuType"]["stringValue"] == "image" && backgroundByteArr != null){
-      this.background = "url(data:image/"+backgroundExtension+";base64,"+backgroundByteArr+")";
-    }
-    else{
-      this.background = backgroundSolidColor != null ? backgroundSolidColor : "black";
-    }
+    this.setupBackground();
 
     beers.forEach((b)=>{
       b.style = styles.find((s)=>{return s.id == b.styleId;});
       b.label = labels.find((l)=>{return l.id == b.labelId;}); 
       if (b.label){
         b.labelSrc = `data:image/${b.label.extension};base64,${b.label.image}`;
+      }
+      else{
+        b.labelSrc = null;
       }
     });
 
@@ -213,9 +208,26 @@ export class MenuComponent implements OnInit {
 
   updateSetting(setting:ISetting){
     this.brewerySettings[setting.key] = setting;
+    if (setting.key == "BackgroundType" ||
+        setting.key == "MenuBackground" ||
+        setting.key == "MenuSolidBackground"){
+      this.setupBackground();  
+    }
   }
 
   //helpers
+  setupBackground(){
+    var backgroundByteArr = this.brewerySettings["MenuBackground"]["byteArrValue"];
+    var backgroundExtension = this.brewerySettings["MenuBackground"]["stringValue"];
+    var backgroundSolidColor = this.brewerySettings["MenuSolidBackground"]["stringValue"];
+    if (this.brewerySettings["BackgroundType"]["stringValue"] == "image" && backgroundByteArr != null){
+      this.background = "url(data:image/"+backgroundExtension+";base64,"+backgroundByteArr+")";
+    }
+    else{
+      this.background = backgroundSolidColor != null ? backgroundSolidColor : "black";
+    } 
+  }
+
   fillTapData(tap): Promise<ITap>{
     return new Promise(resolve => {
     this._beerService.getBeerById(Global.BASE_BEER_ENDPOINT, tap.beerId)
