@@ -12,7 +12,6 @@ import { Global } from '../shared/global';
 export class SettingsComponent implements OnInit {
   loadingState: boolean;
   formFields: object;
-  derp: string;
 
   constructor(public snackBar: MatSnackBar, private _settingService: SettingService) { }
 
@@ -20,7 +19,6 @@ export class SettingsComponent implements OnInit {
     this.formFields = {};
     this.loadingState = true;
     this.loadSettings();
-    this.derp = "solid";
   }
 
   loadSettings(){
