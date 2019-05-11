@@ -61,6 +61,24 @@
         (change)="updateSetting(formFields.ShowDesc, ShowDesc.checked)">Show Description</mat-checkbox>
 
       <br/>
+      <h4>Paging</h4>
+
+      <mat-form-field class="settings-field">
+        <input #MaxTapsPerPage matInput type="number" placeholder="Max Taps Per Page" 
+          value={{formFields.MaxTapsPerPage.intValue}}
+          (blur)="updateSetting(formFields.MaxTapsPerPage, MaxTapsPerPage.value)"
+          (keyup.enter)="updateSetting(formFields.MaxTapsPerPage, MaxTapsPerPage.value)">
+      </mat-form-field>
+
+      <mat-form-field class="settings-field">
+        <input #PagingInterval matInput type="number" placeholder="Paging Interval" 
+          value={{formFields.PagingInterval.intValue}}
+          (blur)="updateSetting(formFields.PagingInterval, PagingInterval.value)"
+          (keyup.enter)="updateSetting(formFields.PagingInterval, PagingInterval.value)">
+      </mat-form-field>
+
+
+      <br/>
       <h4>Styles</h4>
       <mat-radio-group #BackgroundType [(ngModel)]="formFields.BackgroundType.stringValue" (ngModelChange)="updateSetting(formFields.BackgroundType, formFields.BackgroundType.stringValue, true)">
         <mat-radio-button value="solid">
