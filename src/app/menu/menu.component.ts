@@ -26,6 +26,7 @@ export class MenuComponent implements OnInit {
   visibleTaps: ITap[];
   pagingActive: boolean;
   pagingIncices: number[];  //represents the first tap on each page
+  firstTap: number;
   maxTaps: number;
   pagingInterval: number;
   currentPage: number;
@@ -273,9 +274,9 @@ export class MenuComponent implements OnInit {
   pagingLoop(){
     this.visibleTaps = [];
 
-    var firstTap = this.pagingIncices[this.currentPage];
+    this.firstTap = this.pagingIncices[this.currentPage];
     for(var t = 0; t < this.maxTaps; t++){
-      this.visibleTaps.push(this.taps[firstTap + t]);
+      this.visibleTaps.push(this.taps[this.firstTap + t]);
     }
 
     this.currentPage = (this.currentPage >= this.pagingIncices.length - 1) ? 0 : this.currentPage + 1;
