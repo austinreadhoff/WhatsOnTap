@@ -575,6 +575,18 @@ namespace WhatsOnTap.Models
                         key = "MenuTextColor",
                         type = "string",
                         stringValue = "white"
+                    },
+                    new Setting
+                    {
+                        key = "MaxTapsPerPage",
+                        type = "int",
+                        intValue = 5
+                    },
+                    new Setting
+                    {
+                        key = "PagingInterval",
+                        type = "int",
+                        intValue = 10
                     }
                 };
                 defaultSettings.ForEach(setting => 

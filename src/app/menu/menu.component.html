@@ -10,7 +10,7 @@
       </a>
     </div>
     <div class="beers-container">
-      <div *ngFor="let tap of taps; let i = index" class="beer-container">
+      <div *ngFor="let tap of visibleTaps; let i = index" class="beer-container">
         <ng-container *ngIf="!tap.isEmpty; else emptytap">
           <img class="beer-img" 
             *ngIf="tap.beer.labelSrc != null"

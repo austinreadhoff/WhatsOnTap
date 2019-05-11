@@ -21,6 +21,15 @@ import { LabelService } from '../services/label.service';
 export class MenuComponent implements OnInit {
   loadingState: boolean;
   taps: ITap[];
+
+  //for paging purposes
+  visibleTaps: ITap[];
+  pagingActive: boolean;
+  pagingIncices: number[];  //represents the first tap on each page
+  maxTaps: number;
+  pagingInterval: number;
+  currentPage: number;
+
   brewerySettings: object;
   background: string;
   connection = new signalR.HubConnectionBuilder()
@@ -62,8 +71,11 @@ export class MenuComponent implements OnInit {
     this.connection.on("SettingUpdated", (setting) => {
       this.updateSetting(setting);
     });
+
+    this.currentPage = 0;
   }
 
+  //fuck me this block of code is ugly.  It loads all the things.
   loadData(){
     this.loadingState = true;
     this._settingService.getAllSettings(Global.BASE_SETTING_ENDPOINT)
@@ -115,6 +127,8 @@ export class MenuComponent implements OnInit {
       .sort((a, b) => {
         return a.order < b.order ? -1 : 1;
       });
+
+    this.initializePaging();
   }
 
   //signalR-related functions
@@ -125,6 +139,8 @@ export class MenuComponent implements OnInit {
       .sort((a, b) => {
         return a.order < b.order ? -1 : 1;
       });
+    
+    this.initializePaging();
   }
 
   deleteTap(id:number){
@@ -132,6 +148,8 @@ export class MenuComponent implements OnInit {
     if (deletedIndex > -1){
       this.taps.splice(deletedIndex,1);
     }
+
+    this.initializePaging();
   }
 
   async updateTap(tap:ITap){
@@ -213,6 +231,8 @@ export class MenuComponent implements OnInit {
         setting.key == "MenuSolidBackground"){
       this.setupBackground();  
     }
+
+    this.initializePaging();
   }
 
   //helpers
@@ -226,6 +246,45 @@ export class MenuComponent implements OnInit {
     else{
       this.background = backgroundSolidColor != null ? backgroundSolidColor : "black";
     } 
+  }
+
+  initializePaging(){
+    this.maxTaps = this.brewerySettings["MaxTapsPerPage"]["intValue"];
+    this.pagingInterval = this.brewerySettings["PagingInterval"]["intValue"] * 1000; //seconds -> milliseconds
+
+    if (this.taps.length <= this.maxTaps){
+      this.pagingActive = false;
+      this.visibleTaps = this.taps;
+    }
+    else{
+      this.pagingIncices = [];
+      for(var t = 0; t < this.taps.length; t += this.maxTaps){
+        this.pagingIncices.push(t);
+      }
+
+      //if it's already active, the loop is already looping, don't start multiple loops!
+      if (!this.pagingActive){
+        this.pagingActive = true;
+        this.pagingLoop();
+      }
+    }
+  }
+
+  pagingLoop(){
+    this.visibleTaps = [];
+
+    var firstTap = this.pagingIncices[this.currentPage];
+    for(var t = 0; t < this.maxTaps; t++){
+      this.visibleTaps.push(this.taps[firstTap + t]);
+    }
+
+    this.currentPage = (this.currentPage >= this.pagingIncices.length - 1) ? 0 : this.currentPage + 1;
+
+    setTimeout(() => {
+      if (this.pagingActive){
+        this.pagingLoop();
+      }
+    }, (this.pagingInterval));
   }
 
   fillTapData(tap): Promise<ITap>{
