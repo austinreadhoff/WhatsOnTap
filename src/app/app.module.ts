@@ -11,6 +11,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule} from '@angular/material/checkbox';
 
 import {MatFileUploadModule} from 'angular-material-fileupload';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -55,6 +56,7 @@ import { LabelService } from './services/label.service';
     HttpClientModule,
     AppMaterialModule,
     MatFileUploadModule,
+    ColorPickerModule,
     FormsModule,
     ReactiveFormsModule,
     MatAutocompleteModule,

@@ -33,9 +33,9 @@ export class SettingsComponent implements OnInit {
 
   //settingObj: the formFields object for the setting
   //value: the new value
-  //isRadio: Radio Groups bind to their own settingObj, so would otherwise fail the "same value" check and never save
-  updateSetting(settingObj, value, isRadio=false){
-    if (settingObj[settingObj.type + "Value"] != value || isRadio){
+  //overrideSelfCheck: certain controls bind to their own settingObj, so would otherwise fail the "same value" check and never save
+  updateSetting(settingObj, value, overrideSelfCheck=false){
+    if (settingObj[settingObj.type + "Value"] != value || overrideSelfCheck){
       settingObj[settingObj.type + "Value"] = value;
       this._settingService.updateSetting(Global.BASE_SETTING_ENDPOINT, settingObj.id, settingObj)
         .subscribe(result =>{

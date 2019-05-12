@@ -83,12 +83,22 @@
       <mat-radio-group #BackgroundType [(ngModel)]="formFields.BackgroundType.stringValue" (ngModelChange)="updateSetting(formFields.BackgroundType, formFields.BackgroundType.stringValue, true)">
         <mat-radio-button value="solid">
             <span class="settings-radio-content">
-              <mat-form-field class="settings-field">
+              <!-- <mat-form-field class="settings-field">
                 <input #MenuSolidBackground matInput placeholder="Menu Solid Background Color (css-compatible values)" 
                   value={{formFields.MenuSolidBackground.stringValue}}
                   (blur)="updateSetting(formFields.MenuSolidBackground, MenuSolidBackground.value)"
                   (keyup.enter)="updateSetting(formFields.MenuSolidBackground, MenuSolidBackground.value)">
-              </mat-form-field>
+              </mat-form-field> -->
+              <label class="mat-form-field-labe">Menu Solid Background Color</label>
+              <input #MenuSolidBackground class="non-mat-form-field"
+                [value]="formFields.MenuSolidBackground.stringValue"
+                [style.background]="formFields.MenuSolidBackground.stringValue"
+                [cpOKButton]="true"
+                [cpSaveClickOutside]="false"
+                [cpOKButtonClass]= "'btn btn-primary btn-xs'"
+                [cpPosition]="'top'"
+                [(colorPicker)]="formFields.MenuSolidBackground.stringValue"
+                (colorPickerSelect)="updateSetting(formFields.MenuSolidBackground, MenuSolidBackground.value, true)"/>
             </span>
         </mat-radio-button>
         <mat-radio-button value="image">
@@ -107,12 +117,16 @@
 
 
       <br/>
-      <mat-form-field class="settings-field">
-        <input #MenuTextColor matInput placeholder="Menu Font Color (css-compatible values)" 
-          value={{formFields.MenuTextColor.stringValue}}
-          (blur)="updateSetting(formFields.MenuTextColor, MenuTextColor.value)"
-          (keyup.enter)="updateSetting(formFields.MenuTextColor, MenuTextColor.value)">
-      </mat-form-field>
+      <label class="mat-form-field-labe">Menu Text Color</label>
+      <input #MenuTextColor class="non-mat-form-field"
+        [value]="formFields.MenuTextColor.stringValue"
+        [style.background]="formFields.MenuTextColor.stringValue"
+        [cpOKButton]="true"
+        [cpSaveClickOutside]="false"
+        [cpOKButtonClass]= "'btn btn-primary btn-xs'"
+        [cpPosition]="'top'"
+        [(colorPicker)]="formFields.MenuTextColor.stringValue"
+        (colorPickerSelect)="updateSetting(formFields.MenuTextColor, MenuTextColor.value, true)"/>
     </div>
   </div>
 </ng-template>
