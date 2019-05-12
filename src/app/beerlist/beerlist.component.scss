@@ -12,6 +12,16 @@
     overflow: auto;
     margin: 0 auto;
 }
+
+// dumb label preview fuckery
+td:first-of-type{
+    width: 10%; 
+}
+.beer-img{
+    padding: 5px;
+    max-width: 100%;
+}
+
 .upload-container{
     display: none;
 }

@@ -10,6 +10,7 @@ import { IBeer } from '../models/beer';
 import { IStyle } from '../models/style';
 import { Global } from '../shared/global';
 import { ListComponent } from '../shared/listComponent';
+import { LabelService } from '../services/label.service';
 
 @Component({
   selector: 'app-beerlist',
@@ -25,10 +26,10 @@ export class BeerlistComponent implements OnInit, ListComponent {
   modalBtnTitle: string;
   availableStyles: IStyle[];
 
-  displayedColumns = ['name', 'style', 'abv', 'ibu', 'og', 'fg', 'srm', 'action'];
+  displayedColumns = [ 'preview', 'name', 'style', 'abv', 'ibu', 'og', 'fg', 'srm', 'action'];
   dataSource = new MatTableDataSource<IBeer>();
 
-  constructor(public snackBar: MatSnackBar, private _beerService: BeerService, private _styleService: StyleService, private dialog: MatDialog) { }
+  constructor(public snackBar: MatSnackBar, private _beerService: BeerService, private _styleService: StyleService, private _labelService: LabelService, private dialog: MatDialog) { }
 
   ngOnInit() {
     this.loadingState = true;
@@ -36,21 +37,31 @@ export class BeerlistComponent implements OnInit, ListComponent {
   }
 
   loadListItems(): void {
-    this._styleService.getAllStyles(Global.BASE_STYLE_ENDPOINT)
-      .subscribe(styles => {
-        this.availableStyles = styles
-          .sort((a, b) => {
-            return a.name.localeCompare(b.name)
-          });
-        this._beerService.getAllBeers(Global.BASE_BEER_ENDPOINT)
-          .subscribe(items => {
-            this.loadingState = false;
-            items.forEach((i)=>{
-              i.style = styles.find((b)=>{return b.id == i.styleId;});
-            });
-            this.dataSource.data = items
+    this._labelService.getAllLabels(Global.BASE_LABEL_ENDPOINT)
+      .subscribe(labels => {
+        this._styleService.getAllStyles(Global.BASE_STYLE_ENDPOINT)
+          .subscribe(styles => {
+            this.availableStyles = styles
               .sort((a, b) => {
                 return a.name.localeCompare(b.name)
+              });
+            this._beerService.getAllBeers(Global.BASE_BEER_ENDPOINT)
+              .subscribe(items => {
+                this.loadingState = false;
+                items.forEach((i)=>{
+                  i.style = styles.find((s)=>{return s.id == i.styleId;});
+                  i.label = labels.find((l)=>{return l.id == i.labelId;});
+                  if (i.label){
+                    i.labelSrc = `data:image/${i.label.extension};base64,${i.label.image}`;
+                  }
+                  else{
+                    i.labelSrc = null;
+                  }
+                });
+                this.dataSource.data = items
+                  .sort((a, b) => {
+                    return a.name.localeCompare(b.name)
+                  });
               });
           });
       });
