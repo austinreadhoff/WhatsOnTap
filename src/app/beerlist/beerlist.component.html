@@ -8,6 +8,15 @@
     <div><button title="Create" mat-raised-button color="accent" (click)="createListItem()">Create</button></div>
     <table mat-table #table [dataSource]="dataSource">
 
+      <ng-container matColumnDef="preview">
+        <th class="mobile-hidden" mat-header-cell *matHeaderCellDef></th>
+        <td class="mobile-hidden" mat-cell *matCellDef="let element">
+          <img class="beer-img"
+          *ngIf="element.labelSrc != null"
+          src="{{element.labelSrc}}">
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Name</th>
         <td mat-cell *matCellDef="let element">{{element.name}}</td>

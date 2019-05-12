@@ -34,6 +34,10 @@ mat-radio-button * {
     display: block !important;
 }
 
+.bg-preview{
+    max-width: 50%;
+}
+
 @media (max-width:992px) {
     mat-form-field {
         width: 100%;
