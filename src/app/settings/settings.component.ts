@@ -12,6 +12,7 @@ import { Global } from '../shared/global';
 export class SettingsComponent implements OnInit {
   loadingState: boolean;
   formFields: object;
+  bgPreview: string;
 
   constructor(public snackBar: MatSnackBar, private _settingService: SettingService) { }
 
@@ -28,6 +29,12 @@ export class SettingsComponent implements OnInit {
         settings.forEach(setting => {
           this.formFields[setting.key] = setting;
         });
+        if (this.formFields["MenuBackground"]["byteArrValue"]){
+          this.bgPreview = `data:image/${this.formFields["MenuBackground"]["stringValue"]};base64,${this.formFields["MenuBackground"]["byteArrValue"]}`;
+        }
+        else{
+          this.bgPreview = null;
+        }
       });
   }
 
