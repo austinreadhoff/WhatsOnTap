@@ -110,6 +110,12 @@ namespace WhatsOnTap.Controllers
                 return StatusCode(409);
             }
 
+            var label = _context.Label.FirstOrDefault(l => l.id == beer.labelId);
+            if (label != null)
+            {
+                _context.Label.Remove(label);
+            }
+
             _context.Beer.Remove(beer);
             _context.SaveChanges();
             return Ok( new { message= "Beer is deleted successfully."});
