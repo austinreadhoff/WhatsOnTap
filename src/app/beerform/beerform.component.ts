@@ -58,7 +58,9 @@ export class BeerformComponent implements OnInit, FormComponent {
       fg: [''],
       srm: [''],
       description: [''],
-      labelId: ['']
+      labelId: [''],
+      label: [''],
+      labelSrc: ['']
     });
     this.styleSelector.setValidators(Validators.required);
 
