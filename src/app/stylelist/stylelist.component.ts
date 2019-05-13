@@ -15,7 +15,6 @@ import { ListComponent } from '../shared/listComponent';
   styleUrls: ['./stylelist.component.scss']
 })
 export class StylelistComponent implements OnInit, ListComponent {
-  listItems: IStyle[];
   listItem: IStyle;
   dbops: string;
   loadingState: boolean;

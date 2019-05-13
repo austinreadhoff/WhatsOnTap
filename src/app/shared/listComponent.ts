@@ -1,7 +1,6 @@
 import { MatTableDataSource } from '@angular/material';
 
 export interface ListComponent {
-  listItems: Array<any>;
   listItem: any;
   dbops: string;
   loadingState: boolean;

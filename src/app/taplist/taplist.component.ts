@@ -17,7 +17,6 @@ import { ListComponent } from '../shared/listComponent';
   styleUrls: ['./taplist.component.scss']
 })
 export class TaplistComponent implements OnInit,ListComponent {
-  listItems: ITap[];
   listItem: ITap;
   dbops: string;
   loadingState: boolean;
