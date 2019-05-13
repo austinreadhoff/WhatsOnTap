@@ -11,6 +11,7 @@ import { IStyle } from '../models/style';
 import { Global } from '../shared/global';
 import { ListComponent } from '../shared/listComponent';
 import { LabelService } from '../services/label.service';
+import * as signalR from "@aspnet/signalr";
 
 @Component({
   selector: 'app-beerlist',
@@ -18,7 +19,6 @@ import { LabelService } from '../services/label.service';
   styleUrls: ['./beerlist.component.scss']
 })
 export class BeerlistComponent implements OnInit, ListComponent {
-  listItems: IBeer[];
   listItem: IBeer;
   dbops: string;
   loadingState: boolean;
@@ -29,11 +29,21 @@ export class BeerlistComponent implements OnInit, ListComponent {
   displayedColumns = [ 'preview', 'name', 'style', 'abv', 'ibu', 'og', 'fg', 'srm', 'action'];
   dataSource = new MatTableDataSource<IBeer>();
 
+  connection = new signalR.HubConnectionBuilder()
+    .withUrl("/hub")
+    .build();
+
   constructor(public snackBar: MatSnackBar, private _beerService: BeerService, private _styleService: StyleService, private _labelService: LabelService, private dialog: MatDialog) { }
 
   ngOnInit() {
     this.loadingState = true;
     this.loadListItems();
+
+    this.connection.start().catch(err => alert(err));
+
+    this.connection.on("LabelUpdated", (beerId, labelId) => {
+      this.updateLabel(beerId, labelId);
+    });
   }
 
   loadListItems(): void {
@@ -132,6 +142,29 @@ export class BeerlistComponent implements OnInit, ListComponent {
       container.classList.remove("upload-container-visible");
     else{
       container.classList.add("upload-container-visible");
+    }
+  }
+
+  //signalR functions
+  updateLabel(relatedBeerId:number, labelId:number){
+    var updatedIndices = [];
+
+    this.dataSource.data
+      .map(li => li.id)
+      .forEach((beerId, index) => {
+        if (beerId == relatedBeerId){
+          updatedIndices.push(index);
+        }
+      });
+    
+    if (updatedIndices.length){
+      this._labelService.getLabelById(Global.BASE_LABEL_ENDPOINT, labelId)
+        .subscribe(async(label) => {
+          updatedIndices.forEach(i => {
+            this.dataSource.data[i].label = label;
+            this.dataSource.data[i].labelSrc = `data:image/${label.extension};base64,${label.image}`;
+          }, this);
+        });
     }
   }
 }
