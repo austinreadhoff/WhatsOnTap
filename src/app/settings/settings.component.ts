@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { ISetting } from '../models/setting';
 import { MatSnackBar } from '@angular/material';
 
 import { SettingService } from '../services/setting.service';
 import { Global } from '../shared/global';
+
+import * as signalR from "@aspnet/signalr";
 
 @Component({
   selector: 'app-settings',
@@ -14,12 +17,22 @@ export class SettingsComponent implements OnInit {
   formFields: object;
   bgPreview: string;
 
+  connection = new signalR.HubConnectionBuilder()
+    .withUrl("/hub")
+    .build();
+
   constructor(public snackBar: MatSnackBar, private _settingService: SettingService) { }
 
   ngOnInit() {
     this.formFields = {};
     this.loadingState = true;
     this.loadSettings();
+
+    this.connection.start().catch(err => alert(err));
+
+    this.connection.on("SettingUpdated", (setting) => {
+      this.updateBgPreview(setting);
+    });
   }
 
   loadSettings(){
@@ -68,5 +81,12 @@ export class SettingsComponent implements OnInit {
     this.snackBar.open(msg, '', {
       duration: 3000
     });
+  }
+
+  //signalR functions
+  updateBgPreview(setting:ISetting){
+    if (setting.key == "MenuBackground" ){
+      this.bgPreview = `data:image/${setting.stringValue};base64,${setting.byteArrValue}`;
+    }
   }
 }

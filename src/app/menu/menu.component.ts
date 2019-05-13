@@ -256,6 +256,7 @@ export class MenuComponent implements OnInit {
     if (this.taps.length <= this.maxTaps){
       this.pagingActive = false;
       this.visibleTaps = this.taps;
+      this.firstTap = 0;
     }
     else{
       this.pagingIncices = [];
