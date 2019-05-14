@@ -4,4 +4,6 @@ export interface ISetting{
     type: string;
     stringValue: string;
     boolValue: boolean;
+    intValue: number;
+    byteArrValue: any;
 }

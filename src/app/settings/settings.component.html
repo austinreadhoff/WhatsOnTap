@@ -61,40 +61,69 @@
         (change)="updateSetting(formFields.ShowDesc, ShowDesc.checked)">Show Description</mat-checkbox>
 
       <br/>
+      <h4>Paging</h4>
+
+      <mat-form-field class="settings-field">
+        <input #MaxTapsPerPage matInput type="number" placeholder="Max Taps Per Page" 
+          value={{formFields.MaxTapsPerPage.intValue}}
+          (blur)="updateSetting(formFields.MaxTapsPerPage, MaxTapsPerPage.value)"
+          (keyup.enter)="updateSetting(formFields.MaxTapsPerPage, MaxTapsPerPage.value)">
+      </mat-form-field>
+
+      <mat-form-field class="settings-field">
+        <input #PagingInterval matInput type="number" placeholder="Paging Interval" 
+          value={{formFields.PagingInterval.intValue}}
+          (blur)="updateSetting(formFields.PagingInterval, PagingInterval.value)"
+          (keyup.enter)="updateSetting(formFields.PagingInterval, PagingInterval.value)">
+      </mat-form-field>
+
+
+      <br/>
       <h4>Styles</h4>
       <mat-radio-group #BackgroundType [(ngModel)]="formFields.BackgroundType.stringValue" (ngModelChange)="updateSetting(formFields.BackgroundType, formFields.BackgroundType.stringValue, true)">
         <mat-radio-button value="solid">
             <span class="settings-radio-content">
-              <mat-form-field class="settings-field">
-                <input #MenuSolidBackground matInput placeholder="Menu Solid Background Color (css-compatible values)" 
-                  value={{formFields.MenuSolidBackground.stringValue}}
-                  (blur)="updateSetting(formFields.MenuSolidBackground, MenuSolidBackground.value)"
-                  (keyup.enter)="updateSetting(formFields.MenuSolidBackground, MenuSolidBackground.value)">
-              </mat-form-field>
+              <label class="mat-form-field-labe">Menu Solid Background Color</label>
+              <input #MenuSolidBackground class="non-mat-form-field"
+                [value]="formFields.MenuSolidBackground.stringValue"
+                [style.background]="formFields.MenuSolidBackground.stringValue"
+                [cpOKButton]="true"
+                [cpSaveClickOutside]="false"
+                [cpOKButtonClass]= "'btn btn-primary btn-xs'"
+                [cpPosition]="'top'"
+                [(colorPicker)]="formFields.MenuSolidBackground.stringValue"
+                (colorPickerSelect)="updateSetting(formFields.MenuSolidBackground, MenuSolidBackground.value, true)"/>
             </span>
         </mat-radio-button>
         <mat-radio-button value="image">
           <span class="settings-radio-content">
             <label>Menu Background</label>
-            <button title="Upload Label" mat-raised-button color="accent" (click)="toggleLabelUpload('upload-background')" style="width:10em;">Upload Image</button>
-            <div id="upload-background" class="upload-container">
-              <input title="Upload Label" class="label-input" color="primary" type="file" [fileUploadInputFor]="fileQueue">
-              <mat-file-upload-queue #fileQueue [fileAlias]="'file'" httpUrl="api/setting/background">      
-                <mat-file-upload [file]="file" [id]="i" *ngFor="let file of fileQueue.files; let i = index"></mat-file-upload>
-              </mat-file-upload-queue>
-            </div>
           </span>
         </mat-radio-button>
+        <button title="Upload Label" mat-raised-button color="accent" (click)="toggleLabelUpload('upload-background')" style="width:10em;">Upload Image</button>
+        <div id="upload-background" class="upload-container">
+          <input title="Upload Label" class="label-input" color="primary" type="file" [fileUploadInputFor]="fileQueue">
+          <mat-file-upload-queue #fileQueue [fileAlias]="'file'" httpUrl="api/setting/background">      
+            <mat-file-upload [file]="file" [id]="i" *ngFor="let file of fileQueue.files; let i = index"></mat-file-upload>
+          </mat-file-upload-queue>
+        </div>
+        <img class="bg-preview"
+          *ngIf="bgPreview != null"
+          src="{{bgPreview}}">
       </mat-radio-group>
 
 
       <br/>
-      <mat-form-field class="settings-field">
-        <input #MenuTextColor matInput placeholder="Menu Font Color (css-compatible values)" 
-          value={{formFields.MenuTextColor.stringValue}}
-          (blur)="updateSetting(formFields.MenuTextColor, MenuTextColor.value)"
-          (keyup.enter)="updateSetting(formFields.MenuTextColor, MenuTextColor.value)">
-      </mat-form-field>
+      <label class="mat-form-field-labe">Menu Text Color</label>
+      <input #MenuTextColor class="non-mat-form-field"
+        [value]="formFields.MenuTextColor.stringValue"
+        [style.background]="formFields.MenuTextColor.stringValue"
+        [cpOKButton]="true"
+        [cpSaveClickOutside]="false"
+        [cpOKButtonClass]= "'btn btn-primary btn-xs'"
+        [cpPosition]="'top'"
+        [(colorPicker)]="formFields.MenuTextColor.stringValue"
+        (colorPickerSelect)="updateSetting(formFields.MenuTextColor, MenuTextColor.value, true)"/>
     </div>
   </div>
 </ng-template>

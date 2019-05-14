@@ -10,7 +10,7 @@
       </a>
     </div>
     <div class="beers-container">
-      <div *ngFor="let tap of taps; let i = index" class="beer-container">
+      <div *ngFor="let tap of visibleTaps; let i = index" class="beer-container">
         <ng-container *ngIf="!tap.isEmpty; else emptytap">
           <img class="beer-img" 
             *ngIf="tap.beer.labelSrc != null"
@@ -18,7 +18,7 @@
           <div class="beer-info">
             <div class="beer-header">
               <h1>
-                <span *ngIf="brewerySettings.ShowTapNumbers.boolValue">{{i+1}}. </span>
+                <span *ngIf="brewerySettings.ShowTapNumbers.boolValue">{{i+firstTap+1}}. </span>
                 {{tap.beer.name}}
               </h1>
               <h2 *ngIf="tap.beer.style && brewerySettings.ShowStyle.boolValue">{{tap.beer.style.name}}</h2>

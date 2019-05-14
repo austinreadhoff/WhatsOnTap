@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { ISetting } from '../models/setting';
 import { MatSnackBar } from '@angular/material';
 
 import { SettingService } from '../services/setting.service';
 import { Global } from '../shared/global';
+
+import * as signalR from "@aspnet/signalr";
 
 @Component({
   selector: 'app-settings',
@@ -12,7 +15,11 @@ import { Global } from '../shared/global';
 export class SettingsComponent implements OnInit {
   loadingState: boolean;
   formFields: object;
-  derp: string;
+  bgPreview: string;
+
+  connection = new signalR.HubConnectionBuilder()
+    .withUrl("/hub")
+    .build();
 
   constructor(public snackBar: MatSnackBar, private _settingService: SettingService) { }
 
@@ -20,7 +27,12 @@ export class SettingsComponent implements OnInit {
     this.formFields = {};
     this.loadingState = true;
     this.loadSettings();
-    this.derp = "solid";
+
+    this.connection.start().catch(err => alert(err));
+
+    this.connection.on("SettingUpdated", (setting) => {
+      this.updateBgPreview(setting);
+    });
   }
 
   loadSettings(){
@@ -30,14 +42,20 @@ export class SettingsComponent implements OnInit {
         settings.forEach(setting => {
           this.formFields[setting.key] = setting;
         });
+        if (this.formFields["MenuBackground"]["byteArrValue"]){
+          this.bgPreview = `data:image/${this.formFields["MenuBackground"]["stringValue"]};base64,${this.formFields["MenuBackground"]["byteArrValue"]}`;
+        }
+        else{
+          this.bgPreview = null;
+        }
       });
   }
 
   //settingObj: the formFields object for the setting
   //value: the new value
-  //isRadio: Radio Groups bind to their own settingObj, so would otherwise fail the "same value" check and never save
-  updateSetting(settingObj, value, isRadio=false){
-    if (settingObj[settingObj.type + "Value"] != value || isRadio){
+  //overrideSelfCheck: certain controls bind to their own settingObj, so would otherwise fail the "same value" check and never save
+  updateSetting(settingObj, value, overrideSelfCheck=false){
+    if (settingObj[settingObj.type + "Value"] != value || overrideSelfCheck){
       settingObj[settingObj.type + "Value"] = value;
       this._settingService.updateSetting(Global.BASE_SETTING_ENDPOINT, settingObj.id, settingObj)
         .subscribe(result =>{
@@ -63,5 +81,12 @@ export class SettingsComponent implements OnInit {
     this.snackBar.open(msg, '', {
       duration: 3000
     });
+  }
+
+  //signalR functions
+  updateBgPreview(setting:ISetting){
+    if (setting.key == "MenuBackground" ){
+      this.bgPreview = `data:image/${setting.stringValue};base64,${setting.byteArrValue}`;
+    }
   }
 }
