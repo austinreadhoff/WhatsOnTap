@@ -47,7 +47,6 @@ export class BeerformComponent implements OnInit, FormComponent {
 
   ngOnInit() {
     this.itemForm = this.fb.group({
-      //all properties of the .ts model must be present here, used or not
       id: [''],
       name: ['', [Validators.required]],
       styleId: [''],
@@ -58,9 +57,7 @@ export class BeerformComponent implements OnInit, FormComponent {
       fg: [''],
       srm: [''],
       description: [''],
-      labelId: [''],
-      label: [''],
-      labelSrc: ['']
+      labelId: ['']
     });
     this.styleSelector.setValidators(Validators.required);
 
