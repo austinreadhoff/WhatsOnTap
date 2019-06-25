@@ -57,7 +57,9 @@ export class BeerformComponent implements OnInit, FormComponent {
       fg: [''],
       srm: [''],
       description: [''],
-      labelId: ['']
+      labelId: [''],
+      label: [''],
+      labelSrc: ['']
     });
     this.styleSelector.setValidators(Validators.required);
 
@@ -74,6 +76,10 @@ export class BeerformComponent implements OnInit, FormComponent {
     if (this.data.dbops === "create") {
       this.itemForm.reset();
     } else {
+      this.data.beer.style = (this.data.beer.style == null ? null : this.data.beer.style);
+      this.data.beer.labelSrc = (this.data.beer.labelSrc == null ? null : this.data.beer.labelSrc);
+      this.data.beer.label = (this.data.beer.label == null ? null : this.data.beer.label);
+
       this.itemForm.setValue(this.data.beer);
       this.styleSelector.setValue(this.data.beer.style);
     }
