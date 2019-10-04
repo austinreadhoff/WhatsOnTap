@@ -8,6 +8,7 @@ import { BeerService } from '../services/beer.service';
 import { StyleService } from '../services/style.service';
 import { IBeer } from '../models/beer';
 import { IStyle } from '../models/style';
+import { ILabel } from '../models/label';
 import { Global } from '../shared/global';
 import { ListComponent } from '../shared/listComponent';
 import { LabelService } from '../services/label.service';
@@ -41,8 +42,8 @@ export class BeerlistComponent implements OnInit, ListComponent {
 
     this.connection.start().catch(err => alert(err));
 
-    this.connection.on("LabelUpdated", (beerId, labelId) => {
-      this.updateLabel(beerId, labelId);
+    this.connection.on("LabelUpdated", (label, beerId) => {
+      this.updateLabel(label, beerId);
     });
   }
 
@@ -145,26 +146,16 @@ export class BeerlistComponent implements OnInit, ListComponent {
     }
   }
 
-  //signalR functions
-  updateLabel(relatedBeerId:number, labelId:number){
-    var updatedIndices = [];
+  //#region signalR functions
 
-    this.dataSource.data
-      .map(li => li.id)
-      .forEach((beerId, index) => {
-        if (beerId == relatedBeerId){
-          updatedIndices.push(index);
-        }
-      });
-    
-    if (updatedIndices.length){
-      this._labelService.getLabelById(Global.BASE_LABEL_ENDPOINT, labelId)
-        .subscribe(async(label) => {
-          updatedIndices.forEach(i => {
-            this.dataSource.data[i].label = label;
-            this.dataSource.data[i].labelSrc = `data:image/${label.extension};base64,${label.image}`;
-          }, this);
-        });
-    }
+  updateLabel(label:ILabel, beerId:number){
+    this.dataSource.data.forEach((b) => {
+      if (b.id == beerId){
+        b.label = label;
+        b.labelSrc = Global.getLabelSrc(b.label);
+      }
+    });
   }
+
+  //#endregion
 }

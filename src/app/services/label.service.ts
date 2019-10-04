@@ -21,17 +21,6 @@ export class LabelService {
       .pipe(catchError(this.handleError));
   }
 
-  getLabelById(url:string, id:number): Observable<ILabel>{
-    return this.http.get<ILabel>(`${url}/${id}`, httpOptions)
-      .pipe(catchError(this.handleError));
-  }
-
-  getLabelsByIds(url:string, ids:number[]): Observable<ILabel[]>{
-    var inputString = '?ids=' + ids.join('&ids=');
-    return this.http.get<ILabel[]>(`${url}/GetByIds${inputString}`, httpOptions)
-      .pipe(catchError(this.handleError));
-  }
-
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.

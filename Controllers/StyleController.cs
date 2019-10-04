@@ -39,21 +39,6 @@ namespace WhatsOnTap.Controllers
             }
             return new ObjectResult(item);
         }
-
-        [HttpGet]
-        [Route("GetByIds")]
-        public IActionResult GetByIds([FromQuery(Name="ids")] long[] ids)
-        {
-            var items = _context.Style
-                .Where(s => s.id.HasValue)
-                .Where(s => ids.Contains(s.id.Value));
-
-            if (items == null)
-            {
-                return NotFound();
-            }
-            return new ObjectResult(items);
-        }
         
         [HttpPost]
         public IActionResult Create([FromBody] Style item)
@@ -91,7 +76,7 @@ namespace WhatsOnTap.Controllers
             _context.Style.Update(style);
             _context.SaveChanges();
 
-            await _menuHubContext.Clients.All.SendAsync("StyleUpdated", style.id);
+            await _menuHubContext.Clients.All.SendAsync("StyleUpdated", style);
             return Ok( new { message= "Style is updated successfully."});
         }
 

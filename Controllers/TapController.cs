@@ -1,4 +1,4 @@
-using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WhatsOnTap.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using SignalRWebPack.Hubs;
 
 namespace WhatsOnTap.Controllers
@@ -25,13 +26,20 @@ namespace WhatsOnTap.Controllers
         [HttpGet]
         public IEnumerable<Tap> GetAll()
         {
-            return _context.Tap.ToList();
+            return _context.Tap
+                .Include(t => t.beer).ThenInclude(b => b.style)
+                .Include(t => t.beer).ThenInclude(b => b.label)
+                .ToList();
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(long id)
         {
-            var item = _context.Tap.FirstOrDefault(t => t.id == id);
+            var item = _context.Tap
+                .Where(t => t.id == id)
+                .Include(t => t.beer).ThenInclude(b => b.style)
+                .Include(t => t.beer).ThenInclude(b => b.label)
+                .FirstOrDefault();
             if (item == null)
             {
                 return NotFound();
@@ -75,7 +83,9 @@ namespace WhatsOnTap.Controllers
             }
 
             foreach(PropertyInfo prop in item.GetType().GetProperties()){
-                if (prop.Name != "id"){
+                if (prop.Name != "id"
+                    && prop.Name != "beer")
+                {
                     prop.SetValue(tap, prop.GetValue(item));
                 }
             }
@@ -83,7 +93,7 @@ namespace WhatsOnTap.Controllers
             _context.Tap.Update(tap);
             _context.SaveChanges();
             ReorderTaps(tap);
-            await _menuHubContext.Clients.All.SendAsync("TapUpdated", tap);
+            await _menuHubContext.Clients.All.SendAsync("TapUpdated", item);
             return Ok( new { message= "Tap is updated successfully."});
         }
 
