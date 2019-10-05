@@ -59,6 +59,10 @@ namespace WhatsOnTap.Controllers
                 return NotFound();
             }
 
+            if (item.style.id != item.styleId){
+                item.style = _context.Style.FirstOrDefault(s => s.id == item.styleId);
+            }
+
             foreach(PropertyInfo prop in item.GetType().GetProperties()){
                 if (prop.Name != "id"
                     && prop.Name != "label"

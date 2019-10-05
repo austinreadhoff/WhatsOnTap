@@ -81,6 +81,14 @@ namespace WhatsOnTap.Controllers
             {
                 return NotFound();
             }
+            
+            if (item.beer.id != item.beerId){
+                item.beer = _context.Beer
+                    .Where(b => b.id == item.beerId)
+                    .Include(b => b.style)
+                    .Include(b => b.label)
+                    .FirstOrDefault();
+            }
 
             foreach(PropertyInfo prop in item.GetType().GetProperties()){
                 if (prop.Name != "id"
