@@ -63,7 +63,8 @@ namespace WhatsOnTap.Controllers
             }
             _context.Tap.Add(item);
             _context.SaveChanges();
-            ReorderTaps(item);
+            ReorderTapsOnAddEdit(item);
+            _context.SaveChanges();
             await _menuHubContext.Clients.All.SendAsync("TapCreated", item);
             return Ok( new { message= "Tap added successfully."});
         }
@@ -99,8 +100,8 @@ namespace WhatsOnTap.Controllers
             }
 
             _context.Tap.Update(tap);
+            ReorderTapsOnAddEdit(tap);
             _context.SaveChanges();
-            ReorderTaps(tap);
             await _menuHubContext.Clients.All.SendAsync("TapUpdated", item);
             return Ok( new { message= "Tap is updated successfully."});
         }
@@ -115,6 +116,7 @@ namespace WhatsOnTap.Controllers
             }
 
             _context.Tap.Remove(tap);
+            ReorderTapsOnDelete(id);
             _context.SaveChanges();
             await _menuHubContext.Clients.All.SendAsync("TapDeleted", id);
             return Ok( new { message= "Tap is deleted successfully."});
@@ -122,7 +124,8 @@ namespace WhatsOnTap.Controllers
 
         #region private helpers
         
-        private void ReorderTaps(Tap editedTap){
+        private void ReorderTapsOnAddEdit(Tap editedTap)
+        {
             if (_context.Tap.Count(t => t.order == editedTap.order) > 1)
             {
                 List<Tap> taps = _context.Tap.OrderBy(t => t.order).ToList();
@@ -134,8 +137,20 @@ namespace WhatsOnTap.Controllers
                     taps[i].order = i+1;
                     _context.Tap.Update(taps[i]);
                 }
+            }
+        }
 
-                _context.SaveChanges();
+        private void ReorderTapsOnDelete(long deletedId)
+        {
+            List<Tap> taps = _context.Tap
+            .Where(t => t.id != deletedId)
+            .OrderBy(t => t.order)
+            .ToList();
+
+            for(int i=0; i<taps.Count; i++)
+            {
+                taps[i].order = i+1;
+                _context.Tap.Update(taps[i]);
             }
         }
 
