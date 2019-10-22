@@ -146,13 +146,34 @@ export class BeerlistComponent implements OnInit, ListComponent {
     }
   }
 
+  toggleLabelRemove(id:number): void{
+    var container = document.getElementById("remove-container-"+id);
+    if (container.classList.contains("remove-container-visible"))
+      container.classList.remove("remove-container-visible");
+    else{
+      container.classList.add("remove-container-visible");
+    }
+  }
+
+  removeLabel(id:number): void{
+    this._labelService.deleteLabel(Global.BASE_LABEL_ENDPOINT, id).subscribe(data=>{
+			var container = document.getElementById("remove-container-"+id);
+			container.classList.remove("remove-container-visible");
+		});
+  }
+
   //#region signalR functions
 
   updateLabel(label:ILabel, beerId:number){
     this.dataSource.data.forEach((b) => {
       if (b.id == beerId){
         b.label = label;
-        b.labelSrc = Global.getLabelSrc(b.label);
+        if (label){
+          b.labelSrc = Global.getLabelSrc(b.label);
+				}
+				else{
+					b.labelSrc = null;
+				}
       }
     });
   }

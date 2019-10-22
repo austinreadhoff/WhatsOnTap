@@ -54,7 +54,7 @@
 
       <ng-container matColumnDef="srm">
         <th class="mobile-hidden" mat-header-cell *matHeaderCellDef>SRM</th>
-        <td class="mobile-hidden"mat-cell *matCellDef="let element">{{element.srm | number:'1.1-1'}}</td>
+        <td class="mobile-hidden" mat-cell *matCellDef="let element">{{element.srm | number:'1.1-1'}}</td>
       </ng-container>
 
       <!-- <ng-container matColumnDef="description">
@@ -68,11 +68,17 @@
           <button title="Edit" mat-raised-button color="primary" (click)="updateListItem(element.id)">Edit</button>
           <button title="Delete" mat-raised-button color="warn" (click)="deleteListItem(element.id)">Delete</button>
           <button title="Upload Label" mat-raised-button color="accent" (click)="toggleLabelUpload(element.id)">Upload Label</button>
+          <button *ngIf="element.label" title="Remove Label" mat-raised-button color="warn" (click)="toggleLabelRemove(element.id)">Remove Label</button>
+
           <div id="{{'upload-container-'+element.id}}" class="upload-container">
             <input title="Upload Label" class="label-input" color="primary" type="file" [fileUploadInputFor]="fileQueue">
             <mat-file-upload-queue #fileQueue [fileAlias]="'file'" httpUrl="api/label/label?beerId={{element.id}}">      
               <mat-file-upload [file]="file" [id]="i" *ngFor="let file of fileQueue.files; let i = index"></mat-file-upload>
             </mat-file-upload-queue>
+          </div>
+
+          <div id="{{'remove-container-'+element.id}}" class="remove-container">
+            <button title="Confirm" mat-raised-button color="warn" (click)="removeLabel(element.id)">Confirm</button>
           </div>
         </td>
       </ng-container>

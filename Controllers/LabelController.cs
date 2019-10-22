@@ -60,5 +60,28 @@ namespace WhatsOnTap.Controllers
                 return Ok();
             }
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(long id)
+        {
+            Beer beer = _context.Beer.FirstOrDefault(b => b.id == id);
+            if (beer == null)
+            {
+                return NotFound();
+            }
+
+            Label label = _context.Label.FirstOrDefault(l => l.id == beer.labelId);
+            if (label == null)
+            {
+                return NotFound();
+            }
+
+            beer.labelId = null;
+            _context.Label.Remove(label);
+            _context.SaveChanges();
+
+            await _menuHubContext.Clients.All.SendAsync("LabelUpdated", null, beer.id);
+            return Ok();
+        }
     }
 }

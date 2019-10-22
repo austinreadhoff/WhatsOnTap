@@ -20,10 +20,10 @@ td:first-of-type{
     max-width: 100%;
 }
 
-.upload-container{
+.upload-container, .remove-container{
     display: none;
 }
-.upload-container-visible{
+.upload-container-visible, .remove-container-visible{
     display: block !important;
 }
 @media (max-width:992px){
