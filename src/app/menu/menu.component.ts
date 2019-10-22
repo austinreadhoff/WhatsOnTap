@@ -106,12 +106,9 @@ export class MenuComponent implements OnInit {
 
   async createTap(tap: ITap){
     tap.beer.labelSrc = Global.getLabelSrc(tap.beer.label);
-    this.taps.push(tap);
-    this.taps = this.taps
-      .sort((a, b) => {
-        return a.order < b.order ? -1 : 1;
-      });
+    this.taps.splice(tap.order-1, 0, tap);
     
+    this.updateTapOrderProp();
     this.initializePaging();
   }
 
@@ -120,14 +117,20 @@ export class MenuComponent implements OnInit {
     if (deletedIndex > -1){
       this.taps.splice(deletedIndex,1);
     }
-
+    
+    this.updateTapOrderProp();
     this.initializePaging();
   }
 
   async updateTap(tap:ITap){
     tap.beer.labelSrc = Global.getLabelSrc(tap.beer.label);
     var updatedIndex = this.taps.map(t => t.id).indexOf(tap.id);
-    this.taps[updatedIndex] = tap;
+
+    this.taps.splice(updatedIndex,1);
+    this.taps.splice(tap.order-1, 0, tap);
+
+    this.updateTapOrderProp();
+    this.initializePaging();
   }
 
   async updateBeer(beer:IBeer){
@@ -222,6 +225,12 @@ export class MenuComponent implements OnInit {
         this.pagingLoop();
       }
     }, (this.pagingInterval));
+  }
+
+  updateTapOrderProp(){
+    for(var i = 0; i < this.taps.length; i++){
+      this.taps[i].order = i+1;
+    }
   }
 
   //#endregion

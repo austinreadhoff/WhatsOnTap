@@ -61,10 +61,19 @@ namespace WhatsOnTap.Controllers
             {
                 return BadRequest();
             }
+
             _context.Tap.Add(item);
             _context.SaveChanges();
+
             ReorderTapsOnAddEdit(item);
             _context.SaveChanges();
+
+            item.beer = _context.Beer
+                .Where(b => b.id == item.beerId)
+                .Include(b => b.style)
+                .Include(b => b.label)
+                .FirstOrDefault();
+
             await _menuHubContext.Clients.All.SendAsync("TapCreated", item);
             return Ok( new { message= "Tap added successfully."});
         }
@@ -100,8 +109,11 @@ namespace WhatsOnTap.Controllers
             }
 
             _context.Tap.Update(tap);
+            _context.SaveChanges();
+
             ReorderTapsOnAddEdit(tap);
             _context.SaveChanges();
+
             await _menuHubContext.Clients.All.SendAsync("TapUpdated", item);
             return Ok( new { message= "Tap is updated successfully."});
         }
@@ -118,6 +130,7 @@ namespace WhatsOnTap.Controllers
             _context.Tap.Remove(tap);
             ReorderTapsOnDelete(id);
             _context.SaveChanges();
+
             await _menuHubContext.Clients.All.SendAsync("TapDeleted", id);
             return Ok( new { message= "Tap is deleted successfully."});
         }
