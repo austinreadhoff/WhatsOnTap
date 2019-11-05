@@ -11,9 +11,9 @@
       <ng-container matColumnDef="preview">
         <th class="mobile-hidden" mat-header-cell *matHeaderCellDef></th>
         <td class="mobile-hidden" mat-cell *matCellDef="let element">
-          <img class="beer-img"
+            <a class="bg-preview-container" href="#img-popout" role="button" data-toggle="modal" (click)="setPopoutSrc(element.labelSrc)"><img class="beer-img"
           *ngIf="element.labelSrc != null"
-          src="{{element.labelSrc}}">
+          src="{{element.labelSrc}}"></a>
         </td>
       </ng-container>
 
@@ -66,9 +66,12 @@
         <th mat-header-cell *matHeaderCellDef>Action</th>
         <td mat-cell *matCellDef="let element">
           <button title="Edit" mat-raised-button color="primary" (click)="updateListItem(element.id)">Edit</button>
+
           <button title="Delete" mat-raised-button color="warn" (click)="deleteListItem(element.id)">Delete</button>
-          <button title="Upload Label" mat-raised-button color="accent" (click)="toggleLabelUpload(element.id)">Upload Label</button>
-          <button *ngIf="element.label" title="Remove Label" mat-raised-button color="warn" (click)="toggleLabelRemove(element.id)">Remove Label</button>
+
+          <button class="mobile-hidden" title="Upload Label" mat-raised-button color="accent" (click)="toggleLabelUpload(element.id)">Upload Label</button>
+
+          <button class="mobile-hidden" *ngIf="element.label" title="Remove Label" mat-raised-button color="warn" (click)="toggleLabelRemove(element.id)">Remove Label</button>
 
           <div id="{{'upload-container-'+element.id}}" class="upload-container">
             <input title="Upload Label" class="label-input" color="primary" type="file" [fileUploadInputFor]="fileQueue">
@@ -87,5 +90,18 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
+  </div>
+
+  <div class="modal" id="img-popout" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="modal-body">
+          <img class="bg-popout" src="{{labelPopoutSrc}}">
+        </div>
+      </div>
+    </div>
   </div>
 </ng-template>

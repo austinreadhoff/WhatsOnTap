@@ -26,6 +26,7 @@ export class BeerlistComponent implements OnInit, ListComponent {
   modalTitle: string;
   modalBtnTitle: string;
   availableStyles: IStyle[];
+  labelPopoutSrc: string;
 
   displayedColumns = [ 'preview', 'name', 'style', 'abv', 'ibu', 'og', 'fg', 'srm', 'action'];
   dataSource = new MatTableDataSource<IBeer>();
@@ -160,6 +161,10 @@ export class BeerlistComponent implements OnInit, ListComponent {
 			var container = document.getElementById("remove-container-"+id);
 			container.classList.remove("remove-container-visible");
 		});
+  }
+
+  setPopoutSrc(src:string): void{
+    this.labelPopoutSrc = src;
   }
 
   //#region signalR functions

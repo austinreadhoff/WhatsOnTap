@@ -33,8 +33,42 @@ mat-radio-button * {
     display: block !important;
 }
 
-.bg-preview{
+.bg-preview-container{
     max-width: 50%;
+
+    .bg-preview{
+        max-width: 100%
+    }
+}
+
+#img-popout.show{
+    display: flex !important;
+
+    .modal-dialog{
+        max-width: 90%;
+        display: inline-block;
+    
+        .bg-popout{
+            max-width: 100%;
+            max-height: 100%;
+        }
+    }
+}
+
+button.close{
+    position: absolute;
+    z-index: 69;
+    left: -.5em;
+    opacity: 100 !important;
+
+    span{
+        border: 2px solid gray;
+        border-radius: 1em;
+        color: white;
+        text-shadow: 0 1px 0 gray;
+        background-color: black;
+        padding: 10px;
+    }
 }
 
 @media (max-width:992px) {

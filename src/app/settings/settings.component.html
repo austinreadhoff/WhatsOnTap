@@ -107,9 +107,9 @@
             <mat-file-upload [file]="file" [id]="i" *ngFor="let file of fileQueue.files; let i = index"></mat-file-upload>
           </mat-file-upload-queue>
         </div>
-        <img class="bg-preview"
+        <a class="bg-preview-container" href="#img-popout" role="button" data-toggle="modal"><img class="bg-preview"
           *ngIf="bgPreview != null"
-          src="{{bgPreview}}">
+          src="{{bgPreview}}"></a>
       </mat-radio-group>
 
 
@@ -124,6 +124,19 @@
         [cpPosition]="'top'"
         [(colorPicker)]="formFields.MenuTextColor.stringValue"
         (colorPickerSelect)="updateSetting(formFields.MenuTextColor, MenuTextColor.value, true)"/>
+    </div>
+  </div>
+  
+  <div class="modal" id="img-popout" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="modal-body">
+          <img class="bg-popout" src="{{bgPreview}}">
+        </div>
+      </div>
     </div>
   </div>
 </ng-template>
