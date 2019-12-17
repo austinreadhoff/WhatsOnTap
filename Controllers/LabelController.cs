@@ -29,36 +29,10 @@ namespace WhatsOnTap.Controllers
             return _context.Label.ToList();
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetById(long id)
-        {
-            var item = _context.Label.FirstOrDefault(l => l.id == id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            return new ObjectResult(item);
-        }
-
-        [HttpGet]
-        [Route("GetByIds")]
-        public IActionResult GetByIds([FromQuery(Name="ids")] long[] ids)
-        {
-            var items = _context.Label
-                .Where(l => l.id.HasValue)
-                .Where(l => ids.Contains(l.id.Value));
-
-            if (items == null)
-            {
-                return NotFound();
-            }
-            return new ObjectResult(items);
-        }
-
         [HttpPost("label")]
-        public async Task<IActionResult> UploadLabel(int id)
+        public async Task<IActionResult> UploadLabel(int beerId)
         {
-            Beer beer = _context.Beer.Where(b => b.id == id).FirstOrDefault();
+            Beer beer = _context.Beer.Where(b => b.id == beerId).FirstOrDefault();
 
             using (var ms = new MemoryStream())
             {
@@ -82,9 +56,32 @@ namespace WhatsOnTap.Controllers
                 _context.Beer.Update(beer);
                 _context.SaveChanges();
 
-                await _menuHubContext.Clients.All.SendAsync("LabelUpdated", id, label.id);
+                await _menuHubContext.Clients.All.SendAsync("LabelUpdated", label, beerId);
                 return Ok();
             }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(long id)
+        {
+            Beer beer = _context.Beer.FirstOrDefault(b => b.id == id);
+            if (beer == null)
+            {
+                return NotFound();
+            }
+
+            Label label = _context.Label.FirstOrDefault(l => l.id == beer.labelId);
+            if (label == null)
+            {
+                return NotFound();
+            }
+
+            beer.labelId = null;
+            _context.Label.Remove(label);
+            _context.SaveChanges();
+
+            await _menuHubContext.Clients.All.SendAsync("LabelUpdated", null, beer.id);
+            return Ok();
         }
     }
 }

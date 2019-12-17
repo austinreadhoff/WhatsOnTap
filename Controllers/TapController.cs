@@ -1,4 +1,4 @@
-using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WhatsOnTap.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using SignalRWebPack.Hubs;
 
 namespace WhatsOnTap.Controllers
@@ -25,13 +26,20 @@ namespace WhatsOnTap.Controllers
         [HttpGet]
         public IEnumerable<Tap> GetAll()
         {
-            return _context.Tap.ToList();
+            return _context.Tap
+                .Include(t => t.beer).ThenInclude(b => b.style)
+                .Include(t => t.beer).ThenInclude(b => b.label)
+                .ToList();
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(long id)
         {
-            var item = _context.Tap.FirstOrDefault(t => t.id == id);
+            var item = _context.Tap
+                .Where(t => t.id == id)
+                .Include(t => t.beer).ThenInclude(b => b.style)
+                .Include(t => t.beer).ThenInclude(b => b.label)
+                .FirstOrDefault();
             if (item == null)
             {
                 return NotFound();
@@ -53,9 +61,19 @@ namespace WhatsOnTap.Controllers
             {
                 return BadRequest();
             }
+
             _context.Tap.Add(item);
             _context.SaveChanges();
-            ReorderTaps(item);
+
+            ReorderTapsOnAddEdit(item);
+            _context.SaveChanges();
+
+            item.beer = _context.Beer
+                .Where(b => b.id == item.beerId)
+                .Include(b => b.style)
+                .Include(b => b.label)
+                .FirstOrDefault();
+
             await _menuHubContext.Clients.All.SendAsync("TapCreated", item);
             return Ok( new { message= "Tap added successfully."});
         }
@@ -73,17 +91,30 @@ namespace WhatsOnTap.Controllers
             {
                 return NotFound();
             }
+            
+            if (item.beer.id != item.beerId){
+                item.beer = _context.Beer
+                    .Where(b => b.id == item.beerId)
+                    .Include(b => b.style)
+                    .Include(b => b.label)
+                    .FirstOrDefault();
+            }
 
             foreach(PropertyInfo prop in item.GetType().GetProperties()){
-                if (prop.Name != "id"){
+                if (prop.Name != "id"
+                    && prop.Name != "beer")
+                {
                     prop.SetValue(tap, prop.GetValue(item));
                 }
             }
 
             _context.Tap.Update(tap);
             _context.SaveChanges();
-            ReorderTaps(tap);
-            await _menuHubContext.Clients.All.SendAsync("TapUpdated", tap);
+
+            ReorderTapsOnAddEdit(tap);
+            _context.SaveChanges();
+
+            await _menuHubContext.Clients.All.SendAsync("TapUpdated", item);
             return Ok( new { message= "Tap is updated successfully."});
         }
 
@@ -97,14 +128,17 @@ namespace WhatsOnTap.Controllers
             }
 
             _context.Tap.Remove(tap);
+            ReorderTapsOnDelete(id);
             _context.SaveChanges();
+
             await _menuHubContext.Clients.All.SendAsync("TapDeleted", id);
             return Ok( new { message= "Tap is deleted successfully."});
         }
 
         #region private helpers
         
-        private void ReorderTaps(Tap editedTap){
+        private void ReorderTapsOnAddEdit(Tap editedTap)
+        {
             if (_context.Tap.Count(t => t.order == editedTap.order) > 1)
             {
                 List<Tap> taps = _context.Tap.OrderBy(t => t.order).ToList();
@@ -116,8 +150,20 @@ namespace WhatsOnTap.Controllers
                     taps[i].order = i+1;
                     _context.Tap.Update(taps[i]);
                 }
+            }
+        }
 
-                _context.SaveChanges();
+        private void ReorderTapsOnDelete(long deletedId)
+        {
+            List<Tap> taps = _context.Tap
+            .Where(t => t.id != deletedId)
+            .OrderBy(t => t.order)
+            .ToList();
+
+            for(int i=0; i<taps.Count; i++)
+            {
+                taps[i].order = i+1;
+                _context.Tap.Update(taps[i]);
             }
         }
 

@@ -26,12 +26,6 @@ export class StyleService {
       .pipe(catchError(this.handleError));
   }
 
-  getStylesByIds(url:string, ids:number[]){
-    var inputString = '?ids=' + ids.join('&ids=');
-    return this.http.get<IStyle[]>(`${url}/GetByIds${inputString}`, httpOptions)
-      .pipe(catchError(this.handleError));
-  }
-
   createStyle(url:string, style: IStyle): Observable<any>{
     return this.http.post(url, JSON.stringify(style), httpOptions)
       .pipe(catchError(this.handleError));

@@ -5,8 +5,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using WhatsOnTap.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using SignalRWebPack.Hubs;
 
 namespace WhatsOnTap.Controllers
@@ -26,33 +26,10 @@ namespace WhatsOnTap.Controllers
         [HttpGet]
         public IEnumerable<Beer> GetAll()
         {
-            return _context.Beer.ToList();
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult GetById(long id)
-        {
-            var item = _context.Beer.FirstOrDefault(b => b.id == id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            return new ObjectResult(item);
-        }
-
-        [HttpGet]
-        [Route("GetByIds")]
-        public IActionResult GetByIds([FromQuery(Name="ids")] long[] ids)
-        {
-            var items = _context.Beer
-                .Where(b => b.id.HasValue)
-                .Where(b => ids.Contains(b.id.Value));
-
-            if (items == null)
-            {
-                return NotFound();
-            }
-            return new ObjectResult(items);
+            return _context.Beer
+                .Include(b => b.style)
+                .Include(b => b.label)
+                .ToList();
         }
         
         [HttpPost]
@@ -82,8 +59,15 @@ namespace WhatsOnTap.Controllers
                 return NotFound();
             }
 
+            if (item.style.id != item.styleId){
+                item.style = _context.Style.FirstOrDefault(s => s.id == item.styleId);
+            }
+
             foreach(PropertyInfo prop in item.GetType().GetProperties()){
-                if (prop.Name != "id"){
+                if (prop.Name != "id"
+                    && prop.Name != "label"
+                    && prop.Name != "style")
+                {
                     prop.SetValue(beer, prop.GetValue(item));
                 }
             }
@@ -91,7 +75,7 @@ namespace WhatsOnTap.Controllers
             _context.Beer.Update(beer);
             _context.SaveChanges();
             
-            await _menuHubContext.Clients.All.SendAsync("BeerUpdated", beer.id);
+            await _menuHubContext.Clients.All.SendAsync("BeerUpdated", item);
             return Ok( new { message= "Beer is updated successfully."});
         }
 

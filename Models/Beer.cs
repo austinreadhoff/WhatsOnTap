@@ -6,6 +6,7 @@ namespace WhatsOnTap.Models
     {
         public long? id { get; set; }
         public string name { get; set; }
+        public Style style { get; set; }
         public long? styleId {get;set;}
         public double? abv {get;set;}
         public double? ibu {get;set;}
@@ -13,6 +14,7 @@ namespace WhatsOnTap.Models
         public double? fg {get;set;}
         public double? srm {get;set;}
         public string description {get;set;}
+        public Label label {get;set;}
         public long? labelId {get;set;}
     }
 }

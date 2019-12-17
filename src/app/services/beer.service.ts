@@ -21,17 +21,6 @@ export class BeerService {
       .pipe(catchError(this.handleError));
   }
 
-  getBeerById(url:string, id:number): Observable<IBeer>{
-    return this.http.get<IBeer>(`${url}/${id}`, httpOptions)
-      .pipe(catchError(this.handleError));
-  }
-
-  getBeersByIds(url:string, ids:number[]): Observable<IBeer[]>{
-    var inputString = '?ids=' + ids.join('&ids=');
-    return this.http.get<IBeer[]>(`${url}/GetByIds${inputString}`, httpOptions)
-      .pipe(catchError(this.handleError));
-  }
-
   createBeer(url:string, beer: IBeer): Observable<any>{
     return this.http.post(url, JSON.stringify(beer), httpOptions)
       .pipe(catchError(this.handleError));

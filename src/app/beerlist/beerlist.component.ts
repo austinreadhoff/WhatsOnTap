@@ -8,6 +8,7 @@ import { BeerService } from '../services/beer.service';
 import { StyleService } from '../services/style.service';
 import { IBeer } from '../models/beer';
 import { IStyle } from '../models/style';
+import { ILabel } from '../models/label';
 import { Global } from '../shared/global';
 import { ListComponent } from '../shared/listComponent';
 import { LabelService } from '../services/label.service';
@@ -25,6 +26,7 @@ export class BeerlistComponent implements OnInit, ListComponent {
   modalTitle: string;
   modalBtnTitle: string;
   availableStyles: IStyle[];
+  labelPopoutSrc: string;
 
   displayedColumns = [ 'preview', 'name', 'style', 'abv', 'ibu', 'og', 'fg', 'srm', 'action'];
   dataSource = new MatTableDataSource<IBeer>();
@@ -41,8 +43,8 @@ export class BeerlistComponent implements OnInit, ListComponent {
 
     this.connection.start().catch(err => alert(err));
 
-    this.connection.on("LabelUpdated", (beerId, labelId) => {
-      this.updateLabel(beerId, labelId);
+    this.connection.on("LabelUpdated", (label, beerId) => {
+      this.updateLabel(label, beerId);
     });
   }
 
@@ -145,26 +147,41 @@ export class BeerlistComponent implements OnInit, ListComponent {
     }
   }
 
-  //signalR functions
-  updateLabel(relatedBeerId:number, labelId:number){
-    var updatedIndices = [];
-
-    this.dataSource.data
-      .map(li => li.id)
-      .forEach((beerId, index) => {
-        if (beerId == relatedBeerId){
-          updatedIndices.push(index);
-        }
-      });
-    
-    if (updatedIndices.length){
-      this._labelService.getLabelById(Global.BASE_LABEL_ENDPOINT, labelId)
-        .subscribe(async(label) => {
-          updatedIndices.forEach(i => {
-            this.dataSource.data[i].label = label;
-            this.dataSource.data[i].labelSrc = `data:image/${label.extension};base64,${label.image}`;
-          }, this);
-        });
+  toggleLabelRemove(id:number): void{
+    var container = document.getElementById("remove-container-"+id);
+    if (container.classList.contains("remove-container-visible"))
+      container.classList.remove("remove-container-visible");
+    else{
+      container.classList.add("remove-container-visible");
     }
   }
+
+  removeLabel(id:number): void{
+    this._labelService.deleteLabel(Global.BASE_LABEL_ENDPOINT, id).subscribe(data=>{
+			var container = document.getElementById("remove-container-"+id);
+			container.classList.remove("remove-container-visible");
+		});
+  }
+
+  setPopoutSrc(src:string): void{
+    this.labelPopoutSrc = src;
+  }
+
+  //#region signalR functions
+
+  updateLabel(label:ILabel, beerId:number){
+    this.dataSource.data.forEach((b) => {
+      if (b.id == beerId){
+        b.label = label;
+        if (label){
+          b.labelSrc = Global.getLabelSrc(b.label);
+				}
+				else{
+					b.labelSrc = null;
+				}
+      }
+    });
+  }
+
+  //#endregion
 }

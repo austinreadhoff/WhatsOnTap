@@ -1,17 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Global } from '../shared/global';
-import { BeerService } from '../services/beer.service';
-import { StyleService } from '../services/style.service';
 import { TapService } from '../services/tap.service';
 import { SettingService } from '../services/setting.service';
 import { ITap } from '../models/tap';
-import { ISetting } from '../models/setting';
-import { IStyle } from '../models/style';
 import { IBeer } from '../models/beer';
-import * as signalR from "@aspnet/signalr";
 import { ILabel } from '../models/label';
-import { LabelService } from '../services/label.service';
+import { IStyle } from '../models/style';
+import { ISetting } from '../models/setting';
+import * as signalR from "@aspnet/signalr";
 
 @Component({
   selector: 'app-menu',
@@ -38,11 +35,8 @@ export class MenuComponent implements OnInit {
     .build();
 
   constructor(
-    private _beerService: BeerService,
-    private _styleService: StyleService,
     private _tapService: TapService,
-    private _settingService: SettingService,
-    private _labelService: LabelService
+    private _settingService: SettingService
     ) { }
 
   ngOnInit() {
@@ -60,14 +54,14 @@ export class MenuComponent implements OnInit {
     this.connection.on("TapUpdated", (tap) => {
       this.updateTap(tap);
     });
-    this.connection.on("BeerUpdated", (id) => {
-      this.updateBeer(id);
+    this.connection.on("BeerUpdated", (beer) => {
+      this.updateBeer(beer);
     });
-    this.connection.on("LabelUpdated", (beerId, labelId) => {
-      this.updateLabel(beerId, labelId);
+    this.connection.on("LabelUpdated", (label, beerId) => {
+      this.updateLabel(label, beerId);
     });
-    this.connection.on("StyleUpdated", (id) => {
-      this.updateStyle(id);
+    this.connection.on("StyleUpdated", (style) => {
+      this.updateStyle(style);
     });
     this.connection.on("SettingUpdated", (setting) => {
       this.updateSetting(setting);
@@ -76,31 +70,18 @@ export class MenuComponent implements OnInit {
     this.currentPage = 0;
   }
 
-  //fuck me this block of code is ugly.  It loads all the things.
   loadData(){
     this.loadingState = true;
     this._settingService.getAllSettings(Global.BASE_SETTING_ENDPOINT)
       .subscribe(settings =>{
         this._tapService.getAllTaps(Global.BASE_TAP_ENDPOINT)
           .subscribe(taps =>{
-            var beerIds = taps.map(t => t.beerId);
-            this._beerService.getBeersByIds(Global.BASE_BEER_ENDPOINT, beerIds)
-              .subscribe(beers => {
-                var styleIds = beers.map(b => b.styleId);
-                var labelIds = beers.map(b => b.labelId);
-                this._styleService.getStylesByIds(Global.BASE_STYLE_ENDPOINT, styleIds)
-                  .subscribe(styles => {
-                    this._labelService.getLabelsByIds(Global.BASE_LABEL_ENDPOINT, labelIds)
-                      .subscribe(labels => {
-                        this.setupMenu(settings, taps, styles, labels, beers);
-                      });
-                  });
-              });
+            this.setupMenu(settings, taps);
           });
       });
   }
 
-  setupMenu(settings: ISetting[], taps: ITap[], styles: IStyle[], labels: ILabel[], beers: IBeer[]){
+  setupMenu(settings: ISetting[], taps: ITap[]){
     this.loadingState = false;
 
     settings.forEach(setting => {
@@ -109,19 +90,8 @@ export class MenuComponent implements OnInit {
 
     this.setupBackground();
 
-    beers.forEach((b)=>{
-      b.style = styles.find((s)=>{return s.id == b.styleId;});
-      b.label = labels.find((l)=>{return l.id == b.labelId;}); 
-      if (b.label){
-        b.labelSrc = `data:image/${b.label.extension};base64,${b.label.image}`;
-      }
-      else{
-        b.labelSrc = null;
-      }
-    });
-
     taps.forEach((t)=>{
-      t.beer = beers.find((b) => {return b.id == t.beerId;});
+      t.beer.labelSrc = Global.getLabelSrc(t.beer.label);
     })
 
     this.taps = taps
@@ -132,15 +102,13 @@ export class MenuComponent implements OnInit {
     this.initializePaging();
   }
 
-  //signalR-related functions
+  //#region signalR functions
+
   async createTap(tap: ITap){
-    tap = await this.fillTapData(tap);
-    this.taps.push(tap);
-    this.taps = this.taps
-      .sort((a, b) => {
-        return a.order < b.order ? -1 : 1;
-      });
+    tap.beer.labelSrc = Global.getLabelSrc(tap.beer.label);
+    this.taps.splice(tap.order-1, 0, tap);
     
+    this.updateTapOrderProp();
     this.initializePaging();
   }
 
@@ -149,80 +117,47 @@ export class MenuComponent implements OnInit {
     if (deletedIndex > -1){
       this.taps.splice(deletedIndex,1);
     }
-
+    
+    this.updateTapOrderProp();
     this.initializePaging();
   }
 
   async updateTap(tap:ITap){
-    tap = await this.fillTapData(tap);
+    tap.beer.labelSrc = Global.getLabelSrc(tap.beer.label);
     var updatedIndex = this.taps.map(t => t.id).indexOf(tap.id);
-    this.taps[updatedIndex] = tap;
+
+    this.taps.splice(updatedIndex,1);
+    this.taps.splice(tap.order-1, 0, tap);
+
+    this.updateTapOrderProp();
+    this.initializePaging();
   }
 
-  async updateBeer(id:number){
-    var updatedIndices = [];
+  async updateBeer(beer:IBeer){
+    beer.labelSrc = Global.getLabelSrc(beer.label);
 
-    this.taps
-      .map(t => t.beerId)
-      .forEach((beerId, index) => {
-        if (beerId == id){
-          updatedIndices.push(index);
+    this.taps.forEach((t) => {
+        if (t.beerId == beer.id){
+          t.beer = beer;
         }
-      });
-
-    if (updatedIndices.length){
-      this._beerService.getBeerById(Global.BASE_BEER_ENDPOINT, id)
-        .subscribe(async(beer) => {
-          beer = await this.fillBeerData(beer);
-          updatedIndices.forEach(i => {
-            this.taps[i].beer = beer;
-          }, this);
-        });
-    }
+    });
   }
 
-  updateLabel(relatedBeerId:number, labelId:number){
-    var updatedIndices = [];
-
-    this.taps
-      .map(t => t.beerId)
-      .forEach((beerId, index) => {
-        if (beerId == relatedBeerId){
-          updatedIndices.push(index);
-        }
-      });
-    
-    if (updatedIndices.length){
-      this._labelService.getLabelById(Global.BASE_LABEL_ENDPOINT, labelId)
-        .subscribe(async(label) => {
-          updatedIndices.forEach(i => {
-            this.taps[i].beer.label = label;
-            this.taps[i].beer.labelSrc = `data:image/${label.extension};base64,${label.image}`;
-          }, this);
-        });
-    }
+  updateLabel(label:ILabel, beerId:number){
+    this.taps.forEach((t) => {
+      if (t.beer.id == beerId){
+        t.beer.label = label;
+        t.beer.labelSrc = Global.getLabelSrc(t.beer.label);
+      }
+    });
   }
 
-  updateStyle(id:number){
-    var updatedIndices = [];
-
-    this.taps
-      .map(t => t.beer)
-      .map(b => b.styleId)
-      .forEach((styleId, index) => {
-        if (styleId == id){
-          updatedIndices.push(index);
-        }
-      });
-
-    if (updatedIndices.length){
-      this._styleService.getStyleById(Global.BASE_STYLE_ENDPOINT, id)
-        .subscribe(async(style) => {
-          updatedIndices.forEach(i => {
-            this.taps[i].beer.style = style;
-          }, this);
-        });
-    }
+  updateStyle(style:IStyle){
+    this.taps.forEach((t) => {
+      if (t.beer.styleId = style.id){
+        t.beer.style = style;
+      }
+    });
   }
 
   updateSetting(setting:ISetting){
@@ -236,7 +171,10 @@ export class MenuComponent implements OnInit {
     this.initializePaging();
   }
 
-  //helpers
+  //#endregion
+
+  //#region helpers
+
   setupBackground(){
     var backgroundByteArr = this.brewerySettings["MenuBackground"]["byteArrValue"];
     var backgroundExtension = this.brewerySettings["MenuBackground"]["stringValue"];
@@ -289,33 +227,11 @@ export class MenuComponent implements OnInit {
     }, (this.pagingInterval));
   }
 
-  fillTapData(tap): Promise<ITap>{
-    return new Promise(resolve => {
-    this._beerService.getBeerById(Global.BASE_BEER_ENDPOINT, tap.beerId)
-      .subscribe(async(beer) => {
-        tap.beer = await this.fillBeerData(beer);
-        resolve(tap);
-      });
-    });
+  updateTapOrderProp(){
+    for(var i = 0; i < this.taps.length; i++){
+      this.taps[i].order = i+1;
+    }
   }
 
-  fillBeerData(beer): Promise<IBeer>{
-    return new Promise(resolve => {
-      this._styleService.getStyleById(Global.BASE_STYLE_ENDPOINT, beer.styleId)
-      .subscribe(style => {
-        beer.style = style;
-        if (beer.labelId){
-          this._labelService.getLabelById(Global.BASE_LABEL_ENDPOINT, beer.labelId)
-          .subscribe(label => {
-            beer.label = label;
-            beer.labelSrc = `data:image/${beer.label.extension};base64,${beer.label.image}`;
-            resolve(beer);
-          });
-        }
-        else{
-          resolve(beer);
-        }
-      });
-    });
-  }
+  //#endregion
 }
